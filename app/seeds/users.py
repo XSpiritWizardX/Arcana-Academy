@@ -5,15 +5,24 @@ from sqlalchemy.sql import text
 # Adds a demo user, you can add other users here if you want
 def seed_users():
     demo = User(
-       firstname='Demo', lastname='User', username='Demo', email='demo@aa.io', password='password')
+       firstname='Demo', lastname='User', username='Demo', email='demo@aa.io', password='password', gold=0, experience=0, level=1, health=100, speed=10, power=10, mana=10)
     marnie = User(
-        firstname='MAR', lastname='MARNI', username='marnie', email='marnie@aa.io', password='password')
+        firstname='MAR', lastname='MARNI', username='marnie', email='marnie@aa.io', password='password', gold=0, experience=0, level=1, health=100, speed=10, power=10, mana=10)
     bobbie = User(
-        firstname='BOB', lastname='BOBBIE', username='bobbie', email='bobbie@aa.io', password='password')
+        firstname='BOB', lastname='BOBBIE', username='bobbie', email='bobbie@aa.io', password='password', gold=0, experience=0, level=1, health=100, speed=10, power=10, mana=10)
+    legolas = User(
+        firstname='Legolas', lastname='LOTR', username='Archer', email='lego@aa.io', password='password', gold=0, experience=0, level=1, health=100, speed=10, power=10, mana=10)
+    frodo = User(
+        firstname='Frodo', lastname='Baggins', username='ringbearer', email='baggins@aa.io', password='password', gold=0, experience=0, level=1, health=100, speed=10, power=10, mana=10)
+    gandalf = User(
+        firstname='Gandalf', lastname='The Grey', username='Wizard', email='wizard@aa.io', password='password', gold=0, experience=0, level=1, health=100, speed=10, power=10, mana=10)
 
     db.session.add(demo)
     db.session.add(marnie)
     db.session.add(bobbie)
+    db.session.add(legolas)
+    db.session.add(frodo)
+    db.session.add(gandalf)
     db.session.commit()
 
 

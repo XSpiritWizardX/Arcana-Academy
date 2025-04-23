@@ -15,6 +15,13 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(40), nullable=False, unique=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
+    gold = db.Column(db.Integer, default=0)
+    experience = db.Column(db.Integer, default=0 )
+    level = db.Column(db.Integer, default=1)
+    health = db.Column(db.Integer, default=100)
+    speed = db.Column(db.Integer, default=10)
+    power = db.Column(db.Integer, default=10)
+    mana = db.Column(db.Integer, default=10)
 
     @property
     def password(self):

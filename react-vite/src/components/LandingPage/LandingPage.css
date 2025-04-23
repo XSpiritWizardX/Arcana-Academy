@@ -2,7 +2,12 @@
 
 
 .landing-page-title{
-    color: blueviolet;
+    color: #00FFB3;
     display: flex;
     justify-self: center;
+}
+
+
+.landing-page-text{
+color: #F5F5FA;
 }
