@@ -4,3 +4,8 @@ __pycache__/
 .venv
 .DS_Store
 .vscode/
+*.db
+instance/*.db
+instance/dev.db
+flask_session/*
+flask_session/
