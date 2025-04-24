@@ -12,7 +12,7 @@ function LandingPage() {
 
     <p
     className="landing-page-text"
-    >Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nisi placeat, laboriosam libero consequatur quasi nesciunt dolorem vitae odit quas at explicabo autem reprehenderit itaque, reiciendis enim dignissimos unde similique quae?</p>
+    >WELCOME TO ARCANA ACADEMY ipsum dolor, sit amet consectetur adipisicing elit. Nisi placeat, laboriosam libero consequatur quasi nesciunt dolorem vitae odit quas at explicabo autem reprehenderit itaque, reiciendis enim dignissimos unde similique quae?</p>
     <p
     className="landing-page-text"
     >Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus! Quod, cumque. Quisquam, voluptatibus! Quod, cumque. Quisquam, voluptatibus! Quod, cumque. Quisquam, voluptatibus! Quod, cumque.</p>

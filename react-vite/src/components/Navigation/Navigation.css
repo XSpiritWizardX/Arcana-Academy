@@ -1,3 +1,49 @@
+
+.profile-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  background-color: #281a38;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
 .profile-dropdown {
-  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  border: #C0C0C0 solid 2px;
+  border-radius: 12px;
+}
+
+.navigation-container {
+  display: flex;
+  width: 15%;
+  height: auto;
+  align-items: center;
+  flex-direction: column;
+  margin-right: 1%;
+  border-radius: 12px;
+}
+.navigation-container a {
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  font-style:oblique;
+  font-size: 20px;
+}
+.navigation-container a:hover {
+  background-color: #575757;
+}
+
+
+.logo{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
 }
