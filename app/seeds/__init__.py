@@ -6,7 +6,7 @@ from .background_images import seed_background_images, undo_background_images
 from .monsters import seed_monsters, undo_monsters
 from .monster_images import seed_monster_images, undo_monster_images
 from .reviews import seed_reviews, undo_reviews
-
+from .schedules import seed_schedules, undo_schedules
 
 from app.models.db import db, environment, SCHEMA
 
@@ -30,6 +30,7 @@ def seed():
         undo_monsters()
         undo_monster_images()
         undo_reviews()
+        undo_schedules()
     seed_users()
     seed_players()
     seed_stages()
@@ -37,6 +38,7 @@ def seed():
     seed_monsters()
     seed_monster_images()
     seed_reviews()
+    seed_schedules()
     # Add other seed functions here
 
 
@@ -50,4 +52,5 @@ def undo():
     undo_monsters()
     undo_monster_images()
     undo_reviews()
+    undo_schedules()
     # Add other undo functions here
