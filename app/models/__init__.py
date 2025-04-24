@@ -12,4 +12,5 @@ from .spell_book import Spell_book
 from .spell import Spell
 from .spell_image import Spell_image
 from .potion_bag import Potion_bag
+from .potion import Potion
 from .db import environment, SCHEMA
