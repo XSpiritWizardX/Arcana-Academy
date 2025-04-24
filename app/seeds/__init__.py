@@ -7,7 +7,7 @@ from .monsters import seed_monsters, undo_monsters
 from .monster_images import seed_monster_images, undo_monster_images
 from .reviews import seed_reviews, undo_reviews
 from .schedules import seed_schedules, undo_schedules
-
+from .events import seed_events, undo_events
 from app.models.db import db, environment, SCHEMA
 
 # Creates a seed group to hold our commands
@@ -31,6 +31,7 @@ def seed():
         undo_monster_images()
         undo_reviews()
         undo_schedules()
+        undo_events()
     seed_users()
     seed_players()
     seed_stages()
@@ -39,6 +40,7 @@ def seed():
     seed_monster_images()
     seed_reviews()
     seed_schedules()
+    seed_events()
     # Add other seed functions here
 
 
@@ -53,4 +55,5 @@ def undo():
     undo_monster_images()
     undo_reviews()
     undo_schedules()
+    undo_events()
     # Add other undo functions here
