@@ -47,7 +47,11 @@ export function Modal() {
   // Render the following component to the div referenced by the modalRef
   return ReactDOM.createPortal(
     <div id="modal">
-      <div id="modal-background" onClick={closeModal} />
+      <div id="modal-background" onClick={closeModal} >
+        <img
+        className='modal-background-image'
+        src='https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745477673/coolmodalback_op5ldm.gif' alt="forest stage" />
+      </div>
       <div id="modal-content">
         {modalContent}
       </div>
