@@ -3,7 +3,7 @@ from .users import seed_users, undo_users
 from .players import seed_players, undo_players
 from .stages import seed_stages, undo_stages
 from .background_images import seed_background_images, undo_background_images
-
+from .monsters import seed_monsters, undo_monsters
 from app.models.db import db, environment, SCHEMA
 
 # Creates a seed group to hold our commands
@@ -23,10 +23,12 @@ def seed():
         undo_players()
         undo_stages()
         undo_background_images()
+        undo_monsters()
     seed_users()
     seed_players()
     seed_stages()
     seed_background_images()
+    seed_monsters()
     # Add other seed functions here
 
 
@@ -37,4 +39,5 @@ def undo():
     undo_players()
     undo_stages()
     undo_background_images()
+    undo_monsters()
     # Add other undo functions here
