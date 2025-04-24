@@ -32,7 +32,7 @@ function LoginFormModal() {
         await closeModal();
         // then navigate after a short delay to ensure state is updated
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate('/');
         }, 100);
       }
     } catch (error) {
@@ -50,7 +50,7 @@ function LoginFormModal() {
     .then(() => {
       // add delay before navigation
       setTimeout(() => {
-        navigate('/dashboard');
+        navigate('/');
       }, 100);
     });
   };
