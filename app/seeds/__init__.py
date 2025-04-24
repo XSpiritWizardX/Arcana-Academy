@@ -1,6 +1,9 @@
 from flask.cli import AppGroup
 from .users import seed_users, undo_users
 from .players import seed_players, undo_players
+from .stages import seed_stages, undo_stages
+
+
 from app.models.db import db, environment, SCHEMA
 
 # Creates a seed group to hold our commands
@@ -18,8 +21,10 @@ def seed():
         # Make sure to add all your other model's undo functions below
         undo_users()
         undo_players()
+        undo_stages()
     seed_users()
     seed_players()
+    seed_stages()
     # Add other seed functions here
 
 
@@ -28,4 +33,5 @@ def seed():
 def undo():
     undo_users()
     undo_players()
+    undo_stages()
     # Add other undo functions here
