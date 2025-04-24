@@ -2,7 +2,7 @@ from flask.cli import AppGroup
 from .users import seed_users, undo_users
 from .players import seed_players, undo_players
 from .stages import seed_stages, undo_stages
-
+from .background_images import seed_background_images, undo_background_images
 
 from app.models.db import db, environment, SCHEMA
 
@@ -22,9 +22,11 @@ def seed():
         undo_users()
         undo_players()
         undo_stages()
+        undo_background_images()
     seed_users()
     seed_players()
     seed_stages()
+    seed_background_images()
     # Add other seed functions here
 
 
@@ -34,4 +36,5 @@ def undo():
     undo_users()
     undo_players()
     undo_stages()
+    undo_background_images()
     # Add other undo functions here
