@@ -9,7 +9,7 @@ from .reviews import seed_reviews, undo_reviews
 from .schedules import seed_schedules, undo_schedules
 from .events import seed_events, undo_events
 from .spell_books import seed_spell_books, undo_spell_books
-
+from .spells import seed_spells, undo_spells
 
 from app.models.db import db, environment, SCHEMA
 
@@ -36,6 +36,7 @@ def seed():
         undo_schedules()
         undo_events()
         undo_spell_books()
+        undo_spells()
     seed_users()
     seed_players()
     seed_stages()
@@ -46,6 +47,7 @@ def seed():
     seed_schedules()
     seed_events()
     seed_spell_books()
+    seed_spells()
     # Add other seed functions here
 
 
@@ -62,4 +64,5 @@ def undo():
     undo_schedules()
     undo_events()
     undo_spell_books()
+    undo_spells()
     # Add other undo functions here

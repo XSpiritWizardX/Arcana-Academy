@@ -9,5 +9,5 @@ from .review import Review
 from .schedule import Schedule
 from .event import Event
 from .spell_book import Spell_book
-
+from .spell import Spell
 from .db import environment, SCHEMA
