@@ -14,6 +14,8 @@ from .spell_images import seed_spell_images, undo_spell_images
 from .potion_bags import seed_potion_bags, undo_potion_bags
 from .potions import seed_potions, undo_potions
 from .potion_images import seed_potion_images, undo_potion_images
+from .sword_galleries import seed_sword_galleries, undo_sword_galleries
+
 from app.models.db import db, environment, SCHEMA
 
 # Creates a seed group to hold our commands
@@ -44,6 +46,7 @@ def seed():
         undo_potion_bags()
         undo_potions()
         undo_potion_images()
+        undo_sword_galleries()
     seed_users()
     seed_players()
     seed_stages()
@@ -59,6 +62,7 @@ def seed():
     seed_potion_bags()
     seed_potions()
     seed_potion_images()
+    seed_sword_galleries()
     # Add other seed functions here
 
 
@@ -80,4 +84,5 @@ def undo():
     undo_potion_bags()
     undo_potions()
     undo_potion_images()
+    undo_sword_galleries()
     # Add other undo functions here
