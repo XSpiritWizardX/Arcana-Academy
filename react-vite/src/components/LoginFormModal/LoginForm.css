@@ -7,16 +7,35 @@
 .submit-button-login {
 background-color: #7F00FF;
 color: white;
-width: 96%;
+width: 100%;
 }
 
 .demo-log-in{
+   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: auto;
+  padding: 4px;
   background-color: #1C1C1E;
   text-decoration: none;
   color: #00CFFF;
   font-size: larger;
   border: none;
+  border-radius: 0%;
+  box-shadow: 0px 0px 0px #C0C0C0;
 
+}
+
+.demo-log-in:hover{
+  background-color: #1C1C1E;
+  text-decoration:underline;
+  color: #00CFFF;
+  font-size: larger;
+  border: none;
+  border-radius: 0%;
+  box-shadow: 0px 0px 0px #C0C0C0;
+  font-size: x-large;
 }
 
 .login-modal-words{

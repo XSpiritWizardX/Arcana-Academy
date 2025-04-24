@@ -90,7 +90,7 @@ function FooterCard() {
           </div>
 
           <a
-          href='https://github.com/XSpiritWizardX/TradeToad/wiki'
+          href='https://github.com/XSpiritWizardX/Arcana-Academy/wiki'
           target="_self"
           className='foot-links'
           >Docs
