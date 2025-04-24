@@ -10,4 +10,5 @@ from .schedule import Schedule
 from .event import Event
 from .spell_book import Spell_book
 from .spell import Spell
+from .spell_image import Spell_image
 from .db import environment, SCHEMA
