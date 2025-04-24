@@ -4,6 +4,7 @@ from .players import seed_players, undo_players
 from .stages import seed_stages, undo_stages
 from .background_images import seed_background_images, undo_background_images
 from .monsters import seed_monsters, undo_monsters
+from .monster_images import seed_monster_images, undo_monster_images
 from app.models.db import db, environment, SCHEMA
 
 # Creates a seed group to hold our commands
@@ -24,11 +25,13 @@ def seed():
         undo_stages()
         undo_background_images()
         undo_monsters()
+        undo_monster_images()
     seed_users()
     seed_players()
     seed_stages()
     seed_background_images()
     seed_monsters()
+    seed_monster_images()
     # Add other seed functions here
 
 
@@ -40,4 +43,5 @@ def undo():
     undo_stages()
     undo_background_images()
     undo_monsters()
+    undo_monster_images()
     # Add other undo functions here

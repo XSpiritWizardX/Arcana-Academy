@@ -17,7 +17,7 @@ class Monster(db.Model):
 
     # Relationships
     # player = db.relationship("Player", back_populates="player")
-
+    # monster_images = db.relationship("Monster_image", back_populates="monster", cascade="all, delete-orphan")
 
 
     def to_dict(self):
