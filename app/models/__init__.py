@@ -8,6 +8,6 @@ from .monster_image import Monster_image
 from .review import Review
 from .schedule import Schedule
 from .event import Event
-
+from .spell_book import Spell_book
 
 from .db import environment, SCHEMA
