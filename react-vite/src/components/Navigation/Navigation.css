@@ -18,6 +18,7 @@
   width: 160px;
   height: 100%;
   box-shadow: 4px 4px 8px 4px black;
+  border: 4px double #C0C0C0;
 }
 
 .nav-logo{
