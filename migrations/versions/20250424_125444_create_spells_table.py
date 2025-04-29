@@ -23,6 +23,7 @@ def upgrade():
     sa.Column('spell_book_id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=20), nullable=False),
     sa.Column('description', sa.String(length=256), nullable=False),
+    sa.Column('url', sa.String(length=256), nullable=False),
     sa.Column('damage', sa.Numeric(precision=20, scale=2), nullable=False),
     sa.Column('cost', sa.Numeric(precision=20, scale=2), nullable=False),
     sa.Column('mana_cost', sa.Numeric(precision=20, scale=2), nullable=False),

@@ -12,7 +12,7 @@ class Monster(db.Model):
     description = db.Column(db.String(250), nullable=False)
     health = db.Column(db.Numeric(precision=20, scale=2, asdecimal=True), nullable=False)
     gold_drop = db.Column(db.Numeric(precision=20, scale=2, asdecimal=True), nullable=False)
-
+    url = db.Column(db.String(250), nullable=False)
 
 
     # Relationships
@@ -27,5 +27,6 @@ class Monster(db.Model):
             'element': self.element,
             'description': self.description,
             'health': self.health,
-            'gold_drop': self.gold_drop
+            'gold_drop': self.gold_drop,
+            "url": self.url
         }

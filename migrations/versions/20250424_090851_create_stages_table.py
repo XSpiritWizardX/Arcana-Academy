@@ -23,6 +23,7 @@ def upgrade():
     sa.Column('monster_id', sa.Integer(), nullable=False),
     sa.Column('player_id', sa.Integer(), nullable=False),
     sa.Column('background_id', sa.Integer(), nullable=False),
+    sa.Column('url', sa.String(length=250), nullable=False),
     sa.Column('element', sa.String(length=20), nullable=False),
     sa.Column('description', sa.String(length=250), nullable=False),
     sa.PrimaryKeyConstraint('id')

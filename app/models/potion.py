@@ -8,6 +8,7 @@ class Potion(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     potion_bag_id = db.Column(db.Integer, nullable=False)
+    url = db.Column(db.String(256), nullable=False)
     name = db.Column(db.String(20), nullable=False)
     type = db.Column(db.String(20), nullable=False)
     description = db.Column(db.String(256), nullable=False)
@@ -28,6 +29,7 @@ class Potion(db.Model):
         return {
             'id': self.id,
             'potion_bag_id': self.potion_bag_id,
+            "url": self.url,
             'name': self.name,
             'type': self.type,
             'description': self.description,

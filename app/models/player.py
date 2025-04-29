@@ -9,6 +9,7 @@ class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     name = db.Column(db.String(20), nullable=False)
+    url = db.Column(db.String(256), nullable=False)
     magic_class = db.Column(db.String(20), nullable=False)
     element = db.Column(db.String(20), nullable=False)
     level = db.Column(db.Numeric(precision=20, scale=2, asdecimal=True), nullable=False)
@@ -35,6 +36,7 @@ class Player(db.Model):
         return {
             'id': self.id,
             'name': self.name,
+            "url": self.url,
             'magic_class': self.magic_class,
             'element': self.element,
             'level': self.level,

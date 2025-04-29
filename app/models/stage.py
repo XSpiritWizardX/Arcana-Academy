@@ -13,6 +13,8 @@ class Stage(db.Model):
     background_id = db.Column(db.Integer, nullable=False)
     element = db.Column(db.String(20), nullable=False)
     description = db.Column(db.String(250), nullable=False)
+    url = db.Column(db.String(250), nullable=False)
+
 
 
 
@@ -28,5 +30,6 @@ class Stage(db.Model):
             'player_id': self.player_id,
             'background_id': self.background_id,
             'element': self.element,
-            'description': self.description
+            'description': self.description,
+            "url": self.url
         }

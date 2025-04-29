@@ -4,18 +4,18 @@ from sqlalchemy.sql import text
 
 def seed_potions():
     potion1 = Potion(
-        potion_bag_id=1, name='small potion', element='healing', cost=100, type="health", regeneration=670.80, description='A small healing potion.')
+        potion_bag_id=1, name='small potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='healing', cost=100, type="health", regeneration=670.80, description='A small healing potion.')
 
     potion2 = Potion(
-        potion_bag_id=2, name='medium potion', element='healing', cost=200, type="health", regeneration=1341.60, description='A medium healing potion.')
+        potion_bag_id=2, name='medium potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='healing', cost=200, type="health", regeneration=1341.60, description='A medium healing potion.')
     potion3 = Potion(
-        potion_bag_id=3, name='large potion', element='healing', cost=300, type="health", regeneration=2012.40, description='A large healing potion.')
+        potion_bag_id=3, name='large potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='healing', cost=300, type="health", regeneration=2012.40, description='A large healing potion.')
     potion4 = Potion(
-        potion_bag_id=4, name='small mana potion', element='mana', cost=100, type="mana", regeneration=670.80, description='A small mana potion.')
+        potion_bag_id=4, name='small mana potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='mana', cost=100, type="mana", regeneration=670.80, description='A small mana potion.')
     potion5 = Potion(
-        potion_bag_id=5, name='medium mana potion', element='mana', cost=200, type="mana", regeneration=1341.60, description='A medium mana potion.')
+        potion_bag_id=5, name='medium mana potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='mana', cost=200, type="mana", regeneration=1341.60, description='A medium mana potion.')
     potion6 = Potion(
-        potion_bag_id=6, name='large mana potion', element='mana', cost=300, type="mana", regeneration=2012.40, description='A large mana potion.')
+        potion_bag_id=6, name='large mana potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='mana', cost=300, type="mana", regeneration=2012.40, description='A large mana potion.')
 
     db.session.add(potion1)
     db.session.add(potion2)

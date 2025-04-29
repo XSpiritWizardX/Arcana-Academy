@@ -24,6 +24,7 @@ def upgrade():
     sa.Column('name', sa.String(length=20), nullable=False),
     sa.Column('type', sa.String(length=20), nullable=False),
     sa.Column('description', sa.String(length=256), nullable=False),
+    sa.Column('url', sa.String(length=256), nullable=False),
     sa.Column('regeneration', sa.Numeric(precision=20, scale=2), nullable=False),
     sa.Column('cost', sa.Numeric(precision=20, scale=2), nullable=False),
     sa.Column('element', sa.String(length=20), nullable=False),

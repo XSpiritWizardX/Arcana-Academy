@@ -22,6 +22,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=20), nullable=False),
+    sa.Column('url', sa.String(length=256), nullable=False),
     sa.Column('magic_class', sa.String(length=20), nullable=False),
     sa.Column('element', sa.String(length=20), nullable=False),
     sa.Column('level', sa.Numeric(precision=20, scale=2), nullable=False),

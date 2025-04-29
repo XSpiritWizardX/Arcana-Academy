@@ -8,6 +8,7 @@ class Spell(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     spell_book_id = db.Column(db.Integer, nullable=False)
+    url = db.Column(db.String(256), nullable=False)
     name = db.Column(db.String(20), nullable=False)
     description = db.Column(db.String(256), nullable=False)
     damage = db.Column(db.Numeric(precision=20, scale=2, asdecimal=True), nullable=False)
@@ -28,6 +29,7 @@ class Spell(db.Model):
         return {
             'id': self.id,
             'spell_book_id': self.spell_book_id,
+            "url": self.url,
             'name': self.name,
             'description': self.description,
             'damage': self.damage,

@@ -4,19 +4,19 @@ from sqlalchemy.sql import text
 
 def seed_stages():
     stage1 = Stage(
-        monster_id=1, player_id=1, background_id=1, element='TIME', description="This wizard has been known for many ages now. from the time a sword was in a stone ")
+        monster_id=1, player_id=1, background_id=1, element='TIME', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",description="This wizard has been known for many ages now. from the time a sword was in a stone ")
     stage2 = Stage(
-        monster_id=2, player_id=1, background_id=2, element='LIGHTNING', description="This wizard has been known for many ages now. from the time a sword was in a stone ")
+        monster_id=2, player_id=1, background_id=2, element='LIGHTNING', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",description="This wizard has been known for many ages now. from the time a sword was in a stone ")
     stage3 = Stage(
-        monster_id=3, player_id=1, background_id=3, element='FIRE', description="This wizard has been known for many ages now. from the time a sword was in a stone ")
+        monster_id=3, player_id=1, background_id=3, element='FIRE', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",description="This wizard has been known for many ages now. from the time a sword was in a stone ")
     stage4 = Stage(
-        monster_id=4, player_id=1, background_id=4, element='EARTH', description="This wizard has been known for many ages now. from the time a sword was in a stone ")
+        monster_id=4, player_id=1, background_id=4, element='EARTH', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",description="This wizard has been known for many ages now. from the time a sword was in a stone ")
     stage5 = Stage(
-        monster_id=5, player_id=1, background_id=5, element='WIND', description="This wizard has been known for many ages now. from the time a sword was in a stone ")
+        monster_id=5, player_id=1, background_id=5, element='WIND', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",description="This wizard has been known for many ages now. from the time a sword was in a stone ")
     stage6 = Stage(
-        monster_id=6, player_id=1, background_id=6, element='WATER', description="This wizard has been known for many ages now. from the time a sword was in a stone ")
+        monster_id=6, player_id=1, background_id=6, element='WATER', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",description="This wizard has been known for many ages now. from the time a sword was in a stone ")
     stage7 = Stage(
-        monster_id=7, player_id=1, background_id=7, element='EARTH', description="This wizard has been known for many ages now. from the time a sword was in a stone ")
+        monster_id=7, player_id=1, background_id=7, element='EARTH', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",description="This wizard has been known for many ages now. from the time a sword was in a stone ")
 
     db.session.add(stage1)
     db.session.add(stage2)

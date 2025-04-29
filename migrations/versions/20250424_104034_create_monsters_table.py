@@ -23,6 +23,7 @@ def upgrade():
     sa.Column('name', sa.Integer(), nullable=False),
     sa.Column('element', sa.Integer(), nullable=False),
     sa.Column('description', sa.String(length=250), nullable=False),
+    sa.Column('url', sa.String(length=250), nullable=False),
     sa.Column('health', sa.Numeric(precision=20, scale=2), nullable=False),
     sa.Column('gold_drop', sa.Numeric(precision=20, scale=2), nullable=False),
     sa.PrimaryKeyConstraint('id')

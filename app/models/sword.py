@@ -10,6 +10,7 @@ class Sword(db.Model):
     sword_gallery_id = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(20), nullable=False)
     description = db.Column(db.String(256), nullable=False)
+    url = db.Column(db.String(256), nullable=False)
     damage = db.Column(db.Numeric(precision=20, scale=2, asdecimal=True), nullable=False)
     cost = db.Column(db.Numeric(precision=20, scale=2, asdecimal=True), nullable=False)
     mana_cost = db.Column(db.Numeric(precision=20, scale=2, asdecimal=True), nullable=False)
@@ -30,6 +31,7 @@ class Sword(db.Model):
             'sword_gallery_id': self.sword_gallery_id,
             'name': self.name,
             'description': self.description,
+            "url": self.url,
             'damage': self.damage,
             'cost': self.cost,
             'mana_cost': self.mana_cost,
