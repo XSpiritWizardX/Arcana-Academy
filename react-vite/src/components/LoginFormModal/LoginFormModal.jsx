@@ -58,7 +58,7 @@ function LoginFormModal() {
   const loginDemo2 = (e) => {
     e.preventDefault();
     dispatch(thunkLogin({
-        email: 'thechosenone@aa.io',
+        email: 'harry@aa.io',
         password: 'password'
     }))
     .then(() => closeModal())
@@ -73,7 +73,7 @@ function LoginFormModal() {
   const loginDemo3 = (e) => {
     e.preventDefault();
     dispatch(thunkLogin({
-        email: 'etusks@aa.io',
+        email: 'gandalf@aa.io',
         password: 'password'
     }))
     .then(() => closeModal())

@@ -33,6 +33,8 @@ def seed_spells():
      name='Light Beam', user_id= 1,element='Light', cost=100, mana_cost=30, damage=6070.80, url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",description='Unleash a beam of holy light that deals damage to your enemies and heals your allies.')
     spell15 = Spell(
      name='Water Shield', user_id= 1,element='Water', cost=100, mana_cost=30, damage=6070.80, url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",description='Create a protective shield of water around your allies, reducing damage taken and increasing their mana regeneration.')
+    spell16 = Spell(
+     name='Hurricane', user_id= 2,element='Water', cost=100, mana_cost=30, damage=6070.80, url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",description='Create a protective shield of water around your allies, reducing damage taken and increasing their mana regeneration.')
 
 
 
@@ -51,6 +53,7 @@ def seed_spells():
     db.session.add(spell13)
     db.session.add(spell14)
     db.session.add(spell15)
+    db.session.add(spell16)
 
     db.session.commit()
 

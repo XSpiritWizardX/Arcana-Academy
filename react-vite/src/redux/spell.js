@@ -65,7 +65,7 @@ export const fetchSpells = () => async (dispatch) => {
 
 export const fetchAllSpells = () => async (dispatch) => {
   try {
-    const response = await fetch('/api/spells/all', {
+    const response = await csrfFetch('/api/spells/all', {
 
     });
 
@@ -208,7 +208,7 @@ function spellReducer(state = initialState, action) {
 
     case GET_SPELLS:
       return { ...state, spell: action.payload };
-      
+
     case GET_ALL_SPELLS:
       return { ...state, spell: action.payload };
 

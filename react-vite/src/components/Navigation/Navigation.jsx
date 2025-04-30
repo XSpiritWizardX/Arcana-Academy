@@ -7,9 +7,22 @@ function Navigation() {
     <div
     className="nav-bar"
     >
-    <ProfileButton
-   className="profile-button"
-    />
+
+      <ProfileButton
+     className="profile-button"
+      />
+
+
+        <NavLink to="/"
+        className="nav-bar-text"
+        >
+        <img
+        className="nav-logo"
+        src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745460813/PigZ34Z1EbOSrle1I22d--0--qafvf_bg-rmvd_bofljj.png"  />
+        HOME
+        </NavLink>
+
+
 
         <NavLink to="/"
         className="nav-bar-text"
@@ -17,11 +30,11 @@ function Navigation() {
         <img
         className="nav-logo"
         src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745460859/TiisO45JvVhdMXUaM7ow--0--b4glo_bg-rmvd_rbtkpx.png"  />
-        SCHEDULE
+        EVENTS
         </NavLink>
 
 
-        <NavLink to="/spells"
+        <NavLink to="/spells/all"
          className="nav-bar-text"
         >
         <img

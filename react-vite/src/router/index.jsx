@@ -25,9 +25,63 @@ export const router = createBrowserRouter([
         element: <SignupFormPage />,
       },
       {
+        path:'/spells/all',
+        element: <SpellList />
+      },
+      // {
+      //   path:'/spells/current',
+      //   element: <CurrentSpells />
+      // },
+      // {
+      //   path:'/spells/new',
+      //   element: <SpellForm />
+      // },
+      // {
+      //   path:'/spells/:spellId',
+      //   element: <SpellShow />
+      // },
+      {
         path:'/spells',
         element: <SpellList />
       },
+      {
+        path:'/spells',
+        element: <SpellList />
+      },
+      {
+        path:'/spells',
+        element: <SpellList />
+      },
+      {
+        path:'/spells',
+        element: <SpellList />
+      },
+      {
+        path:'/spells',
+        element: <SpellList />
+      },
+
+
+
+      {
+        path:'/spells',
+        element: <SpellList />
+      },
+      {
+        path:'/spells',
+        element: <SpellList />
+      },
+      {
+        path:'/spells',
+        element: <SpellList />
+      },
+      {
+        path:'/spells',
+        element: <SpellList />
+      },
+
+
+
       {
         path:'*',
         element: <h2>Page Not Found</h2>

@@ -6,7 +6,7 @@ spell_routes = Blueprint('spells', __name__)
 
 
 @spell_routes.route('/all')
-@login_required
+
 def get_all_spells():
     """
     Get all spells.

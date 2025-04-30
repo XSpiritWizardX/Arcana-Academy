@@ -10,7 +10,7 @@ function ProfileButton() {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const user = useSelector((store) => store.session.user);
-  const session = useSelector((store) => store.session);
+  // const session = useSelector((store) => store.session);
   const ulRef = useRef();
 
   const toggleMenu = (e) => {
@@ -48,7 +48,9 @@ function ProfileButton() {
       onClick={toggleMenu}
       className="nav-logo"
       src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745460861/hm1Zq9Ih3p0Adhj7eGLp--0--ulhyr_bg-rmvd_wikfdy.png"></img>
-
+      <h1
+      className="user-interface"
+      >MENU</h1>
 
 
       {showMenu && (
@@ -74,46 +76,7 @@ function ProfileButton() {
               >
 
               </div>
-            <p
-            className="user-stats-level"
-            >
-              Level: {session.level}
-            </p>
 
-            <p
-            className="user-stats-xp"
-            >
-            Experience: {session.experience}
-              </p>
-
-            <p
-            className="user-stats-health"
-            >
-            Health: {session.health}
-              </p>
-
-              <p
-              className="user-stats-mana"
-              >Mana: {session.mana}
-              </p>
-
-            <p
-            className="user-stats-gold"
-            >
-            Gold: {session.gold}
-              </p>
-
-              <p
-              className="user-stats"
-              >
-                Power: {session.power}
-              </p>
-
-            <p
-            className="user-stats"
-            >
-              Speed: {session.speed}
-            </p>
 
 
 
