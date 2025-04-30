@@ -81,9 +81,9 @@ button {
 }
 
 button:hover {
-    box-shadow: 4px 4px 8px #C0C0C0;
+    box-shadow: 7px 6px 6px #C0C0C0;
 }
 
 button:active {
-    box-shadow: 2px 2px 4px #C0C0C0;
+    box-shadow: 6px 6px 12px #C0C0C0;
 }

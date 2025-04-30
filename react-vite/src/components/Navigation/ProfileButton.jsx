@@ -4,6 +4,7 @@ import { thunkLogout } from "../../redux/session";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import { NavLink } from "react-router-dom";
 import "./ProfileButton.css";
 
 function ProfileButton() {
@@ -78,6 +79,47 @@ function ProfileButton() {
               </div>
 
 
+              <NavLink to="/spells/"
+              className="pro-bar-text"
+              >
+              YOUR PLAYERS
+              </NavLink>
+
+              <NavLink to="/spells/"
+              className="pro-bar-text"
+              >
+              YOUR SPELLS
+              </NavLink>
+
+              <NavLink to="/spells/"
+              className="pro-bar-text"
+              >
+              YOUR POTIONS
+              </NavLink>
+
+              <NavLink to="/spells/"
+              className="pro-bar-text"
+              >
+              YOUR SWORDS
+              </NavLink>
+
+              <NavLink to="/spells/"
+              className="pro-bar-text"
+              >
+              ANGEL REBIRTH
+              </NavLink>
+
+              <NavLink to="/spells/"
+              className="pro-bar-text"
+              >
+              BATTLE
+              </NavLink>
+
+              <NavLink to="/spells/"
+              className="pro-bar-text"
+              >
+              SCHEDULE
+              </NavLink>
 
 
               <button

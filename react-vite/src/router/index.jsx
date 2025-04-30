@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import LoginFormPage from '../components/LoginFormPage';
 import SignupFormPage from '../components/SignupFormPage';
 import SpellList from '../components/SpellList/SpellList';
-
+import CurrentSpells from "../components/CurrentSpells/CurrentSpells"
 
 
 import Layout from './Layout';
@@ -28,10 +28,10 @@ export const router = createBrowserRouter([
         path:'/spells/all',
         element: <SpellList />
       },
-      // {
-      //   path:'/spells/current',
-      //   element: <CurrentSpells />
-      // },
+      {
+        path:'/spells',
+        element: <CurrentSpells />
+      },
       // {
       //   path:'/spells/new',
       //   element: <SpellForm />
@@ -40,45 +40,45 @@ export const router = createBrowserRouter([
       //   path:'/spells/:spellId',
       //   element: <SpellShow />
       // },
-      {
-        path:'/spells',
-        element: <SpellList />
-      },
-      {
-        path:'/spells',
-        element: <SpellList />
-      },
-      {
-        path:'/spells',
-        element: <SpellList />
-      },
-      {
-        path:'/spells',
-        element: <SpellList />
-      },
-      {
-        path:'/spells',
-        element: <SpellList />
-      },
+      // {
+      //   path:'/spells',
+      //   element: <SpellList />
+      // },
+      // {
+      //   path:'/spells',
+      //   element: <SpellList />
+      // },
+      // {
+      //   path:'/spells',
+      //   element: <SpellList />
+      // },
+      // {
+      //   path:'/spells',
+      //   element: <SpellList />
+      // },
+      // {
+      //   path:'/spells',
+      //   element: <SpellList />
+      // },
 
 
 
-      {
-        path:'/spells',
-        element: <SpellList />
-      },
-      {
-        path:'/spells',
-        element: <SpellList />
-      },
-      {
-        path:'/spells',
-        element: <SpellList />
-      },
-      {
-        path:'/spells',
-        element: <SpellList />
-      },
+      // {
+      //   path:'/spells',
+      //   element: <SpellList />
+      // },
+      // {
+      //   path:'/spells',
+      //   element: <SpellList />
+      // },
+      // {
+      //   path:'/spells',
+      //   element: <SpellList />
+      // },
+      // {
+      //   path:'/spells',
+      //   element: <SpellList />
+      // },
 
 
 

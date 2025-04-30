@@ -1,0 +1,7 @@
+.title-cont{
+    display: flex;
+    margin-left: 10%;
+    justify-content: space-around;
+    margin-bottom: 5%;
+    margin-top: 2%;
+}
