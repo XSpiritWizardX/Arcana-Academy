@@ -9,17 +9,17 @@ import './SpellList.css'
 function SpellCard() {
   const dispatch = useDispatch();
   const spells = useSelector(state => state.spell.spell || [])
-  const user = useSelector(state => state.session.user);
+  // const user = useSelector(state => state.session.user);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
+
       setIsLoading(true);
       dispatch(fetchAllSpells())
         .then(() => setIsLoading(false))
         .catch(() => setIsLoading(false));
-    }
-  }, [dispatch, user]);
+
+  }, [dispatch]);
 
   if (isLoading) {
     return <div className="spells-container">Loading spells...</div>;

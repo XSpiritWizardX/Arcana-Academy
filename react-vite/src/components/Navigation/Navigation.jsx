@@ -71,23 +71,7 @@ function Navigation() {
         BESTIARY
         </NavLink>
 
-        <NavLink to="/"
-         className="nav-bar-text"
-        >
-        <img
-        className="nav-logo"
-        src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745460861/52pMCncY7299YlmPJExv--0--61l2j_bg-rmvd_nhsmvi.png"  />
-        ANGEL REBIRTH
-        </NavLink>
-
-        <NavLink to="/"
-         className="nav-bar-text"
-        >
-        <img
-        className="nav-logo"
-        src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745460813/PigZ34Z1EbOSrle1I22d--0--qafvf_bg-rmvd_bofljj.png"  />
-        BATTLE
-        </NavLink>
+     
 
     </div>
   );
