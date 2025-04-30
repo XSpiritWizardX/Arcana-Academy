@@ -5,6 +5,16 @@ from app.models import Spell, db
 spell_routes = Blueprint('spells', __name__)
 
 
+@spell_routes.route('/all')
+@login_required
+def get_all_spells():
+    """
+    Get all spells.
+    """
+    spells = Spell.query.all()
+    return jsonify({'spells': [spell.to_dict() for spell in spells]})
+
+
 @spell_routes.route('/')
 @login_required
 def get_spells():

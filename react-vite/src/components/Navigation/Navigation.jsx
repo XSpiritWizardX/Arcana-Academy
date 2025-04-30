@@ -21,7 +21,7 @@ function Navigation() {
         </NavLink>
 
 
-        <NavLink to="/"
+        <NavLink to="/spells"
          className="nav-bar-text"
         >
         <img

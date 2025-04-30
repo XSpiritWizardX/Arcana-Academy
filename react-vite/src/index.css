@@ -1,7 +1,7 @@
 /* TODO: Add sitewide styles */
 *{
     background-color: #1C1C1E;
-    cursor: url(https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745474309/ZgJmgn2IcIxm1Th2tNaw--0--pck9e_bg-rmvd_dwpfeb_a_hflip_c_pad_w_100_h_100_uombrh.png), auto;
+    cursor: url(https://res.cloudinary.com/dl6ls3rgu/image/upload/a_hflip/c_pad,w_90,h_90/v1745983698/mAKmqaPgDvyyxNZlqdjt--0--pxxxn_bg-rmvd_ucyxld.png), auto;
 }
 
 
@@ -87,4 +87,3 @@ button:hover {
 button:active {
     box-shadow: 2px 2px 4px #C0C0C0;
 }
-
