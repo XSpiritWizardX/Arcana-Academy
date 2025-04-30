@@ -4,6 +4,7 @@ import { fetchSpells } from "../../redux/spell";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import SpellForm from "../SpellForm/SpellForm";
 
 // import { NavLink } from 'react-router-dom';
 import './CurrentSpells.css'
@@ -49,7 +50,7 @@ function SpellCard() {
                 className="create-spell-button"
                 buttonText="Create A New Spell"
 
-                modalComponent={<SignupFormModal />}
+                modalComponent={<SpellForm />}
               />
             </div>
 

@@ -1,0 +1,56 @@
+.create-spell-labels{
+width: 98%;
+}
+
+
+.create-confirm{
+    width: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 1%;
+    border: 2px solid white;
+    position:fixed;
+    top: 10%;
+    right: 5%;
+}
+
+
+.button-container{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+
+
+
+.inputs{
+    width: 70%;
+}
+
+
+.create-spell-form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.create-spell-title{
+    display: flex;
+    justify-self: center;
+    margin-left: 25%;
+}
+
+.element-select{
+    display: flex;
+    height: 50px;
+    margin-bottom: 5%
+}
+
+.keep-spell-button{
+    margin-left: 5%;
+}
