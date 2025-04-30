@@ -7,7 +7,7 @@ class Spell(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    spell_book_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
     url = db.Column(db.String(256), nullable=False)
     name = db.Column(db.String(20), nullable=False)
     description = db.Column(db.String(256), nullable=False)
@@ -18,7 +18,7 @@ class Spell(db.Model):
 
 
     # Relationships
-    # user = db.relationship("User", back_populates="player")
+    user = db.relationship("User", back_populates="spell")
     # portfolio_stocks = db.relationship("Portfolio_Stock", back_populates="stock", cascade="all, delete-orphan")
     # watchlist_stocks = db.relationship("Watchlist_Stock", back_populates="stock", cascade="all, delete-orphan")
     # stock_transactions = db.relationship("Stock_Transaction", back_populates="stock", cascade="all, delete-orphan")
@@ -28,7 +28,7 @@ class Spell(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'spell_book_id': self.spell_book_id,
+            "user_id": self.user_id,
             "url": self.url,
             'name': self.name,
             'description': self.description,

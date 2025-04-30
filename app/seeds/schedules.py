@@ -4,25 +4,25 @@ from sqlalchemy.sql import text
 
 def seed_schedules():
     schedule1 = Schedule(
-        user_id=3, event_id=1,  description="Schedule for event 1"
+        user_id=1, event_id=1,  description="Schedule for event 1"
     )
     schedule2 = Schedule(
-        user_id=3, event_id=2,  description="Schedule for event 2"
+        user_id=1, event_id=2,  description="Schedule for event 2"
     )
     schedule3 = Schedule(
-        user_id=3, event_id=3,  description="Schedule for event 3"
+        user_id=1, event_id=3,  description="Schedule for event 3"
     )
     schedule4 = Schedule(
-        user_id=3, event_id=4,  description="Schedule for event 4"
+        user_id=1, event_id=4,  description="Schedule for event 4"
     )
     schedule5 = Schedule(
-        user_id=3, event_id=5,  description="Schedule for event 5"
+        user_id=1, event_id=5,  description="Schedule for event 5"
     )
     schedule6 = Schedule(
-        user_id=3, event_id=6,  description="Schedule for event 6"
+        user_id=1, event_id=6,  description="Schedule for event 6"
     )
     schedule7 = Schedule(
-        user_id=3, event_id=7,  description="Schedule for event 7"
+        user_id=1, event_id=7,  description="Schedule for event 7"
     )
     schedule8 = Schedule(
         user_id=3, event_id=8,  description="Schedule for event 8"

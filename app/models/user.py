@@ -28,6 +28,13 @@ class User(db.Model, UserMixin):
 
     # Relationships
     player = db.relationship("Player", back_populates="user", cascade="all, delete-orphan")
+    spell = db.relationship("Spell", back_populates="user", cascade="all, delete-orphan", uselist=False)
+    potion = db.relationship("Potion", back_populates="user", cascade="all, delete-orphan", uselist=False)
+    sword = db.relationship("Sword", back_populates="user", cascade="all, delete-orphan", uselist=False)
+    schedule = db.relationship("Schedule", back_populates="user", cascade="all, delete-orphan", uselist=False)
+    review = db.relationship("Review", back_populates="user", cascade="all, delete-orphan", uselist=False)
+
+
 
 
     def to_dict(self):
