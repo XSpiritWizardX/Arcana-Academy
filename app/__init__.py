@@ -7,6 +7,12 @@ from flask_login import LoginManager
 from .models import db, User
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
+from .api.spell_routes import spell_routes
+from .api.potion_routes import potion_routes
+from .api.sword_routes import sword_routes
+from .api.player_routes import player_routes
+# from .api.schedule_routes import schedule_routes
+# from .api.review_routes import review_routes
 from .seeds import seed_commands
 from .config import Config
 
@@ -28,6 +34,12 @@ app.cli.add_command(seed_commands)
 app.config.from_object(Config)
 app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
+app.register_blueprint(spell_routes, url_prefix='/api/spells')
+app.register_blueprint(potion_routes, url_prefix='/api/potions')
+app.register_blueprint(sword_routes, url_prefix='/api/swords')
+app.register_blueprint(player_routes, url_prefix='/api/players')
+# app.register_blueprint(schedule_routes, url_prefix='/api/schedules')
+# app.register_blueprint(review_routes, url_prefix='/api/reviews')
 db.init_app(app)
 Migrate(app, db)
 
