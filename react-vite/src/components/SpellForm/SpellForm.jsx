@@ -88,35 +88,80 @@ function SpellForm() {
 
 
 
-
-        {/* <select
-          value={element}
-          onChange={(e) => setElement(e.target.value)}
-          className='element-select'
-          required
-
+        <div
+        className='select-el-container'
         >
-            ELEMENT
-          <option value="">-- Select an element --</option>
+          <label htmlFor="element">Element</label>
+          <br />
+          <select
+            id="element-select"
+            name="element"
+            value={element}
+            onChange={(e) => setElement(e.target.value)}          >
 
-            <option>
-                "Fire"
-            </option>
+            <option
+            className='beautiful-dropdown'
+            value="">----Choose Element----</option>
+            <option
+            className='beautiful-dropdown-fire'
+            value="Fire">Fire</option>
+            <option
+            className='beautiful-dropdown-water'
+            value="Water">Water</option>
+            <option
+            className='beautiful-dropdown-earth'
+            value="Earth">Earth</option>
+            <option
+            className='beautiful-dropdown-ice'
+            value="Ice">Ice</option>
+            <option
+            className='beautiful-dropdown-wind'
+            value="Wind">Wind</option>
+            <option
+            className='beautiful-dropdown-light'
+            value="Light">Light</option>
+            <option
+            className='beautiful-dropdown-dark'
+            value="Dark">Dark</option>
+            <option
+            className='beautiful-dropdown-arcane'
+            value="Arcane">Arcane</option>
+            <option
+            className='beautiful-dropdown-nature'
+            value="Nature">Nature</option>
+            <option
+            className='beautiful-dropdown-gravity'
+            value="Gravity">Gravity</option>
+            <option
+            className='beautiful-dropdown-support'
+            value="Support">Support</option>
+            <option
+            className='beautiful-dropdown-time'
+            value="Time">Time</option>
+            <option
+            className='beautiful-dropdown-electricity'
+            value="Electricty">Electricty</option>
+            <option
+            className='beautiful-dropdown-psychic'
+            value="Psychic">Psychic</option>
+            <option
+            className='beautiful-dropdown-ancient'
+            value="Ancient">Ancient</option>
+            <option
+            className='beautiful-dropdown-life'
+            value="Life">Life</option>
+            <option
+            className='beautiful-dropdown-death'
+            value="Death">Death</option>
+            <option
+            className='beautiful-dropdown-non'
+            value="No Element">No Element</option>
+          </select>
+        </div>
 
-        </select> */}
-        <label
-        className='create-spell-labels'
-        >
-        Element
-        <input
-        className='inputs'
-        placeholder='Element'
-        type="text"
-        value={element}
-        onChange={(e) => setElement(e.target.value)}
-        required
-        />
-        </label>
+
+
+
 
         <label
         className='create-spell-labels'
