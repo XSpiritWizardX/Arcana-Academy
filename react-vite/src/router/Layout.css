@@ -4,4 +4,68 @@
     height: auto;
    margin-top: 1%;;
    margin-bottom: 5%;
+   min-height: 100vh;
 }
+
+.layout-container{
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+
+    background: linear-gradient(180deg, #0d1b2a, #1b263b, #415a77);
+    height: 100vh;
+    cursor: none;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  /* h1 {
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    text-align: center;
+    color: #7F00FF;
+    pointer-events: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 3vw;
+  } */
+
+  .snowflake,
+  .mouseflake,
+  .magicflake {
+    position: absolute;
+    top: -10px;
+    background: #00CFFF;
+    border-radius: 50%;
+    pointer-events: none;
+    will-change: transform, opacity;
+    mix-blend-mode: lighten;
+    filter: blur(2px);
+  }
+
+  .mouseflake {
+    background: #7F00FF;
+    filter: blur(2px);
+  }
+
+  .magicflake {
+    background: radial-gradient(circle, #00CFFF 30%, #7F00FF 70%);
+    width: 15px;
+    height: 15px;
+    filter: drop-shadow(0 0 10px #7F00FF);
+    opacity: 0.9;
+  }
+
+
+
+
+
+  .Arcana-layout{
+    margin-top: 5%;
+    color: #7F00FF;
+  }

@@ -1,11 +1,11 @@
 import { csrfFetch } from "./csrf";
 
-const CREATE_SPELL = 'session/createSpell';
-const SET_ONE_SPELL = 'session/oneSpell';
-const REMOVE_SPELL = 'session/removeSpell';
-const GET_SPELLS = 'session/getSpells';
-const GET_ALL_SPELLS = 'session/getAllSpells';
-const UPDATE_SPELL = 'session/updateSpell';
+const CREATE_SPELL = 'spell/createSpell';
+const SET_ONE_SPELL = 'spell/oneSpell';
+const REMOVE_SPELL = 'spell/removeSpell';
+const GET_SPELLS = 'spell/getSpells';
+const GET_ALL_SPELLS = 'spell/getAllSpells';
+const UPDATE_SPELL = 'spell/updateSpell';
 
 
 
@@ -95,9 +95,12 @@ export const fetchOneSpell = (spellId) => async (dispatch) => {
       const spell = await response.json();
       dispatch(setOneSpell(spell));
       return spell;
+    } else {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to fetch spell');
     }
   } catch (error) {
-    console.error('Error fetching spell:', error);
+    console.error('Error fetching spell', error);
     throw error;
   }
 };

@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpells } from "../../redux/spell";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
-import LoginFormModal from "../LoginFormModal";
-import SignupFormModal from "../SignupFormModal";
+import UpdateSpellForm from "../UpdateSpellForm/UpdateSpellForm"
+import DeleteSpellModal from "../DeleteSpell/DeleteSpellModal";
 import SpellForm from "../SpellForm/SpellForm";
 
-// import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './CurrentSpells.css'
 
 
@@ -63,7 +63,16 @@ function SpellCard() {
               <h2
               className="spell-name"
               >{spell.name}</h2>
+
+              <NavLink
+              to={`/spells/${spell.id}`}
+              className="spell-image-container"
+              >
               <img className="spell-image" src={spell.url} alt={spell.name} />
+
+              </NavLink>
+
+
               <p
               className="spell-description"
               >Description: {spell.description}</p>
@@ -87,13 +96,13 @@ function SpellCard() {
                 className="update-spell-button"
                 buttonText="UPDATE"
 
-                modalComponent={<LoginFormModal />}
+                modalComponent={<UpdateSpellForm spellId={spell.id}/>}
               />
               <OpenModalButton
                 className="delete-spell-button"
                 buttonText="DELETE"
 
-                modalComponent={<SignupFormModal />}
+                modalComponent={<DeleteSpellModal spellId={spell.id}/>}
               />
                 </div>
 

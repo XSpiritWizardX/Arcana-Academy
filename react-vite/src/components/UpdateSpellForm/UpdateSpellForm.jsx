@@ -1,52 +1,68 @@
 import { useDispatch, useSelector } from 'react-redux';
 import * as spellActions from '../../redux/spell';
 import { useModal } from '../../context/Modal';
-import './SpellForm.css';
+import './UpdateSpellForm.css';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { fetchOneSpell } from '../../redux/spell';
 
 
-function SpellForm() {
+function UpdateSpellForm() {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
   const sessionUser = useSelector(state => state.session.user);
-  console.log(`Trying to get user ID: ${ sessionUser }`)
-  const [url, setUrl] = useState("")
-  const [name, setName] = useState("")
-  const [description, setDescription]= useState("")
-  const [damage, setDamage] = useState("")
-  const [cost, setCost] = useState("")
-  const [manaCost, setManaCost] = useState("")
-  const [element, setElement] = useState("")
+  const spell = useSelector(state => state.spell.spell.spells || []);
+  const navigate = useNavigate();
+
+  const [url, setUrl] = useState(spell.url)
+  const [name, setName] = useState(spell.name)
+  const [description, setDescription]= useState(spell.description)
+  const [damage, setDamage] = useState(spell.damage)
+  const [cost, setCost] = useState(spell.cost)
+  const [manaCost, setManaCost] = useState(spell.mana_cost)
+  const [element, setElement] = useState(spell.element)
+  const { spellId } = useParams()
 
   const handleSubmit = async (e) => {
     e.preventDefault();    // prevent default form submission
 
     try {
-      // Default portfolio data plus user_id from sessionUser
       const spellData = {
+        id: spell.id,
         user_id: sessionUser.id,
-        url: url,
-        name: name,
-        description: description,
-        damage:damage,
-        cost: cost,
-        mana_cost: manaCost,
-        element: element
+        url,
+        name,
+        description,
+        damage,
+        cost,
+        manaCost,
+        element
       };
 
-      await dispatch(spellActions.createSpell(spellData));
-      alert("Spell created successfully!");
+      await dispatch(spellActions.updateSpell(spellData));
+      alert("Spell updated successfully!");
       closeModal();
+      navigate(`/spells/${spellId}`)
     } catch (error) {
-      alert(error.message || "Failed to create spell");
+      alert(error.message || "Failed to update spell");
     }
   };
+
+
+  useEffect(() => {
+    console.log("spell id:",spellId)
+    dispatch(fetchOneSpell(spellId));
+
+  }, [dispatch, spellId]);
+
 
   return (
     <div className='create-confirm'>
       <h1
       className='create-spell-title'
-      >Confirm New Spell</h1>
+      >Update Your Spell</h1>
 
 
       <form
@@ -180,39 +196,10 @@ function SpellForm() {
         <label
         className='create-spell-labels'
         >
-        Gold Cost
-        <input
-        className='inputs'
-        placeholder='1234.56'
-        type="decimal"
-        value={cost}
-        onChange={(e) => setCost(e.target.value)}
-        required
-        />
-        </label>
-
-
-        <label
-        className='create-spell-labels'
-        >
-        Mana Cost
-        <input
-        className='inputs'
-        placeholder='1234.56'
-        type="decimal"
-        value={manaCost}
-        onChange={(e) => setManaCost(e.target.value)}
-        required
-        />
-        </label>
-
-        <label
-        className='create-spell-labels'
-        >
         Damage
         <input
         className='inputs'
-        placeholder='1234.56'
+        placeholder='Damage'
         type="decimal"
         value={damage}
         onChange={(e) => setDamage(e.target.value)}
@@ -220,11 +207,37 @@ function SpellForm() {
         />
         </label>
 
+        <label
+        className='create-spell-labels'
+        >
+        Cost
+        <input
+        className='inputs'
+        placeholder='Cost'
+        type="decimal"
+        value={cost}
+        onChange={(e) => setCost(e.target.value)}
+        required
+        />
+        </label>
 
+        <label
+        className='create-spell-labels'
+        >
+        Mana Cost
+        <input
+        className='inputs'
+        placeholder='Mana Cost'
+        type="decimal"
+        value={manaCost}
+        onChange={(e) => setManaCost(e.target.value)}
+        required
+        />
+        </label>
 
 
       <p className='confirm-create-text'>
-        Are you sure you want to create this spell?
+        Are you sure you want to update this spell?
       </p>
 
         <div className="button-container">
@@ -232,7 +245,7 @@ function SpellForm() {
             type="submit"
             className='create-spell-button'
           >
-            Yes (Create Spell)
+            Yes {`${spell.id}`}
           </button>
 
           <button
@@ -250,4 +263,4 @@ function SpellForm() {
 }
 
 
-export default SpellForm;
+export default UpdateSpellForm;

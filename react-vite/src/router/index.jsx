@@ -4,7 +4,7 @@ import LoginFormPage from '../components/LoginFormPage';
 import SignupFormPage from '../components/SignupFormPage';
 import SpellList from '../components/SpellList/SpellList';
 import CurrentSpells from "../components/CurrentSpells/CurrentSpells"
-
+import DeleteSpellModal from '../components/DeleteSpell/DeleteSpellModal';
 
 import Layout from './Layout';
 import LandingPage from '../components/LandingPage/LandingPage';
@@ -32,10 +32,10 @@ export const router = createBrowserRouter([
         path:'/spells',
         element: <CurrentSpells />
       },
-      // {
-      //   path:'/spells/new',
-      //   element: <SpellForm />
-      // },
+      {
+        path:'/spells/:spellId',
+        element: <DeleteSpellModal />
+      },
       // {
       //   path:'/spells/:spellId',
       //   element: <SpellShow />
