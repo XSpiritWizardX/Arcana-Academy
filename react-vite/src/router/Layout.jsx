@@ -1,388 +1,3 @@
-// // import { useEffect, useState } from "react";
-// // import { Outlet } from "react-router-dom";
-// // import { useDispatch } from "react-redux";
-// // import { ModalProvider, Modal } from "../context/Modal";
-// // import { thunkAuthenticate } from "../redux/session";
-// // import Navigation from "../components/Navigation/Navigation";
-// // import FooterCard from "../components/Footer/Footer";
-// // import "./Layout.css";
-// // import { gsap } from "gsap";
-// // export default function Layout() {
-// //   const dispatch = useDispatch();
-// //   const [isLoaded, setIsLoaded] = useState(false);
-// //   useEffect(() => {
-// //     dispatch(thunkAuthenticate()).then(() => setIsLoaded(true));
-// //   }, [dispatch]);
-
-
-
-
-
-
-
-// //   const maxSnowflakes = 200;
-// //   const snowflakes = [];
-// //   const maxMouseflakes = 150; // limit active mouse particles
-// //   let mouseflakes = [];
-// //   let lastX = 0;
-// //   let lastY = 0;
-// //   let lastTime = Date.now();
-// //   let lastTrailTime = 0;
-
-// //   function createSnowflake() {
-// //     if (snowflakes.length >= maxSnowflakes) return;
-
-// //     const snowflake = document.createElement("div");
-// //     snowflake.classList.add("snowflake");
-
-// //     const size = Math.random() * 5 + 3;
-// //     snowflake.style.width = `${size}px`;
-// //     snowflake.style.height = `${size}px`;
-
-// //     const startX = Math.random() * window.innerWidth;
-// //     document.body.appendChild(snowflake);
-
-// //     snowflakes.push(snowflake);
-
-// //     gsap.set(snowflake, {
-// //       x: startX,
-// //       y: -10,
-// //       opacity: Math.random() * 0.5 + 0.1,
-// //       scale: Math.random() * 0.8 + 0.6
-// //     });
-
-// //     gsap.to(snowflake, {
-// //       duration: 10 + Math.random() * 10,
-// //       x: startX + (Math.random() - 0.5) * 200,
-// //       y: window.innerHeight + 20,
-// //       rotation: Math.random() * 360,
-// //       ease: "linear",
-// //       onComplete: () => {
-// //         snowflake.remove();
-// //         snowflakes.splice(snowflakes.indexOf(snowflake), 1);
-// //       }
-// //     });
-
-// //     // 5% chance to create a magicflake
-// //     if (Math.random() < 0.05) {
-// //       createMagicFlake(startX);
-// //     }
-// //   }
-
-// //   function createMagicFlake(startX) {
-// //     const magicflake = document.createElement("div");
-// //     magicflake.classList.add("magicflake");
-// //     document.body.appendChild(magicflake);
-
-// //     const offsetX = (Math.random() - 0.5) * 100;
-
-// //     gsap.set(magicflake, {
-// //       x: startX + offsetX,
-// //       y: -20,
-// //       scale: 1,
-// //       opacity: 0.9
-// //     });
-
-// //     gsap.to(magicflake, {
-// //       duration: 12 + Math.random() * 8,
-// //       x: startX + offsetX + (Math.random() - 0.5) * 300,
-// //       y: window.innerHeight + 30,
-// //       scale: 1.5,
-// //       opacity: 0,
-// //       ease: "power1.inOut",
-// //       onComplete: () => {
-// //         magicflake.remove();
-// //       }
-// //     });
-// //   }
-
-// //   setInterval(() => {
-// //     for (let i = 0; i < 2; i++) {
-// //       createSnowflake();
-// //     }
-// //   }, 200);
-
-// //   window.addEventListener("mousemove", (e) => {
-// //     const now = Date.now();
-// //     const deltaTime = now - lastTime;
-// //     const deltaX = e.clientX - lastX;
-// //     const deltaY = e.clientY - lastY;
-// //     const speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY) / deltaTime;
-
-// //     lastX = e.clientX;
-// //     lastY = e.clientY;
-// //     lastTime = now;
-
-// //     // Throttle trail creation to avoid flooding
-// //     if (now - lastTrailTime > 30) {
-// //       // create trail every 30ms
-// //       const particleCount = Math.min(Math.floor(speed * 30), 6); // limit max
-
-// //       for (let i = 0; i < particleCount; i++) {
-// //         createMouseflake(e.clientX, e.clientY);
-// //       }
-// //       lastTrailTime = now;
-// //     }
-// //   });
-
-// //   function createMouseflake(x, y) {
-// //     if (mouseflakes.length >= maxMouseflakes) return; // hard limit active trails
-
-// //     const mouseflake = document.createElement("div");
-// //     mouseflake.classList.add("mouseflake");
-// //     document.body.appendChild(mouseflake);
-
-// //     mouseflakes.push(mouseflake);
-
-// //     const size = Math.random() * 3 + 10;
-// //     mouseflake.style.width = `${size}px`;
-// //     mouseflake.style.height = `${size}px`;
-
-// //     const driftX = (Math.random() - 0.5) * 80;
-// //     const driftY = Math.random() * 100;
-
-// //     gsap.set(mouseflake, {
-// //       x: x - size / 2,
-// //       y: y - size / 2,
-// //       opacity: 1,
-// //       scale: 1
-// //     });
-
-// //     gsap.to(mouseflake, {
-// //       duration: 1.2,
-// //       x: x + driftX,
-// //       y: y + driftY,
-// //       opacity: 0,
-// //       scale: 0.5,
-// //       ease: "power2.out",
-// //       onComplete: () => {
-// //         mouseflake.remove();
-// //         mouseflakes.splice(mouseflakes.indexOf(mouseflake), 1); // clean
-// //       }
-// //     });
-// //   }
-
-
-
-
-
-// //   return (
-// //     <div
-// //     className="layout-container"
-// //     >
-// //         <h1
-// //         className="Arcana-layout"
-// //         >Arcana Academy</h1>
-
-// //           <ModalProvider>
-// //         <div
-// //         className="layout"
-// //         >
-// //         <Navigation />
-// //         {isLoaded && <Outlet />}
-
-// //         <Modal />
-// //         </div>
-// //         <FooterCard />
-// //       </ModalProvider>
-// //     </div>
-// //   );
-// // }
-
-
-
-// import { useEffect, useState } from "react";
-// import { Outlet } from "react-router-dom";
-// import { useDispatch } from "react-redux";
-// import { ModalProvider, Modal } from "../context/Modal";
-// import { thunkAuthenticate } from "../redux/session";
-// import Navigation from "../components/Navigation/Navigation";
-// import FooterCard from "../components/Footer/Footer";
-// import { gsap } from "gsap";
-// import "./Layout.css";
-
-// export default function Layout() {
-//   const dispatch = useDispatch();
-//   const [isLoaded, setIsLoaded] = useState(false);
-
-//   useEffect(() => {
-//     dispatch(thunkAuthenticate()).then(() => setIsLoaded(true));
-//   }, [dispatch]);
-
-//   useEffect(() => {
-//     const maxSnowflakes = 200;
-//     const snowflakes = [];
-//     const maxMouseflakes = 150; // limit active mouse particles
-//     let mouseflakes = [];
-//     let lastX = 0;
-//     let lastY = 0;
-//     let lastTime = Date.now();
-//     let lastTrailTime = 0;
-
-//     function createSnowflake() {
-//       if (snowflakes.length >= maxSnowflakes) return;
-
-//       const snowflake = document.createElement("div");
-//       snowflake.classList.add("snowflake");
-
-//       const size = Math.random() * 5 + 3;
-//       snowflake.style.width = `${size}px`;
-//       snowflake.style.height = `${size}px`;
-
-//       const startX = Math.random() * window.innerWidth;
-//       document.body.appendChild(snowflake);
-
-//       snowflakes.push(snowflake);
-
-//       gsap.set(snowflake, {
-//         x: startX,
-//         y: -10,
-//         opacity: Math.random() * 0.5 + 0.1,
-//         scale: Math.random() * 0.8 + 0.6
-//       });
-
-//       gsap.to(snowflake, {
-//         duration: 10 + Math.random() * 10,
-//         x: startX + (Math.random() - 0.5) * 200,
-//         y: window.innerHeight + 20,
-//         rotation: Math.random() * 360,
-//         ease: "linear",
-//         onComplete: () => {
-//           snowflake.remove();
-//           snowflakes.splice(snowflakes.indexOf(snowflake), 1);
-//         }
-//       });
-
-//       // 5% chance to create a magicflake
-//       if (Math.random() < 0.05) {
-//         createMagicFlake(startX);
-//       }
-//     }
-
-//     function createMagicFlake(startX) {
-//       const magicflake = document.createElement("div");
-//       magicflake.classList.add("magicflake");
-//       document.body.appendChild(magicflake);
-
-//       const offsetX = (Math.random() - 0.5) * 100;
-
-//       gsap.set(magicflake, {
-//         x: startX + offsetX,
-//         y: -20,
-//         scale: 1,
-//         opacity: 0.9
-//       });
-
-//       gsap.to(magicflake, {
-//         duration: 12 + Math.random() * 8,
-//         x: startX + offsetX + (Math.random() - 0.5) * 300,
-//         y: window.innerHeight + 30,
-//         scale: 1.5,
-//         opacity: 0,
-//         ease: "power1.inOut",
-//         onComplete: () => {
-//           magicflake.remove();
-//         }
-//       });
-//     }
-
-//     const snowflakeInterval = setInterval(() => {
-//       for (let i = 0; i < 2; i++) {
-//         createSnowflake();
-//       }
-//     }, 200);
-
-//     function createMouseflake(x, y) {
-//       if (mouseflakes.length >= maxMouseflakes) return; // hard limit active trails
-
-//       const mouseflake = document.createElement("div");
-//       mouseflake.classList.add("mouseflake");
-//       document.body.appendChild(mouseflake);
-
-//       mouseflakes.push(mouseflake);
-
-//       const size = Math.random() * 3 + 10;
-//       mouseflake.style.width = `${size}px`;
-//       mouseflake.style.height = `${size}px`;
-
-//       const driftX = (Math.random() - 0.5) * 80;
-//       const driftY = Math.random() * 100;
-
-//       gsap.set(mouseflake, {
-//         x: x - size / 2,
-//         y: y - size / 2,
-//         opacity: 1,
-//         scale: 1
-//       });
-
-//       gsap.to(mouseflake, {
-//         duration: 1.2,
-//         x: x + driftX,
-//         y: y + driftY,
-//         opacity: 0,
-//         scale: 0.5,
-//         ease: "power2.out",
-//         onComplete: () => {
-//           mouseflake.remove();
-//           mouseflakes.splice(mouseflakes.indexOf(mouseflake), 1); // clean
-//         }
-//       });
-//     }
-
-//     const handleMouseMove = (e) => {
-//       const now = Date.now();
-//       const deltaTime = now - lastTime;
-//       const deltaX = e.clientX - lastX;
-//       const deltaY = e.clientY - lastY;
-//       const speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY) / deltaTime;
-
-//       lastX = e.clientX;
-//       lastY = e.clientY;
-//       lastTime = now;
-
-//       // Throttle trail creation to avoid flooding
-//       if (now - lastTrailTime > 30) {
-//         // create trail every 30ms
-//         const particleCount = Math.min(Math.floor(speed * 30), 6); // limit max
-
-//         for (let i = 0; i < particleCount; i++) {
-//           createMouseflake(e.clientX, e.clientY);
-//         }
-//         lastTrailTime = now;
-//       }
-//     };
-
-//     window.addEventListener("mousemove", handleMouseMove);
-
-//     // Cleanup function to prevent memory leaks
-//     return () => {
-//       clearInterval(snowflakeInterval);
-//       window.removeEventListener("mousemove", handleMouseMove);
-//       // Remove any remaining snowflakes
-//       snowflakes.forEach(snowflake => snowflake.remove());
-//       mouseflakes.forEach(mouseflake => mouseflake.remove());
-//     };
-//   }, []);
-
-//   return (
-//     <>
-//       <h1 className="Arcana-layout">Arcana Academy</h1>
-//       <ModalProvider>
-//         <div className="layout">
-//           <Navigation />
-//           {isLoaded && <Outlet />}
-//           <Modal />
-//         </div>
-//         <FooterCard />
-//       </ModalProvider>
-//     </>
-//   );
-// }
-
-
-
-
-
 import { useEffect, useState, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -406,10 +21,10 @@ export default function Layout() {
     if (!snowContainerRef.current) return;
 
     const container = snowContainerRef.current;
-    const maxSnowflakes = 200;
+    const maxSnowflakes = 400;
     const snowflakes = [];
-    const maxMouseflakes = 150;
-    let mouseflakes = [];
+    const maxMouseflakes = 350;
+    const mouseflakes = [];
     let lastX = 0;
     let lastY = 0;
     let lastTime = Date.now();
@@ -456,7 +71,7 @@ export default function Layout() {
       gsap.to(snowflake, {
         duration: 10 + Math.random() * 10,
         x: startX + (Math.random() - 0.5) * 200,
-        y: docHeight + 20, // Use document height instead of window height
+        y: docHeight + 20,
         rotation: Math.random() * 360,
         ease: "linear",
         onComplete: () => {
@@ -467,8 +82,8 @@ export default function Layout() {
         }
       });
 
-      // 5% chance to create a magicflake
-      if (Math.random() < 0.05) {
+      // 15% chance to create a magicflake (increased from 5%)
+      if (Math.random() < 0.15) {
         createMagicFlake(startX);
       }
     }
@@ -491,7 +106,7 @@ export default function Layout() {
       gsap.to(magicflake, {
         duration: 12 + Math.random() * 8,
         x: startX + offsetX + (Math.random() - 0.5) * 300,
-        y: docHeight + 30, // Use document height
+        y: docHeight + 30,
         scale: 1.5,
         opacity: 0,
         ease: "power1.inOut",
@@ -516,9 +131,11 @@ export default function Layout() {
       mouseflake.style.width = `${size}px`;
       mouseflake.style.height = `${size}px`;
 
-      const driftX = (Math.random() - 0.5) * 80;
-      const driftY = Math.random() * 100;
+      // Reduced drift to make particles appear more directly at cursor position
+      const driftX = (Math.random() - 0.5) * 40;
+      const driftY = (Math.random() - 0.5) * 40;
 
+      // Position exactly at cursor position
       gsap.set(mouseflake, {
         x: x - size / 2,
         y: y - size / 2,
@@ -542,11 +159,47 @@ export default function Layout() {
       });
     }
 
+    // Create a magical moment with a burst of magic flakes
+    function createMagicalMoment() {
+      const centerX = Math.random() * window.innerWidth;
+      const burstCount = Math.floor(Math.random() * 10) + 15;
+
+      for (let i = 0; i < burstCount; i++) {
+        setTimeout(() => {
+          createMagicFlake(centerX + (Math.random() - 0.5) * 100);
+        }, i * 100); // Stagger the creation for a more magical effect
+      }
+    }
+
+    // Handle click events to create magic flake bursts
+    const handleClick = (e) => {
+      // Create a burst of 5-10 magic flakes at the click position
+      const burstCount = Math.floor(Math.random() * 6) + 5;
+      for (let i = 0; i < burstCount; i++) {
+        createMagicFlake(e.clientX);
+      }
+    };
+
     const snowflakeInterval = setInterval(() => {
       for (let i = 0; i < 2; i++) {
         createSnowflake();
       }
     }, 200);
+
+    // Create magic flakes at regular intervals
+    const magicFlakeInterval = setInterval(() => {
+      // Create 1-2 magic flakes at random positions
+      const count = Math.floor(Math.random() * 2) + 1;
+      for (let i = 0; i < count; i++) {
+        const randomX = Math.random() * window.innerWidth;
+        createMagicFlake(randomX);
+      }
+    }, 1000); // Every second
+
+    // Create a magical moment every 15-30 seconds
+    const magicalMomentInterval = setInterval(() => {
+      createMagicalMoment();
+    }, Math.random() * 15000 + 15000);
 
     const handleMouseMove = (e) => {
       const now = Date.now();
@@ -559,11 +212,17 @@ export default function Layout() {
       lastY = e.clientY;
       lastTime = now;
 
-      if (now - lastTrailTime > 30) {
-        const particleCount = Math.min(Math.floor(speed * 30), 6);
+      // Create particles more frequently for smoother trail
+      if (now - lastTrailTime > 20) {
+        const particleCount = Math.min(Math.floor(speed * 30), 8);
 
         for (let i = 0; i < particleCount; i++) {
           createMouseflake(e.clientX, e.clientY);
+
+          // 10% chance to create a magic flake with the cursor
+          if (Math.random() < 0.1) {
+            createMagicFlake(e.clientX);
+          }
         }
         lastTrailTime = now;
       }
@@ -576,9 +235,7 @@ export default function Layout() {
 
       // Update existing snowflakes to the new document height
       snowflakes.forEach(snowflake => {
-        const currentY = gsap.getProperty(snowflake, "y");
-        const progress = currentY / (window.innerHeight + 20);
-
+        // Simply kill the current tween and start a new one
         gsap.killTweensOf(snowflake);
         gsap.to(snowflake, {
           duration: 10 + Math.random() * 10,
@@ -597,13 +254,17 @@ export default function Layout() {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleResize);
+    window.addEventListener("click", handleClick);
 
     // Cleanup function
     return () => {
       clearInterval(snowflakeInterval);
+      clearInterval(magicFlakeInterval);
+      clearInterval(magicalMomentInterval);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleResize);
+      window.removeEventListener("click", handleClick);
 
       // Remove any remaining snowflakes
       snowflakes.forEach(snowflake => {
@@ -621,23 +282,22 @@ export default function Layout() {
   }, []);
 
   return (
-    <>
-      <h1 className="Arcana-layout">Arcana Academy</h1>
+    <div className="page-wrapper">
+      <h1 className="arcana-title">Arcana Academy</h1>
 
       {/* Snow container that covers the entire page */}
-      <div ref={snowContainerRef} className="snow-container">
+      <div ref={snowContainerRef} className="snow-container"></div>
 
-
-      </div>
       <ModalProvider>
         <div className="layout">
           <Navigation />
-          {isLoaded && <Outlet />}
+          <main className="content-area">
+            {isLoaded && <Outlet />}
+          </main>
           <Modal />
         </div>
         <FooterCard />
       </ModalProvider>
-
-    </>
+    </div>
   );
 }
