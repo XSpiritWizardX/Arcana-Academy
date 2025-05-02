@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchOneSpell } from '../../redux/spell';
 
 
-function UpdateSpellForm() {
+function UpdateSpellForm({}) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
   const sessionUser = useSelector(state => state.session.user);
