@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpells } from "../../redux/spell";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
-import UpdateSpellForm from "../UpdateSpellForm/UpdateSpellForm"
-import DeleteSpellModal from "../DeleteSpell/DeleteSpellModal";
+// import UpdateSpellForm from "../UpdateSpellForm/UpdateSpellForm"
+// import DeleteSpellModal from "../DeleteSpell/DeleteSpellModal";
 import SpellForm from "../SpellForm/SpellForm";
 
 import { NavLink } from 'react-router-dom';
@@ -13,7 +13,7 @@ import './CurrentSpells.css'
 
 function SpellCard() {
   const dispatch = useDispatch();
-  const spells = useSelector(state => state.spell.spell || [])
+  const spells = useSelector(state => state.spell.allSpells || [])
   const user = useSelector(state => state.session.user);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -60,17 +60,16 @@ function SpellCard() {
 
           {spells?.spells?.map((spell) => (
             <div key={spell.id} className="spell-card">
-              <h2
-              className="spell-name"
-              >{spell.name}</h2>
-
               <NavLink
               to={`/spells/${spell.id}`}
               className="spell-image-container"
               >
+              <h2
+              className="spell-name"
+              >{spell.name}</h2>
+
               <img className="spell-image" src={spell.url} alt={spell.name} />
 
-              </NavLink>
 
 
               <p
@@ -89,22 +88,8 @@ function SpellCard() {
               className="spell-damage"
               >Damage: {spell.damage}</p>
 
-                <div
-                className="spell-modal-buttons"
-                >
-                <OpenModalButton
-                className="update-spell-button"
-                buttonText="UPDATE"
+              </NavLink>
 
-                modalComponent={<UpdateSpellForm spellId={spell.id}/>}
-              />
-              <OpenModalButton
-                className="delete-spell-button"
-                buttonText="DELETE"
-
-                modalComponent={<DeleteSpellModal spellId={spell.id}/>}
-              />
-                </div>
 
 
             </div>

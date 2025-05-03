@@ -13,7 +13,9 @@
     height: auto;
     width: 20%;
 }
-
+.spell-card:hover{
+    border: 16px double #00FFB3;
+}
 .spell-image{
     width: 50%;
     height: 50%;

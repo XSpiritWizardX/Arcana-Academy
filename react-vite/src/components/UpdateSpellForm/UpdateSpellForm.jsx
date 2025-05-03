@@ -3,7 +3,6 @@ import * as spellActions from '../../redux/spell';
 import { useModal } from '../../context/Modal';
 import './UpdateSpellForm.css';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchOneSpell } from '../../redux/spell';
@@ -13,7 +12,7 @@ function UpdateSpellForm() {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
   const sessionUser = useSelector(state => state.session.user);
-  const spell = useSelector(state => state.spell.spell.spells || []);
+  const spell = useSelector(state => state.spell.currentSpell || []);
   const navigate = useNavigate();
 
   const [url, setUrl] = useState(spell.url)
@@ -23,7 +22,7 @@ function UpdateSpellForm() {
   const [cost, setCost] = useState(spell.cost)
   const [manaCost, setManaCost] = useState(spell.mana_cost)
   const [element, setElement] = useState(spell.element)
-  const { spellId } = useParams()
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();    // prevent default form submission
@@ -41,10 +40,10 @@ function UpdateSpellForm() {
         element
       };
 
-      await dispatch(spellActions.updateSpell(spellData));
+      dispatch(spellActions.updateSpell(spellData));
       alert("Spell updated successfully!");
       closeModal();
-      navigate(`/spells/${spellId}`)
+      navigate(`/spells/${spell.id}`)
     } catch (error) {
       alert(error.message || "Failed to update spell");
     }
@@ -52,10 +51,10 @@ function UpdateSpellForm() {
 
 
   useEffect(() => {
-    console.log("spell id:",spellId)
-    dispatch(fetchOneSpell(spellId));
+    console.log("spell id:",spell.id)
+    dispatch(fetchOneSpell(spell.id));
 
-  }, [dispatch, spellId]);
+  }, [dispatch, spell.id]);
 
 
   return (

@@ -8,6 +8,7 @@ import DeleteSpellModal from '../components/DeleteSpell/DeleteSpellModal';
 import UpdateSpellForm from '../components/UpdateSpellForm/UpdateSpellForm';
 import Layout from './Layout';
 import LandingPage from '../components/LandingPage/LandingPage';
+import SpellShow from '../components/SpellShow/SpellShow'
 export const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -33,17 +34,17 @@ export const router = createBrowserRouter([
         element: <CurrentSpells />
       },
       {
-        path:'/spells/:spellId',
+        path:'/spells/:spellId/delete',
         element: <DeleteSpellModal />
       },
       {
-        path:'/spells/:spellId',
+        path:'/spells/:spellId/update',
         element: <UpdateSpellForm />
       },
-      // {
-      //   path:'/spells/:spellId',
-      //   element: <SpellShow />
-      // },
+      {
+        path:'/spells/:spellId',
+        element: <SpellShow />
+      },
       // {
       //   path:'/spells',
       //   element: <SpellList />

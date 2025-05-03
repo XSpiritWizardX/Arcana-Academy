@@ -86,13 +86,15 @@ export const fetchAllSpells = () => async (dispatch) => {
 
 export const fetchOneSpell = (spellId) => async (dispatch) => {
   try {
-    const response = await csrfFetch(`/api/spells/${spellId}`, {
-      credentials: 'include'
+    const response = await fetch(`/api/spells/${spellId}`, {
+
     });
     console.log('fetchOneSpell response:', response)
+    console.log("spell id:")
 
     if (response.ok) {
       const spell = await response.json();
+      console.log(spell)
       dispatch(setOneSpell(spell));
       return spell;
     } else {
@@ -153,24 +155,47 @@ export const deleteSpell = (spellId) => async (dispatch) => {
 };
 
 
+// export const updateSpell = (spellId, spellData) => async (dispatch) => {
+//   try {
+//     const response = await csrfFetch(`/api/spells/${spellId}`, {
+//       method: 'PUT',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify(spellData),
+//       credentials: 'include'
+//     });
+
+//     if (response.ok) {
+//       const data = await response.json();
+//       dispatch(updateSpellAction(data));
+//       // after updating, fetch all spells to update the state
+//       dispatch(fetchSpells());
+//       return data;
+//     } else {
+//       const errorData = await response.json();
+//       throw new Error(errorData.message || 'Failed to update spell');
+//     }
+//   } catch (error) {
+//     console.error('Error updating spell:', error);
+//     throw error;
+//   }
+// };
 export const updateSpell = (spellId, spellData) => async (dispatch) => {
   try {
     const response = await csrfFetch(`/api/spells/${spellId}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(spellData),
-      credentials: 'include'
     });
 
     if (response.ok) {
-      const data = await response.json();
-      dispatch(updateSpellAction(data));
-      // after updating, fetch all spells to update the state
-      dispatch(fetchSpells());
-      return data;
+      const updatedSpell = await response.json();
+      dispatch(updateSpellAction(updatedSpell));
+      return updatedSpell;
     } else {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to update spell');
+      throw new Error(errorData.error || 'Failed to update spell');
     }
   } catch (error) {
     console.error('Error updating spell:', error);
@@ -179,7 +204,7 @@ export const updateSpell = (spellId, spellData) => async (dispatch) => {
 };
 
 
-const initialState = { spell: null };
+const initialState = { spell: null, currentSpell: null };
 
 
 // Reducer
@@ -190,7 +215,7 @@ function spellReducer(state = initialState, action) {
         return { ...state, spell: action.payload };
 
     case SET_ONE_SPELL:
-        return { ...state, spell: action.payload };
+        return { currentSpell: action.payload };
 
     // updated to handle deletion of single spell or entry in port array:
     case REMOVE_SPELL: {
@@ -216,7 +241,7 @@ function spellReducer(state = initialState, action) {
       return { ...state, spell: action.payload };
 
     case UPDATE_SPELL:
-      return { ...state, spell: action.payload };
+      return { currentSpell: action.payload };
 
     default:
         return state;

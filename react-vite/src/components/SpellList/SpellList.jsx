@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllSpells } from "../../redux/spell";
-// import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './SpellList.css'
 
 
@@ -33,15 +33,17 @@ function SpellCard() {
           <h1
           className="spell-list-title"
           >SPELLS</h1>
-          {/* <NavLink to="/spells" className="all-spells-link">
-          All Spells
-          </NavLink> */}
+
           <div
           className="spell-list"
           >
 
           {spells?.spells?.map((spell) => (
             <div key={spell.id} className="spell-card">
+                 <NavLink
+              to={`/spells/${spell.id}`}
+              className="spell-nav-link"
+              >
               <h2
               className="spell-name"
               >{spell.name}</h2>
@@ -61,7 +63,7 @@ function SpellCard() {
               <p
               className="spell-damage"
               >Damage: {spell.damage}</p>
-
+              </NavLink>
             </div>
           ))}
 

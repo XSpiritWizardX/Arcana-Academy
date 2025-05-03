@@ -22,7 +22,7 @@ function DeleteSpellModal({spellId}) {
     try {
       dispatch(spellActions.deleteSpell(spellId));
       alert("Spell deleted successfully!");
-      
+      dispatch(spellActions.fetchAllSpells());
       closeModal();
     } catch (error) {
       alert(error.message);
