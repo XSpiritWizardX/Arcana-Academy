@@ -6,22 +6,40 @@
    margin-bottom: 5%;
    min-height: 100vh;
 }
-
+.page-wrapper{
+  height: 100%;
+}
 .layout-container{
     height: 100%;
 }
 
+.content-area{
+  width: 100%;
+  height: 100%;
+}
+
+
+.snow-container {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: fit-content;
+  pointer-events: none;
+
+}
+
 body {
-    margin: 0;
-    padding: 0;
     overflow-x: hidden;
-
     background: linear-gradient(180deg, #0d1b2a, #1b263b, #415a77);
-    height: 100vh;
-
     font-family: Arial, Helvetica, sans-serif;
   }
 
+
+
+.epic-logo{
+  display: flex;
+  justify-content: space-around;
+}
 
   .green-mouseflake,
   .green-snowflake,
@@ -96,7 +114,7 @@ body {
 .green-mouseflake {
   position: fixed;
   background-color: #00FFB3;
-  border: 18px solid #00FFB3;
+  border: 22px solid #00FFB3;
   box-shadow: 16px 16px 12px #FFD700;
 }
 

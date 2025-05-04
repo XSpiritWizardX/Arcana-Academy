@@ -81,7 +81,7 @@ const spellUserId = currentSpell.user_id
                 className="update-spell-button"
                 buttonText="UPDATE"
 
-                modalComponent={<UpdateSpellForm />}
+                modalComponent={<UpdateSpellForm spellId={currentSpell.id}/>}
               />
               <OpenModalButton
                 className="delete-spell-button"

@@ -4,7 +4,10 @@
     cursor: url(https://res.cloudinary.com/dl6ls3rgu/image/upload/a_hflip/c_pad,w_90,h_90/v1745983698/mAKmqaPgDvyyxNZlqdjt--0--pxxxn_bg-rmvd_ucyxld.png), auto;
 }
 
+html{
 
+    height: 100%;
+}
 h2{
     color: #C0C0C0;
 }

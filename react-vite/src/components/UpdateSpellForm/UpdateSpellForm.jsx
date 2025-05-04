@@ -40,7 +40,7 @@ function UpdateSpellForm() {
         element
       };
 
-      dispatch(spellActions.updateSpell(spellData));
+      dispatch(spellActions.updateSpell(spell.id, spellData));
       alert("Spell updated successfully!");
       closeModal();
       navigate(`/spells/${spell.id}`)

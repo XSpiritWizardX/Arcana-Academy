@@ -15,14 +15,9 @@ export default function LandingPage() {
   return (
     <div className="landing-page">
       <div className="landing-page-container">
-       
 
-          <div
-          className="lantern-gif-container"
-          >
-            <p>beware of dragons</p>
-          </div>
 
+        
 
 
           <button className="landing-page-signup-button">

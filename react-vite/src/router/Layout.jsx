@@ -24,19 +24,19 @@ export default function Layout() {
     if (!snowContainerRef.current) return;
 
     const container = snowContainerRef.current;
-    const maxSnowflakes = 130;
+    const maxSnowflakes = 50;
     const snowflakes = [];
-    const maxGreenSnowflakes = 130;
+    const maxGreenSnowflakes = 30;
     const greenSnowflakes = [];
-    const maxRedSnowflakes = 130;
+    const maxRedSnowflakes = 20;
     const redSnowflakes = [];
 
 
     const maxMouseflakes = 150;
     const mouseflakes = [];
-    const maxGreenMouseflakes = 150;
+    const maxGreenMouseflakes = 100;
     const greenMouseflakes = [];
-    const maxRedMouseflakes = 150;
+    const maxRedMouseflakes = 100;
     const redMouseflakes = [];
     let lastX = 0;
     let lastY = 0;
@@ -340,15 +340,14 @@ export default function Layout() {
     const snowflakeInterval = setInterval(() => {
       for (let i = 0; i < 2; i++) {
         createSnowflake();
-         createGreenSnowflake();
-          createRedSnowflake();
+
         // Occasionally create green snowflakes
         if (Math.random() < 0.3) {
           createGreenSnowflake();
           createRedSnowflake();
         }
       }
-    }, 100);
+    }, 1050);
 
     // Magic flake interval for occasional special effects
     const magicFlakeInterval = setInterval(() => {
@@ -363,7 +362,7 @@ export default function Layout() {
           }, i * 50);
         }
       }
-    }, 5000);
+    }, 500);
 
 
 
@@ -401,17 +400,17 @@ export default function Layout() {
 
 
 
-    const handleClick = (e) => {
-      // Create a burst of particles on click
-      for (let i = 0; i < 20; i++) {
-        setTimeout(() => {
-          createMouseflake(e.clientX, e.clientY);
-          createGreenMouseflake(e.clientX, e.clientY);
-          createRedMouseflake(e.clientX, e.clientY);
+    // const handleClick = (e) => {
+    //   // Create a burst of particles on click
+    //   for (let i = 0; i < 20; i++) {
+    //     setTimeout(() => {
+    //       createMouseflake(e.clientX, e.clientY);
+    //       createGreenMouseflake(e.clientX, e.clientY);
+    //       createRedMouseflake(e.clientX, e.clientY);
 
-        }, i * 20);
-      }
-    };
+    //     }, i * 20);
+    //   }
+    // };
 
     // Update snowflake animations when window is resized
     const handleResize = () => {
@@ -424,7 +423,7 @@ export default function Layout() {
         gsap.killTweensOf(snowflake);
         gsap.to(snowflake, {
           duration: 10 + Math.random() * 10,
-          y: docHeight + 20,
+          y: docHeight,
           ease: "linear",
           onComplete: () => {
             if (snowflake.parentNode) {
@@ -453,6 +452,22 @@ export default function Layout() {
           }
         });
       });
+
+      redSnowflakes.forEach(redSnowflake => {
+        gsap.killTweensOf(redSnowflake);
+        gsap.to(redSnowflake, {
+          duration: 10 + Math.random() * 10,
+          y: docHeight + 20,
+          ease: "linear",
+          onComplete: () => {
+            if (redSnowflake.parentNode) {
+              redSnowflake.parentNode.removeChild(redSnowflake);
+            }
+            redSnowflakes.splice(redSnowflakes.indexOf(redSnowflake), 1);
+          }
+        });
+      });
+
     };
 
 
@@ -462,7 +477,7 @@ export default function Layout() {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleResize);
-    window.addEventListener("click", handleClick);
+    // window.addEventListener("click", handleClick);
 
     // Cleanup function
     return () => {
@@ -471,7 +486,7 @@ export default function Layout() {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleResize);
-      window.removeEventListener("click", handleClick);
+      // window.removeEventListener("click", handleClick);
 
       // Remove any remaining snowflakes
       snowflakes.forEach(snowflake => {
@@ -523,6 +538,8 @@ export default function Layout() {
   return (
     <div className="page-wrapper">
       <h1 className="arcana-title">Arcana Academy</h1>
+
+
 
       {/* Snow container that covers the entire page */}
       <div ref={snowContainerRef} className="snow-container"></div>
