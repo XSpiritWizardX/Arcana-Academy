@@ -46,23 +46,23 @@ export const router = createBrowserRouter([
         element: <SpellShow />
       },
       // {
-      //   path:'/spells',
+      //   path:'/swords/all',
+      //   element: <SwordList />
+      // },
+      // {
+      //   path:'/swords',
       //   element: <SpellList />
       // },
       // {
-      //   path:'/spells',
+      //   path:'/swords',
       //   element: <SpellList />
       // },
       // {
-      //   path:'/spells',
+      //   path:'/swords',
       //   element: <SpellList />
       // },
       // {
-      //   path:'/spells',
-      //   element: <SpellList />
-      // },
-      // {
-      //   path:'/spells',
+      //   path:'/swords',
       //   element: <SpellList />
       // },
 

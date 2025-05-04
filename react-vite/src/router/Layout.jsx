@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -9,6 +10,8 @@ import { gsap } from "gsap";
 import "./Layout.css";
 
 export default function Layout() {
+
+
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   const snowContainerRef = useRef(null);
@@ -21,10 +24,20 @@ export default function Layout() {
     if (!snowContainerRef.current) return;
 
     const container = snowContainerRef.current;
-    const maxSnowflakes = 400;
+    const maxSnowflakes = 130;
     const snowflakes = [];
-    const maxMouseflakes = 350;
+    const maxGreenSnowflakes = 130;
+    const greenSnowflakes = [];
+    const maxRedSnowflakes = 130;
+    const redSnowflakes = [];
+
+
+    const maxMouseflakes = 150;
     const mouseflakes = [];
+    const maxGreenMouseflakes = 150;
+    const greenMouseflakes = [];
+    const maxRedMouseflakes = 150;
+    const redMouseflakes = [];
     let lastX = 0;
     let lastY = 0;
     let lastTime = Date.now();
@@ -42,6 +55,12 @@ export default function Layout() {
         window.innerHeight
       );
     };
+
+
+
+
+
+
 
     function createSnowflake() {
       if (snowflakes.length >= maxSnowflakes) return;
@@ -81,42 +100,102 @@ export default function Layout() {
           snowflakes.splice(snowflakes.indexOf(snowflake), 1);
         }
       });
-
-      // 15% chance to create a magicflake (increased from 5%)
-      if (Math.random() < 0.15) {
-        createMagicFlake(startX);
-      }
     }
 
-    function createMagicFlake(startX) {
-      const magicflake = document.createElement("div");
-      magicflake.classList.add("magicflake");
-      container.appendChild(magicflake);
 
-      const offsetX = (Math.random() - 0.5) * 100;
-      const docHeight = getDocHeight();
 
-      gsap.set(magicflake, {
-        x: startX + offsetX,
-        y: -20,
-        scale: 1,
-        opacity: 0.9
+
+
+
+    function createGreenSnowflake() {
+      if (greenSnowflakes.length >= maxGreenSnowflakes) return;
+
+      const greenSnowflake = document.createElement("div");
+      greenSnowflake.classList.add("snowflake", "green-snowflake");
+
+      const size = Math.random() * 5 + 3;
+      greenSnowflake.style.width = `${size}px`;
+      greenSnowflake.style.height = `${size}px`;
+
+      const startX = Math.random() * window.innerWidth;
+      container.appendChild(greenSnowflake);
+
+      greenSnowflakes.push(greenSnowflake);
+
+      gsap.set(greenSnowflake, {
+        x: startX,
+        y: -10,
+        opacity: Math.random() * 0.5 + 0.1,
+        scale: Math.random() * 0.8 + 0.6
       });
 
-      gsap.to(magicflake, {
-        duration: 12 + Math.random() * 8,
-        x: startX + offsetX + (Math.random() - 0.5) * 300,
-        y: docHeight + 30,
-        scale: 1.5,
-        opacity: 0,
-        ease: "power1.inOut",
+      // Use the full document height for animation
+      const docHeight = getDocHeight();
+
+      gsap.to(greenSnowflake, {
+        duration: 10 + Math.random() * 10,
+        x: startX + (Math.random() - 0.5) * 200,
+        y: docHeight + 20,
+        rotation: Math.random() * 360,
+        ease: "linear",
         onComplete: () => {
-          if (magicflake.parentNode) {
-            magicflake.parentNode.removeChild(magicflake);
+          if (greenSnowflake.parentNode) {
+            greenSnowflake.parentNode.removeChild(greenSnowflake);
           }
+          greenSnowflakes.splice(greenSnowflakes.indexOf(greenSnowflake), 1);
         }
       });
     }
+
+
+
+    function createRedSnowflake() {
+      if (redSnowflakes.length >= maxRedSnowflakes) return;
+
+      const redSnowflake = document.createElement("div");
+      redSnowflake.classList.add("snowflake", "red-snowflake");
+
+      const size = Math.random() * 5 + 3;
+      redSnowflake.style.width = `${size}px`;
+      redSnowflake.style.height = `${size}px`;
+
+      const startX = Math.random() * window.innerWidth;
+      container.appendChild(redSnowflake);
+
+      redSnowflakes.push(redSnowflake);
+
+      gsap.set(redSnowflake, {
+        x: startX,
+        y: -10,
+        opacity: Math.random() * 0.5 + 0.1,
+        scale: Math.random() * 0.8 + 0.6
+      });
+
+      // Use the full document height for animation
+      const docHeight = getDocHeight();
+
+      gsap.to(redSnowflake, {
+        duration: 10 + Math.random() * 10,
+        x: startX + (Math.random() - 0.5) * 200,
+        y: docHeight + 20,
+        rotation: Math.random() * 360,
+        ease: "linear",
+        onComplete: () => {
+          if (redSnowflake.parentNode) {
+            redSnowflake.parentNode.removeChild(redSnowflake);
+          }
+          redSnowflakes.splice(redSnowflakes.indexOf(redSnowflake), 1);
+        }
+      });
+    }
+
+
+
+
+
+
+
+
 
     function createMouseflake(x, y) {
       if (mouseflakes.length >= maxMouseflakes) return;
@@ -144,7 +223,7 @@ export default function Layout() {
       });
 
       gsap.to(mouseflake, {
-        duration: 1.2,
+        duration: 1,
         x: x + driftX,
         y: y + driftY,
         opacity: 0,
@@ -159,47 +238,136 @@ export default function Layout() {
       });
     }
 
-    // Create a magical moment with a burst of magic flakes
-    function createMagicalMoment() {
-      const centerX = Math.random() * window.innerWidth;
-      const burstCount = Math.floor(Math.random() * 10) + 15;
 
-      for (let i = 0; i < burstCount; i++) {
-        setTimeout(() => {
-          createMagicFlake(centerX + (Math.random() - 0.5) * 100);
-        }, i * 100); // Stagger the creation for a more magical effect
-      }
+
+
+
+
+    function createGreenMouseflake(x, y) {
+      if (greenMouseflakes.length >= maxGreenMouseflakes) return;
+
+      const greenMouseflake = document.createElement("div");
+      greenMouseflake.classList.add("mouseflake", "green-mouseflake");
+      container.appendChild(greenMouseflake);
+
+      greenMouseflakes.push(greenMouseflake);
+
+      const size = Math.random() * 3 + 10;
+      greenMouseflake.style.width = `${size}px`;
+      greenMouseflake.style.height = `${size}px`;
+
+      // Reduced drift to make particles appear more directly at cursor position
+      const driftX = (Math.random() - 0.5) * 40;
+      const driftY = (Math.random() - 0.5) * 40;
+
+      // Position exactly at cursor position
+      gsap.set(greenMouseflake, {
+        x: x - size / 2,
+        y: y - size / 2,
+        opacity: 1,
+        scale: 1
+      });
+
+      gsap.to(greenMouseflake, {
+        duration: 1,
+        x: x + driftX,
+        y: y + driftY,
+        opacity: 0,
+        scale: 0.5,
+        ease: "power2.out",
+        onComplete: () => {
+          if (greenMouseflake.parentNode) {
+            greenMouseflake.parentNode.removeChild(greenMouseflake);
+          }
+          greenMouseflakes.splice(greenMouseflakes.indexOf(greenMouseflake), 1);
+        }
+      });
     }
 
-    // Handle click events to create magic flake bursts
-    const handleClick = (e) => {
-      // Create a burst of 5-10 magic flakes at the click position
-      const burstCount = Math.floor(Math.random() * 6) + 5;
-      for (let i = 0; i < burstCount; i++) {
-        createMagicFlake(e.clientX);
-      }
-    };
+
+
+
+
+    function createRedMouseflake(x, y) {
+      if (redMouseflakes.length >= maxRedMouseflakes) return;
+
+      const redMouseflake = document.createElement("div");
+      redMouseflake.classList.add("mouseflake", "red-mouseflake");
+      container.appendChild(redMouseflake);
+
+      redMouseflakes.push(redMouseflake);
+
+      const size = Math.random() * 3 + 10;
+      redMouseflake.style.width = `${size}px`;
+      redMouseflake.style.height = `${size}px`;
+
+      // Reduced drift to make particles appear more directly at cursor position
+      const driftX = (Math.random() - 0.5) * 40;
+      const driftY = (Math.random() - 0.5) * 40;
+
+      // Position exactly at cursor position
+      gsap.set(redMouseflake, {
+        x: x - size / 2,
+        y: y - size / 2,
+        opacity: 1,
+        scale: 1
+      });
+
+      gsap.to(redMouseflake, {
+        duration: 1,
+        x: x + driftX,
+        y: y + driftY,
+        opacity: 0,
+        scale: 0.5,
+        ease: "power2.out",
+        onComplete: () => {
+          if (redMouseflake.parentNode) {
+            redMouseflake.parentNode.removeChild(redMouseflake);
+          }
+          redMouseflakes.splice(redMouseflakes.indexOf(redMouseflake), 1);
+        }
+      });
+    }
+
+
+
+
+
+
+
+
 
     const snowflakeInterval = setInterval(() => {
       for (let i = 0; i < 2; i++) {
         createSnowflake();
+         createGreenSnowflake();
+          createRedSnowflake();
+        // Occasionally create green snowflakes
+        if (Math.random() < 0.3) {
+          createGreenSnowflake();
+          createRedSnowflake();
+        }
       }
-    }, 200);
+    }, 100);
 
-    // Create magic flakes at regular intervals
+    // Magic flake interval for occasional special effects
     const magicFlakeInterval = setInterval(() => {
-      // Create 1-2 magic flakes at random positions
-      const count = Math.floor(Math.random() * 2) + 1;
-      for (let i = 0; i < count; i++) {
-        const randomX = Math.random() * window.innerWidth;
-        createMagicFlake(randomX);
+      // Create a burst of green snowflakes at random positions
+      if (Math.random() < 0.1) {
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * getDocHeight() * 0.7;
+        for (let i = 0; i < 10; i++) {
+          setTimeout(() => {
+            createGreenMouseflake(x, y);
+            createRedMouseflake(x, y);
+          }, i * 50);
+        }
       }
-    }, 1000); // Every second
+    }, 5000);
 
-    // Create a magical moment every 15-30 seconds
-    const magicalMomentInterval = setInterval(() => {
-      createMagicalMoment();
-    }, Math.random() * 15000 + 15000);
+
+
+
 
     const handleMouseMove = (e) => {
       const now = Date.now();
@@ -214,17 +382,34 @@ export default function Layout() {
 
       // Create particles more frequently for smoother trail
       if (now - lastTrailTime > 20) {
-        const particleCount = Math.min(Math.floor(speed * 30), 8);
+        const particleCount = Math.min(Math.floor(speed * 10), 8);
 
         for (let i = 0; i < particleCount; i++) {
           createMouseflake(e.clientX, e.clientY);
-
-          // 10% chance to create a magic flake with the cursor
-          if (Math.random() < 0.1) {
-            createMagicFlake(e.clientX);
+          // Occasionally create green mouse flakes
+          if (Math.random() < 0.2) {
+            createGreenMouseflake(e.clientX, e.clientY);
+          }
+          if (Math.random() < 0.2) {
+            createRedMouseflake(e.clientX, e.clientY);
           }
         }
         lastTrailTime = now;
+      }
+    };
+
+
+
+
+    const handleClick = (e) => {
+      // Create a burst of particles on click
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          createMouseflake(e.clientX, e.clientY);
+          createGreenMouseflake(e.clientX, e.clientY);
+          createRedMouseflake(e.clientX, e.clientY);
+
+        }, i * 20);
       }
     };
 
@@ -249,7 +434,30 @@ export default function Layout() {
           }
         });
       });
+
+
+
+
+      // Update existing green snowflakes to the new document height
+      greenSnowflakes.forEach(greenSnowflake => {
+        gsap.killTweensOf(greenSnowflake);
+        gsap.to(greenSnowflake, {
+          duration: 10 + Math.random() * 10,
+          y: docHeight + 20,
+          ease: "linear",
+          onComplete: () => {
+            if (greenSnowflake.parentNode) {
+              greenSnowflake.parentNode.removeChild(greenSnowflake);
+            }
+            greenSnowflakes.splice(greenSnowflakes.indexOf(greenSnowflake), 1);
+          }
+        });
+      });
     };
+
+
+
+
 
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("resize", handleResize);
@@ -260,7 +468,6 @@ export default function Layout() {
     return () => {
       clearInterval(snowflakeInterval);
       clearInterval(magicFlakeInterval);
-      clearInterval(magicalMomentInterval);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleResize);
@@ -273,11 +480,43 @@ export default function Layout() {
         }
       });
 
+      // Remove any remaining green snowflakes
+      greenSnowflakes.forEach(greenSnowflake => {
+        if (greenSnowflake.parentNode) {
+          greenSnowflake.parentNode.removeChild(greenSnowflake);
+        }
+      });
+
+      redSnowflakes.forEach(redSnowflake => {
+        if (redSnowflake.parentNode) {
+          redSnowflake.parentNode.removeChild(redSnowflake);
+        }
+      });
+
+
+
+
       mouseflakes.forEach(mouseflake => {
         if (mouseflake.parentNode) {
           mouseflake.parentNode.removeChild(mouseflake);
         }
       });
+
+      greenMouseflakes.forEach(greenMouseflake => {
+        if (greenMouseflake.parentNode) {
+          greenMouseflake.parentNode.removeChild(greenMouseflake);
+        }
+      });
+
+      redMouseflakes.forEach(redMouseflake => {
+        if (redMouseflake.parentNode) {
+          redMouseflake.parentNode.removeChild(redMouseflake);
+        }
+      });
+
+
+
+
     };
   }, []);
 

@@ -5,10 +5,13 @@ import * as spellActions from '../../redux/spell';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import './DeleteSpellModal.css';
+import { useNavigate } from 'react-router-dom';
+
 // import { useParams } from 'react-router-dom';
 
 
 function DeleteSpellModal({spellId}) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { closeModal } = useModal();
   // const spellId = useParams()
@@ -22,14 +25,14 @@ function DeleteSpellModal({spellId}) {
     try {
       dispatch(spellActions.deleteSpell(spellId));
       alert("Spell deleted successfully!");
-      dispatch(spellActions.fetchAllSpells());
+      navigate(`/spells`);
+
       closeModal();
     } catch (error) {
       alert(error.message);
     }
   };
 
-// dispatch(spellActions.fetchOneSpell(spellId))
 
 
   return (

@@ -38,7 +38,7 @@ const spellUserId = currentSpell.user_id
       <h1
       className="spell-list-title"
       >SPELL DETAILS</h1>
-    { spellUserId === user.id ? (
+    { spellUserId === user?.id ? (
 
           <div
           className="spell-show-card"

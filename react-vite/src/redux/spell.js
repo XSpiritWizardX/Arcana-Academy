@@ -102,7 +102,7 @@ export const fetchOneSpell = (spellId) => async (dispatch) => {
       throw new Error(errorData.message || 'Failed to fetch spell');
     }
   } catch (error) {
-    console.error('Error fetching spell', error);
+    console.error('Error fetching spell', {error});
     throw error;
   }
 };

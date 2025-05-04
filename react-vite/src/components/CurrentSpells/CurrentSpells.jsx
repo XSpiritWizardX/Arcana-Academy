@@ -13,7 +13,7 @@ import './CurrentSpells.css'
 
 function SpellCard() {
   const dispatch = useDispatch();
-  const spells = useSelector(state => state.spell.allSpells || [])
+  const spells = useSelector(state => state.spell.spell || [])
   const user = useSelector(state => state.session.user);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -74,7 +74,7 @@ function SpellCard() {
 
               <p
               className="spell-description"
-              >Description: {spell.description}</p>
+              >{spell.description}</p>
               <p
               className="spell-element"
               >element: {spell.element}</p>

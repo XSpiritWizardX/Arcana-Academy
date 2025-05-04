@@ -26,12 +26,11 @@ def get_spells():
 
 
 @spell_routes.route('/<int:id>')
-@login_required
 def get_spell(id):
     """
-    Get a spell by ID for the logged-in user.
+    Get a spell by ID.
     """
-    spell = Spell.query.filter_by(id=id, user_id=current_user.id).first()
+    spell = Spell.query.filter_by(id=id).first()
 
     if not spell:
         return jsonify({'error': 'Spell not found'}), 404
