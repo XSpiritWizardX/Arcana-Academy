@@ -5,12 +5,6 @@ from app.models import Sword, db
 sword_routes = Blueprint('swords', __name__)
 
 
-
-
-
-
-
-
 @sword_routes.route('/all')
 
 def get_all_swords():
@@ -19,11 +13,6 @@ def get_all_swords():
     """
     swords = Sword.query.all()
     return jsonify({'swords': [sword.to_dict() for sword in swords]})
-
-
-
-
-
 
 
 @sword_routes.route('/')
@@ -36,28 +25,17 @@ def get_swords():
     return jsonify({'swords': [sword.to_dict() for sword in swords]})
 
 
-
-
-
-
 @sword_routes.route('/<int:id>')
-@login_required
 def get_sword(id):
     """
-    Get a sword by ID for the logged-in user.
+    Get a sword by ID.
     """
-    sword = Sword.query.filter_by(id=id, user_id=current_user.id).first()
+    sword = Sword.query.filter_by(id=id).first()
 
     if not sword:
         return jsonify({'error': 'Sword not found'}), 404
 
     return jsonify(sword.to_dict())
-
-
-
-
-
-
 
 
 @sword_routes.route('/', methods=['POST'])
@@ -94,8 +72,8 @@ def create_sword():
         return jsonify({'error': 'Sword element is required'}), 400
 
     # Check if the sword already exists for the user
-    existing_spell = Sword.query.filter_by(user_id=current_user.id, name=name).first()
-    if existing_spell:
+    existing_sword = Sword.query.filter_by(user_id=current_user.id, name=name).first()
+    if existing_sword:
         return jsonify({'error': 'Sword with this name already exists'}), 400
     # Create a new sword
     new_sword = Sword(user_id=current_user.id, url=url, name=name, description=description, damage=damage, cost=cost, mana_cost=mana_cost, element=element)
@@ -103,12 +81,6 @@ def create_sword():
     db.session.commit()
 
     return jsonify(new_sword.to_dict()), 201
-
-
-
-
-
-
 
 
 @sword_routes.route('/<int:id>', methods=['PUT'])
@@ -147,20 +119,12 @@ def update_sword(id):
         sword.mana_cost = new_mana_cost
     if new_element is not None:
         sword.element = new_element
-    # Check if the spell already exists for the user
+    # Check if the sword already exists for the user
 
 
 
     db.session.commit()
     return jsonify(sword.to_dict())
-
-
-
-
-
-
-
-
 
 
 @sword_routes.route('/<int:id>', methods=['DELETE'])

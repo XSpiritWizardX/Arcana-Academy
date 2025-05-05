@@ -53,7 +53,7 @@ function Navigation() {
         </NavLink>
 
 
-        <NavLink to="/"
+        <NavLink to="/swords/all"
          className="nav-bar-text"
         >
         <img
@@ -71,7 +71,7 @@ function Navigation() {
         BESTIARY
         </NavLink>
 
-     
+
 
     </div>
   );

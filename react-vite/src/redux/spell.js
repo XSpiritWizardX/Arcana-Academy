@@ -155,30 +155,6 @@ export const deleteSpell = (spellId) => async (dispatch) => {
 };
 
 
-// export const updateSpell = (spellId, spellData) => async (dispatch) => {
-//   try {
-//     const response = await csrfFetch(`/api/spells/${spellId}`, {
-//       method: 'PUT',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify(spellData),
-//       credentials: 'include'
-//     });
-
-//     if (response.ok) {
-//       const data = await response.json();
-//       dispatch(updateSpellAction(data));
-//       // after updating, fetch all spells to update the state
-//       dispatch(fetchSpells());
-//       return data;
-//     } else {
-//       const errorData = await response.json();
-//       throw new Error(errorData.message || 'Failed to update spell');
-//     }
-//   } catch (error) {
-//     console.error('Error updating spell:', error);
-//     throw error;
-//   }
-// };
 export const updateSpell = (spellId, spellData) => async (dispatch) => {
   try {
     const response = await csrfFetch(`/api/spells/${spellId}`, {

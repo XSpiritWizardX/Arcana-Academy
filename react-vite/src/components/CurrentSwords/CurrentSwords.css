@@ -1,0 +1,77 @@
+.title-cont{
+    display: flex;
+    margin-left: 10%;
+    justify-content: space-around;
+    margin-bottom: 5%;
+    margin-top: 2%;
+}
+
+
+
+
+
+.sword-modal-buttons{
+    display: flex;
+    width: 100%;
+}
+
+
+
+
+.sword-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 10px double #7F00FF;
+    border-radius: 10px;
+    background-color: #1C1C1E;
+    color: #C0C0C0;
+    font-size: 1.5rem;
+    margin-right: 2%;
+    margin-bottom: 2%;
+    height: auto;
+    width: 20%;
+}
+.sword-card:hover{
+    border: 16px double #00FFB3;
+}
+.sword-image{
+    margin-left: 3%;
+    width: 94%;
+    height: 50%;
+    object-fit: cover;
+}
+.sword-list-title{
+    font-style: italic;
+}
+.sword-list-container{
+    display: flex;
+;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+}
+
+.sword-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    height: auto;
+    width: 100%;
+}
+
+.sword-list-title{
+    font-size: 2rem;
+    color: #7F00FF;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.sword-name{
+    display: flex;
+    justify-self: center;
+    color: #7F00FF;
+}

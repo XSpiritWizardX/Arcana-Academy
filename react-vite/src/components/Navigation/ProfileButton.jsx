@@ -97,13 +97,13 @@ function ProfileButton() {
               YOUR POTIONS
               </NavLink>
 
-              <NavLink to="/spells/"
+              <NavLink to="/swords/"
               className="pro-bar-text"
               >
               YOUR SWORDS
               </NavLink>
 
-              <NavLink to="/spells/"
+              <NavLink to="/"
               className="pro-bar-text"
               >
               ANGEL REBIRTH

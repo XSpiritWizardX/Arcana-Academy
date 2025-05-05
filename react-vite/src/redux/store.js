@@ -7,10 +7,11 @@ import {
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
 import spellReducer from "./spell";
-
+import swordReducer from "./sword";
 const rootReducer = combineReducers({
   session: sessionReducer,
-  spell: spellReducer
+  spell: spellReducer,
+  sword: swordReducer
 });
 
 let enhancer;
