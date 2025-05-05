@@ -78,8 +78,13 @@ function ProfileButton() {
 
               </div>
 
+              <NavLink to="/stages/"
+              className="pro-bar-text"
+              >
+              BATTLE
+              </NavLink>
 
-              <NavLink to="/spells/"
+              <NavLink to="/players/"
               className="pro-bar-text"
               >
               YOUR PLAYERS
@@ -91,7 +96,7 @@ function ProfileButton() {
               YOUR SPELLS
               </NavLink>
 
-              <NavLink to="/spells/"
+              <NavLink to="/potions/"
               className="pro-bar-text"
               >
               YOUR POTIONS
@@ -103,22 +108,35 @@ function ProfileButton() {
               YOUR SWORDS
               </NavLink>
 
-              <NavLink to="/"
+
+
+
+
+
+              <NavLink to="/schedules/"
+              className="pro-bar-text"
+              >
+              YOUR SCHEDULE
+              </NavLink>
+
+
+              <NavLink to="/events/"
+              className="pro-bar-text"
+              >
+              YOUR EVENTS
+              </NavLink>
+
+
+              <NavLink to="/reviews/"
+              className="pro-bar-text"
+              >
+              YOUR REVIEWS
+              </NavLink>
+
+              <NavLink to="/angels/"
               className="pro-bar-text"
               >
               ANGEL REBIRTH
-              </NavLink>
-
-              <NavLink to="/spells/"
-              className="pro-bar-text"
-              >
-              BATTLE
-              </NavLink>
-
-              <NavLink to="/spells/"
-              className="pro-bar-text"
-              >
-              SCHEDULE
               </NavLink>
 
 

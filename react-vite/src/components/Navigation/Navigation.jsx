@@ -24,7 +24,7 @@ function Navigation() {
 
 
 
-        <NavLink to="/"
+        <NavLink to="/events/all"
         className="nav-bar-text"
         >
         <img
@@ -43,7 +43,7 @@ function Navigation() {
         SPELLS
         </NavLink>
 
-        <NavLink to="/"
+        <NavLink to="/potions/all"
          className="nav-bar-text"
         >
         <img
@@ -62,7 +62,8 @@ function Navigation() {
         SWORDS
         </NavLink>
 
-        <NavLink to="/"
+
+        <NavLink to="/monsters/all"
          className="nav-bar-text"
         >
         <img
