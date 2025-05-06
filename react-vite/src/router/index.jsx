@@ -26,9 +26,11 @@ import UpdatePotionForm from '../components/UpdatePotionForm/UpdatePotionForm';
 import DeletePotionModal from '../components/DeletePotion/DeletePotionModal';
 
 
-
-
-
+import PlayerList from '../components/PlayerList/PlayerList';
+import PlayerShow from '../components/PlayerShow/PlayerShow';
+import CurrentPlayers from '../components/CurrentPlayers/CurrentPlayers';
+import UpdatePlayerForm from '../components/UpdatePlayerForm/UpdatePlayerForm';
+import DeletePlayerModal from '../components/DeletePlayer/DeletePlayerModal';
 
 
 
@@ -132,26 +134,26 @@ export const router = createBrowserRouter([
 
       // PLAYERS
 
-      // {
-      //   path:'/spells/all',
-      //   element: <SpellList />
-      // },
-      // {
-      //   path:'/spells',
-      //   element: <CurrentSpells />
-      // },
-      // {
-      //   path:'/spells/:spellId/delete',
-      //   element: <DeleteSpellModal />
-      // },
-      // {
-      //   path:'/spells/:spellId/update',
-      //   element: <UpdateSpellForm />
-      // },
-      // {
-      //   path:'/spells/:spellId',
-      //   element: <SpellShow />
-      // },
+      {
+        path:'/players/all',
+        element: <PlayerList />
+      },
+      {
+        path:'/players',
+        element: <CurrentPlayers />
+      },
+      {
+        path:'/players/:playerId/delete',
+        element: <DeletePlayerModal />
+      },
+      {
+        path:'/players/:playerId/update',
+        element: <UpdatePlayerForm />
+      },
+      {
+        path:'/players/:playerId',
+        element: <PlayerShow />
+      },
 
 
 

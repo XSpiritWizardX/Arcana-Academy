@@ -120,7 +120,7 @@ export const createPotion = (potionData) => async (dispatch) => {
       const data = await response.json();
 
       dispatch(addPotion(data));
-      // after creating a sword, fetch all potions to update the state
+      // after creating a potion, fetch all potions to update the state
       dispatch(fetchPotions());
       return data;
     } else {
@@ -193,7 +193,7 @@ function potionReducer(state = initialState, action) {
     case REMOVE_POTION:
       return {
         ...state,
-        swords: state.potions.filter(potion => potion.id !== action.potionId)
+        potions: state.potions.filter(potion => potion.id !== action.potionId)
       };
 
     case GET_POTIONS:

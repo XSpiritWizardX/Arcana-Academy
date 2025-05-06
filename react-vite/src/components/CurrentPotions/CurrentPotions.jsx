@@ -43,7 +43,7 @@ function PotionCard() {
                 >YOUR POTIONS</h1>
                       <OpenModalButton
                 className="create-potion-button"
-                buttonText="Create A New Spell"
+                buttonText="Create A New Potion"
 
                 modalComponent={<PotionForm />}
               />
@@ -77,10 +77,10 @@ function PotionCard() {
               className="potion-cost"
               >gold cost: {potion.cost}</p>
               <p
-              className="spell-mana-cost"
+              className="potion-mana-cost"
               >type: {potion.type}</p>
               <p
-              className="spell-damage"
+              className="potion-damage"
               >regeneration: {potion.regeneration}</p>
 
               </NavLink>

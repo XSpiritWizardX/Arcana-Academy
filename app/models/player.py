@@ -35,6 +35,7 @@ class Player(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            "user_id": self.user_id,
             'name': self.name,
             "url": self.url,
             'magic_class': self.magic_class,

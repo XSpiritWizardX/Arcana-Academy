@@ -14,9 +14,9 @@
     text-decoration: none;
 }
 
-.foot-links:hover{
+/* .foot-links:hover{
     cursor: pointer;
-}
+} */
 
 
 h5{
@@ -29,9 +29,9 @@ h5{
     font-style: italic;
 }
 
-h5:hover{
+/* h5:hover{
     cursor:default;
-}
+} */
 
 .resource-col{
     display: flex;
