@@ -1,0 +1,103 @@
+.potion-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 10px double #7F00FF;
+    border-radius: 10px;
+    background-color: #1C1C1E;
+    color: #C0C0C0;
+    font-size: 1.5rem;
+    margin-right: 2%;
+    margin-bottom: 2%;
+    height: auto;
+    width: 20%;
+}
+.potion-card:hover{
+    border: 16px double #00FFB3;
+}
+.potion-image{
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+}
+
+.potion-list-container{
+    display: flex;
+;
+    flex-wrap: wrap;
+
+    width: 100%;
+    height: 100%;
+}
+
+.potion-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    height: auto;
+    width: 100%;
+}
+
+.potion-list-title{
+    font-size: 2rem;
+    color: #7F00FF;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+
+.potion-name{
+    /* color: #fff; */
+    color: white;
+  text-shadow: 0 0 5px #00CFFF, 0 0 10px #00CFFF, 0 0 20px #00CFFF, 0 0 40px #00CFFF, 0 0 80px #00CFFF, 0 0 160px #00CFFF;
+}
+
+.potion-description{
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 1%;
+    font-size: medium;
+}
+
+.potion-element{
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 1%;
+    font-size: medium;
+}
+
+.potion-cost{
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 1%;
+    font-size: medium;
+    color: #FFD700;
+}
+
+.potion-type{
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 1%;
+    font-size: medium;
+    color: #00CFFF;
+}
+
+.potion-regeneration{
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 4%;
+    font-size: medium;
+    color: #C60021;
+}
+
+
+.all-potions-link{
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    color: #7F00FF;
+    font-size: larger;
+}

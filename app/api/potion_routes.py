@@ -112,11 +112,11 @@ def update_potion(id):
     if new_description is not None:
         potion.description = new_description
     if new_regeneration is not None:
-        potion.damage = new_regeneration
+        potion.regeneration = new_regeneration
     if new_cost is not None:
         potion.cost = new_cost
     if new_type is not None:
-        potion.mana_cost = new_type
+        potion.type = new_type
     if new_element is not None:
         potion.element = new_element
     # Check if the spell already exists for the user

@@ -19,6 +19,21 @@ import UpdateSwordForm from '../components/UpdateSwordForm/UpdateSwordForm';
 import DeleteSwordModal from '../components/DeleteSword/DeleteSwordModal';
 
 
+import PotionList from "../components/PotionList/PotionList";
+import PotionShow from '../components/PotionShow/PotionShow';
+import CurrentPotions from "../components/CurrentPotions/CurrentPotions"
+import UpdatePotionForm from '../components/UpdatePotionForm/UpdatePotionForm';
+import DeletePotionModal from '../components/DeletePotion/DeletePotionModal';
+
+
+
+
+
+
+
+
+
+
 export const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -90,26 +105,26 @@ export const router = createBrowserRouter([
 
       // POTIONS
 
-      // {
-      //   path:'/spells/all',
-      //   element: <SpellList />
-      // },
-      // {
-      //   path:'/spells',
-      //   element: <CurrentSpells />
-      // },
-      // {
-      //   path:'/spells/:spellId/delete',
-      //   element: <DeleteSpellModal />
-      // },
-      // {
-      //   path:'/spells/:spellId/update',
-      //   element: <UpdateSpellForm />
-      // },
-      // {
-      //   path:'/spells/:spellId',
-      //   element: <SpellShow />
-      // },
+      {
+        path:'/potions/all',
+        element: <PotionList />
+      },
+      {
+        path:'/potions',
+        element: <CurrentPotions />
+      },
+      {
+        path:'/potions/:potionId/delete',
+        element: <DeletePotionModal />
+      },
+      {
+        path:'/potions/:potionId/update',
+        element: <UpdatePotionForm />
+      },
+      {
+        path:'/potions/:potionId',
+        element: <PotionShow />
+      },
 
 
 
