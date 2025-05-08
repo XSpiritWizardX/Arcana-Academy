@@ -8,7 +8,7 @@ class Monster(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    element = db.Column(db.Integer, nullable=False)
+    element = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(250), nullable=False)
     health = db.Column(db.Numeric(precision=20, scale=2, asdecimal=True), nullable=False)
     gold_drop = db.Column(db.Numeric(precision=20, scale=2, asdecimal=True), nullable=False)

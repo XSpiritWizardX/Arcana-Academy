@@ -21,7 +21,7 @@ def upgrade():
     op.create_table('monsters',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=50), nullable=False),
-    sa.Column('element', sa.Integer(), nullable=False),
+    sa.Column('element', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=250), nullable=False),
     sa.Column('url', sa.String(length=250), nullable=False),
     sa.Column('health', sa.Numeric(precision=20, scale=2), nullable=False),
