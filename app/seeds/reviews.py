@@ -20,13 +20,13 @@ def seed_reviews():
     review8 = Review(
         user_id=1, title='Amazing Wand', rating=5, description="This wand is amazing! It has a great design and works perfectly. I would definitely recommend it to anyone looking for a new wand.")
     review9 = Review(
-        user_id=11, title='Good Wand', rating=4, description="This wand is great for casting spells. I love the design and the way it feels in my hand. The only downside is that it could be a bit more powerful.")
+        user_id=1, title='Good Wand', rating=4, description="This wand is great for casting spells. I love the design and the way it feels in my hand. The only downside is that it could be a bit more powerful.")
     review10 = Review(
-        user_id=12, title='Great Wand', rating=5, description="This wand is amazing! It has a great design and works perfectly. I would definitely recommend it to anyone looking for a new wand.")
+        user_id=1, title='Great Wand', rating=5, description="This wand is amazing! It has a great design and works perfectly. I would definitely recommend it to anyone looking for a new wand.")
     review11 = Review(
-        user_id=13, title='Average Wand', rating=3, description="This wand is okay. It works well enough, but I expected more from it. The design is nice, but it could be more powerful.")
+        user_id=1, title='Average Wand', rating=3, description="This wand is okay. It works well enough, but I expected more from it. The design is nice, but it could be more powerful.")
     review12 = Review(
-        user_id=14, title='Bad Wand', rating=2, description="This wand is not great. It feels cheap and doesn't work as well as I expected. I would not recommend it to anyone.")
+        user_id=1, title='Bad Wand', rating=2, description="This wand is not great. It feels cheap and doesn't work as well as I expected. I would not recommend it to anyone.")
 
     db.session.add(review1)
     db.session.add(review2)
