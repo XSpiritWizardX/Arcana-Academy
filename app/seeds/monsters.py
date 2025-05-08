@@ -4,25 +4,25 @@ from sqlalchemy.sql import text
 
 def seed_monsters():
     monster1 = Monster(
-        name="GREEN DRAGON", element='TIME', description="This Monster has been on the loose for the longest time now. It has been known to be the most powerful monster in the world. It is said that it can control time and space. It is a very dangerous monster and should not be taken lightly.", url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",health=100000, gold_drop=320000)
+        name="GREEN DRAGON", element='TIME', description="This Monster has been on the loose for the longest time now.", url="none",health=100000, gold_drop=320000)
     monster2 = Monster(
-        name="RED DRAGON", element='LIGHTNING', description="This Monster has been on the loose for the longest time now. It has been known to be the most powerful monster in the world. It is said that it can control time and space. It is a very dangerous monster and should not be taken lightly.", url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",health=100000, gold_drop=320000)
+        name="RED DRAGON", element='LIGHTNING', description="This Monster has been on the loose for the longest time now.", url="none",health=100000, gold_drop=320000)
     monster3 = Monster(
-        name="BLUE DRAGON", element='FIRE', description="This Monster has been on the loose for the longest time now. It has been known to be the most powerful monster in the world. It is said that it can control time and space. It is a very dangerous monster and should not be taken lightly.",url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg", health=100000, gold_drop=320000)
+        name="BLUE DRAGON", element='FIRE', description="This Monster has been on the loose for the longest time now.", url="none", health=100000, gold_drop=320000)
     monster4 = Monster(
-        name="BLACK DRAGON", element='EARTH', description="This Monster has been on the loose for the longest time now. It has been known to be the most powerful monster in the world. It is said that it can control time and space. It is a very dangerous monster and should not be taken lightly.", url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",health=100000, gold_drop=320000)
+        name="BLACK DRAGON", element='EARTH', description="This Monster has been on the loose for the longest time now.", url="htnone",health=100000, gold_drop=320000)
     monster5 = Monster(
-        name="WHITE DRAGON", element='WIND', description="This Monster has been on the loose for the longest time now. It has been known to be the most powerful monster in the world. It is said that it can control time and space. It is a very dangerous monster and should not be taken lightly.", url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",health=100000, gold_drop=320000)
+        name="WHITE DRAGON", element='WIND', description="This Monster has been on the loose for the longest time now.", url="htnone",health=100000, gold_drop=320000)
     monster6 = Monster(
-        name="YELLOW DRAGON", element='WATER', description="This Monster has been on the loose for the longest time now. It has been known to be the most powerful monster in the world. It is said that it can control time and space. It is a very dangerous monster and should not be taken lightly.", url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",health=100000, gold_drop=320000)
+        name="YELLOW DRAGON", element='WATER', description="This Monster has been on the loose for the longest time now.", url="htnone",health=100000, gold_drop=320000)
     monster7 = Monster(
-        name="BROWN DRAGON", element='EARTH', description="This Monster has been on the loose for the longest time now. It has been known to be the most powerful monster in the world. It is said that it can control time and space. It is a very dangerous monster and should not be taken lightly.", url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",health=100000, gold_drop=320000)
+        name="BROWN DRAGON", element='EARTH', description="This Monster has been on the loose for the longest time now.", url="htnone",health=100000, gold_drop=320000)
     monster8 = Monster(
-        name="PURPLE DRAGON", element='FIRE', description="This Monster has been on the loose for the longest time now. It has been known to be the most powerful monster in the world. It is said that it can control time and space. It is a very dangerous monster and should not be taken lightly.", url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",health=100000, gold_drop=320000)
+        name="PURPLE DRAGON", element='FIRE', description="This Monster has been on the loose for the longest time now.", url="htnone",health=100000, gold_drop=320000)
     monster9 = Monster(
-        name="PINK DRAGON", element='LIGHTNING', description="This Monster has been on the loose for the longest time now. It has been known to be the most powerful monster in the world. It is said that it can control time and space. It is a very dangerous monster and should not be taken lightly.", url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",health=100000, gold_drop=320000)
+        name="PINK DRAGON", element='LIGHTNING', description="This Monster has been on the loose for the longest time now.", url="htnone",health=100000, gold_drop=320000)
     monster10 = Monster(
-        name="ORANGE DRAGON", element='WATER', description="This Monster has been on the loose for the longest time now. It has been known to be the most powerful monster in the world. It is said that it can control time and space. It is a very dangerous monster and should not be taken lightly.", url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",health=100000, gold_drop=320000)
+        name="ORANGE DRAGON", element='WATER', description="This Monster has been on the loose for the longest time now.", url="htnone",health=100000, gold_drop=320000)
 
     db.session.add(monster1)
     db.session.add(monster2)
