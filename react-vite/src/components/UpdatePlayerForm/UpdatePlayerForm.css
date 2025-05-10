@@ -1,6 +1,9 @@
 .create-player-labels{
-    width: 98%;
+    width: 100%;
     }
+
+
+
 
     .select-magic-class-container{
         display: flex;
@@ -11,7 +14,7 @@
 
     #magic-class-select{
         color: #F5F5FA;
-        margin-left: 13%;
+        margin-left: 7%;
     }
 
 
@@ -115,7 +118,8 @@
 
 
     .create-confirm{
-        width: 480px;
+        width: 500px;
+
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -123,8 +127,8 @@
         padding: 1%;
         border: 2px solid white;
         position:fixed;
-        top: 10%;
-        right: 5%;
+        top: 2%;
+        right: 2%;
     }
 
 
@@ -147,12 +151,11 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        
     }
 
 
     .create-player-title{
-        position: absolute;
+        position: relative;
         top: 0%;
         right: 0%;
         display: flex;
@@ -163,7 +166,7 @@
     .magic-class-select{
         display: flex;
         height: 50px;
-        margin-bottom: 5%
+        margin-bottom: 5%;
     }
 
     .keep-player-button{

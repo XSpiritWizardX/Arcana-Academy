@@ -16,7 +16,7 @@ function DeleteSpellModal({spellId}) {
   const { closeModal } = useModal();
   // const spellId = useParams()
   const handleSubmit = async () => {
-    console.log("Spell ID before deleting:", spellId);
+    // console.log("Spell ID before deleting:", spellId);
     if (!spellId) {
       alert("Error: No Spell ID provided!");  // Debugging check
       return;
@@ -43,7 +43,8 @@ function DeleteSpellModal({spellId}) {
       <p
       className='confirm-delete-text'
       >
-      Are you sure you want to remove this spell? {`${spellId}`}
+      Are you sure you want to remove this spell?
+      {/* {`${spellId}`} */}
       </p>
       <form
       className='delete-spell-form'

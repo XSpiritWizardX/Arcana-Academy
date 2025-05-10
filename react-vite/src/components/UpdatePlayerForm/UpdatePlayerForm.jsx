@@ -75,10 +75,10 @@ function UpdatePlayerForm() {
 
   return (
     <div className='create-confirm'>
+
       <h1
       className='create-player-title'
       >Update Your Player</h1>
-
 
       <form
       onSubmit={handleSubmit}
@@ -423,7 +423,8 @@ function UpdatePlayerForm() {
             type="submit"
             className='create-player-button'
           >
-            Yes {`${player.id}`}
+            Yes (Update Player)
+            {/* {`${player.id}`} */}
           </button>
 
           <button

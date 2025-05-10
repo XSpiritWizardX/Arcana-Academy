@@ -23,6 +23,8 @@
 .nav-logo{
   width: 150px;
   height: 150px;
+  border-radius: 50%;
+
 }
 .nav-logo:hover{
   box-shadow: 4px 4px 8px 8px #C0C0C0;
@@ -47,13 +49,13 @@
   height: 200px;
   padding: 10px 0px;
   font-size: 16px;
-  color: #000000;
+  color: #00CFFF;
   text-decoration: none;
   margin-top: 23px;
 }
 
 .nav-bar-text:hover{
-  color: #00A3FF;
+  color: #00FFB3;
   text-decoration: underline;
   /* box-shadow: 8px 8px  black;
   border-bottom: 8px solid black; */

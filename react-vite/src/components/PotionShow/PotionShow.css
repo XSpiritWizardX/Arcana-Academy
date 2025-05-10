@@ -1,0 +1,64 @@
+.potion-show-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80vw;
+    height: auto;
+}
+
+.potion-show-card{
+    border: 10px double #7F00FF;
+    border-radius: 5%;
+    width: 60vw;
+    height: auto;
+    margin-left: 12%;
+    margin-bottom: 2%;
+    margin-right: 12%;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.potion-show-image{
+    display: flex;
+    width: 80%;
+    height: 60%;
+    border: 2px solid gold;
+}
+
+.potion-show-text{
+    display: flex;
+    color: #F5F5FA;
+    font-weight: lighter;
+    font-size: 26px;
+    margin: 5%;
+}
+
+.potion-show-text-gold{
+    display: flex;
+    color: #FFD700;
+    font-size: 26px;
+}
+
+.potion-show-text-blue{
+    display: flex;
+    color: #00CFFF;
+    font-size: 26px;
+}
+
+.potion-show-text-red{
+    display: flex;
+    color: #C60021;
+    font-size: 26px;
+}
+
+
+
+.potion-modal-buttons{
+    width: 250px;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 5%;
+}

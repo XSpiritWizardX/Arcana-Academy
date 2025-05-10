@@ -14,9 +14,9 @@
     text-decoration: none;
 }
 
-/* .foot-links:hover{
-    cursor: pointer;
-} */
+.foot-links:hover{
+    color:#00FFB3;
+}
 
 
 h5{
@@ -24,7 +24,7 @@ h5{
     align-self: center;
     margin-bottom: 18%;
     text-decoration: 2px underline rgb(255, 255, 255);
-    width: 120px;
+    width: 140px;
     font-size: large;
     font-style: italic;
 }

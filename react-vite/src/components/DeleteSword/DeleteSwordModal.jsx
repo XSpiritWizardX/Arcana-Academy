@@ -16,7 +16,7 @@ function DeleteSwordModal({swordId}) {
   const { closeModal } = useModal();
   // const swordId = useParams()
   const handleSubmit = async () => {
-    console.log("Sword ID before deleting:", swordId);
+    // console.log("Sword ID before deleting:", swordId);
     if (!swordId) {
       alert("Error: No Sword ID provided!");  // Debugging check
       return;
@@ -43,7 +43,8 @@ function DeleteSwordModal({swordId}) {
       <p
       className='confirm-delete-text'
       >
-      Are you sure you want to remove this sword? {`${swordId}`}
+      Are you sure you want to remove this sword?
+      {/* {`${swordId}`} */}
       </p>
       <form
       className='delete-sword-form'

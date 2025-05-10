@@ -36,6 +36,9 @@ import DeletePlayerModal from '../components/DeletePlayer/DeletePlayerModal';
 
 
 
+import BlankPage from '../components/BlankPage/BlankPage';
+
+
 export const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -158,7 +161,10 @@ export const router = createBrowserRouter([
 
 
 
-
+      {
+        path:'/coming-soon',
+        element: <BlankPage/>
+      },
 
       // REVis
 

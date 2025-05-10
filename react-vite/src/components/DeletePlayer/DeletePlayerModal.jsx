@@ -16,7 +16,7 @@ function DeletePlayerModal({playerId}) {
   const { closeModal } = useModal();
   // const playerId = useParams()
   const handleSubmit = async () => {
-    console.log("Player ID before deleting:", playerId);
+    // console.log("Player ID before deleting:", playerId);
     if (!playerId) {
       alert("Error: No player ID provided!");  // Debugging check
       return;
@@ -43,7 +43,8 @@ function DeletePlayerModal({playerId}) {
       <p
       className='confirm-delete-text'
       >
-      Are you sure you want to remove this player? {`${playerId}`}
+      Are you sure you want to remove this player?
+      {/* {`${playerId}`} */}
       </p>
       <form
       className='delete-player-form'

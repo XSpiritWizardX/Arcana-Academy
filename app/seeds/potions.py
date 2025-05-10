@@ -4,18 +4,18 @@ from sqlalchemy.sql import text
 
 def seed_potions():
     potion1 = Potion(
-        user_id= 1, name='small potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='healing', cost=100, type="health", regeneration=670.80, description='A small healing potion.')
+        user_id= 1, name='small potion', url = "https://res.cloudinary.com/dl6ls3rgu/image/upload/v1746906074/s1Uly0FpSpKpi43qvyVn--0--m5715_bg-rmvd_ycku61.png",element='healing', cost=100, type="health", regeneration=670.80, description='A small healing potion.')
 
     potion2 = Potion(
-        user_id= 1, name='medium potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='healing', cost=200, type="health", regeneration=1341.60, description='A medium healing potion.')
+        user_id= 1, name='medium potion', url = "https://res.cloudinary.com/dl6ls3rgu/image/upload/v1746906074/s1Uly0FpSpKpi43qvyVn--0--m5715_bg-rmvd_ycku61.png",element='healing', cost=200, type="health", regeneration=1341.60, description='A medium healing potion.')
     potion3 = Potion(
-        user_id= 1, name='large potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='healing', cost=300, type="health", regeneration=2012.40, description='A large healing potion.')
+        user_id= 1, name='large potion', url = "https://res.cloudinary.com/dl6ls3rgu/image/upload/v1746906074/s1Uly0FpSpKpi43qvyVn--0--m5715_bg-rmvd_ycku61.png",element='healing', cost=300, type="health", regeneration=2012.40, description='A large healing potion.')
     potion4 = Potion(
-        user_id= 1, name='small mana potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='mana', cost=100, type="mana", regeneration=670.80, description='A small mana potion.')
+        user_id= 1, name='small mana potion', url = "https://res.cloudinary.com/dl6ls3rgu/image/upload/v1746906085/qB8NjaYb4UDMKycNwG5t--0--40pub_bg-rmvd_tgtpdd.png",element='mana', cost=100, type="mana", regeneration=670.80, description='A small mana potion.')
     potion5 = Potion(
-        user_id= 1, name='medium mana potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='mana', cost=200, type="mana", regeneration=1341.60, description='A medium mana potion.')
+        user_id= 1, name='medium mana potion', url = "https://res.cloudinary.com/dl6ls3rgu/image/upload/v1746906085/qB8NjaYb4UDMKycNwG5t--0--40pub_bg-rmvd_tgtpdd.png",element='mana', cost=200, type="mana", regeneration=1341.60, description='A medium mana potion.')
     potion6 = Potion(
-        user_id= 1, name='large mana potion', url = "https://img.freepik.com/premium-psd/monster-cartoon-character-design-illustration-transparent-background_187482-2075.jpg",element='mana', cost=300, type="mana", regeneration=2012.40, description='A large mana potion.')
+        user_id= 1, name='large mana potion', url = "https://res.cloudinary.com/dl6ls3rgu/image/upload/v1746906085/qB8NjaYb4UDMKycNwG5t--0--40pub_bg-rmvd_tgtpdd.png",element='mana', cost=300, type="mana", regeneration=2012.40, description='A large mana potion.')
 
     db.session.add(potion1)
     db.session.add(potion2)

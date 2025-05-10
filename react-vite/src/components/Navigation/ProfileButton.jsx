@@ -78,7 +78,7 @@ function ProfileButton() {
 
               </div>
 
-              <NavLink to="/stages/"
+              <NavLink to="coming-soon"
               className="pro-bar-text"
               >
               BATTLE
@@ -113,27 +113,27 @@ function ProfileButton() {
 
 
 
-              <NavLink to="/schedules/"
+              <NavLink to="/coming-soon"
               className="pro-bar-text"
               >
               YOUR SCHEDULE
               </NavLink>
 
 
-              <NavLink to="/events/"
+              <NavLink to="/coming-soon"
               className="pro-bar-text"
               >
               YOUR EVENTS
               </NavLink>
 
 
-              <NavLink to="/reviews/"
+              <NavLink to="/coming-soon"
               className="pro-bar-text"
               >
               YOUR REVIEWS
               </NavLink>
 
-              <NavLink to="/angels/"
+              <NavLink to="/coming-soon"
               className="pro-bar-text"
               >
               ANGEL REBIRTH

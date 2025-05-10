@@ -1,0 +1,7 @@
+.delete-potion-form{
+display: flex;
+}
+
+.delete-confirm{
+    width:400px;
+}

@@ -51,7 +51,7 @@ function UpdatePotionForm() {
 
 
   useEffect(() => {
-    console.log("potion id:",potion.id)
+    // console.log("potion id:",potion.id)
     dispatch(fetchOnePotion(potion.id));
 
   }, [dispatch, potion.id]);
@@ -256,7 +256,8 @@ function UpdatePotionForm() {
             type="submit"
             className='create-potion-button'
           >
-            Yes {`${potion.id}`}
+            Yes (Update Potion)
+             {/* {`${potion.id}`} */}
           </button>
 
           <button

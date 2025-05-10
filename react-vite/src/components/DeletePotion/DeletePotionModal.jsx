@@ -16,7 +16,7 @@ function DeletePotionModal({potionId}) {
   const { closeModal } = useModal();
   // const potionId = useParams()
   const handleSubmit = async () => {
-    console.log("Potion ID before deleting:", potionId);
+    // console.log("Potion ID before deleting:", potionId);
     if (!potionId) {
       alert("Error: No potion ID provided!");  // Debugging check
       return;
@@ -43,7 +43,8 @@ function DeletePotionModal({potionId}) {
       <p
       className='confirm-delete-text'
       >
-      Are you sure you want to remove this potion? {`${potionId}`}
+      Are you sure you want to remove this potion?
+      {/* {`${potionId}`} */}
       </p>
       <form
       className='delete-potion-form'

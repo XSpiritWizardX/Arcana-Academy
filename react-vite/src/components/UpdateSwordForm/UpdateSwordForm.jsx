@@ -51,7 +51,7 @@ function UpdateSwordForm() {
 
 
   useEffect(() => {
-    console.log("sword id:",sword.id)
+    // console.log("sword id:",sword.id)
     dispatch(fetchOneSword(sword.id));
 
   }, [dispatch, sword.id]);
@@ -244,7 +244,8 @@ function UpdateSwordForm() {
             type="submit"
             className='create-sword-button'
           >
-            Yes {`${sword.id}`}
+            Yes (Update Sword)
+             {/* {`${sword.id}`} */}
           </button>
 
           <button

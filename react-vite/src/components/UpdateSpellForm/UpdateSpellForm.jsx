@@ -51,7 +51,7 @@ function UpdateSpellForm() {
 
 
   useEffect(() => {
-    console.log("spell id:",spell.id)
+    // console.log("spell id:",spell.id)
     dispatch(fetchOneSpell(spell.id));
 
   }, [dispatch, spell.id]);
@@ -244,7 +244,9 @@ function UpdateSpellForm() {
             type="submit"
             className='create-spell-button'
           >
-            Yes {`${spell.id}`}
+
+            Yes(Update Spell)
+            {/* {`${spell.id}`} */}
           </button>
 
           <button

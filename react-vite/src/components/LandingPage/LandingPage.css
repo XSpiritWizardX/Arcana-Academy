@@ -1,7 +1,7 @@
 
-.landing-page{
-    width: 100%;
-    height: auto;
+.landing-page-italic{
+    font-style: italic;
+    margin-bottom: 0%;
 }
 
 .landing-page-container{
@@ -9,19 +9,21 @@
     height: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    margin-left: 1%;
+    align-items: flex-start;
 }
 
 .landing-page-title{
-    color: #7F00FF;
+    color: #00FFB3;
     display: flex;
     justify-self: center;
+    font-style: italic;
+    font-size: xx-large
 }
 
 
 .landing-page-text{
-color: #F5F5FA;
+color: #C0C0C0;
 }
 
 
@@ -36,7 +38,23 @@ color: #F5F5FA;
     justify-content: space-between;
 }
 
-.lantern-img{
-    height: 20em;
-    width: auto;
+
+
+ul{
+    color: #C0C0C0;
+    margin-top: 0%;
+}
+
+.arc-para{
+    margin-bottom: 1%;
+   font-size: large;
+}
+
+li{
+color: #C0C0C0;
+}
+
+.land-head{
+    color: #00FFB3;
+    font-size: x-large;
 }

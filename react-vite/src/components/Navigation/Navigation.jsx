@@ -18,13 +18,13 @@ function Navigation() {
         >
         <img
         className="nav-logo"
-        src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745460813/PigZ34Z1EbOSrle1I22d--0--qafvf_bg-rmvd_bofljj.png"  />
+        src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1746905940/jhNonsuSc8ShAi6pP60N--0--x7uaq_bg-rmvd_sf5lbe.png"  />
         HOME
         </NavLink>
 
 
 
-        <NavLink to="/events/all"
+        <NavLink to="/coming-soon"
         className="nav-bar-text"
         >
         <img
@@ -63,7 +63,7 @@ function Navigation() {
         </NavLink>
 
 
-        <NavLink to="/monsters/all"
+        <NavLink to="/coming-soon"
          className="nav-bar-text"
         >
         <img

@@ -1,0 +1,35 @@
+.create-potion-form{
+    width: 100%;
+}
+
+.select-type-container{
+    display: flex;
+
+}
+
+#type-select{
+    color:white;
+    margin-left: 20%;
+}
+
+.beautiful-dropdown-health{
+    color: red;
+}
+.beautiful-dropdown-mana{
+    color: rgb(48, 183, 236);
+}
+
+.button-container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.create-potion-button{
+    margin-right: 5%;
+}
+
+.keep-potion-button{
+    display: flex;
+    margin-left: 20%;
+}
