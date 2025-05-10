@@ -65,7 +65,7 @@ function LoginFormModal() {
     .then(() => {
       // add delay before navigation
       setTimeout(() => {
-        navigate('/dashboard');
+        navigate('/');
       }, 100);
     });
   };
@@ -80,13 +80,15 @@ function LoginFormModal() {
     .then(() => {
       // add delay before navigation
       setTimeout(() => {
-        navigate('/dashboard');
+        navigate('/');
       }, 100);
     });
   };
 
   return (
-    <>
+    <div
+    className="loginzz"
+    >
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}
       className="login-form"
@@ -148,7 +150,7 @@ function LoginFormModal() {
         </button>
 
       </form>
-    </>
+    </div>
   );
 }
 

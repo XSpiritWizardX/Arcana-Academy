@@ -1,13 +1,12 @@
 
 import "./LandingPage.css";
 
-
-
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import SignupFormModal from "../../components/SignupFormModal/SignupFormModal";
 
 
 
 export default function LandingPage() {
-
 
 
 
@@ -178,10 +177,11 @@ Your magic is waiting.
 
 
 
-
-          <button className="landing-page-signup-button">
-            Sign Up Now
-          </button>
+          <OpenModalButton
+            className="landing-page-signup-button"
+            buttonText="Sign Up Now"
+            modalComponent={<SignupFormModal />}
+          />
 
       </div>
     </div>

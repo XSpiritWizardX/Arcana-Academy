@@ -5,6 +5,7 @@ import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./ProfileButton.css";
 
 function ProfileButton() {
@@ -13,6 +14,7 @@ function ProfileButton() {
   const user = useSelector((store) => store.session.user);
   // const session = useSelector((store) => store.session);
   const ulRef = useRef();
+  const navigate = useNavigate();
 
   const toggleMenu = (e) => {
     e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
@@ -39,6 +41,7 @@ function ProfileButton() {
     e.preventDefault();
     dispatch(thunkLogout());
     closeMenu();
+    navigate('/')
   };
 
   return (
@@ -154,13 +157,13 @@ function ProfileButton() {
               <OpenModalButton
                 className="auth-button-login"
                 buttonText="Log In"
-                onItemClick={closeMenu}
+                onButtonClick={closeMenu}
                 modalComponent={<LoginFormModal />}
               />
               <OpenModalButton
                 className="auth-button-signup"
                 buttonText="Sign Up"
-                onItemClick={closeMenu}
+                onButtonClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
             </div>

@@ -27,7 +27,12 @@ h1{
     border:black 5px fill;
 
 } */
-
+.sign-up-modalzs{
+    position: fixed;
+    top: 10%;
+    right: 10%;
+    border: 2px solid #C0C0C0;
+}
 .inputs{
     display: flex;
 

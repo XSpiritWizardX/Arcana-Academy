@@ -26,7 +26,12 @@ width: 100%;
   box-shadow: 0px 0px 0px #C0C0C0;
 
 }
-
+.loginzz{
+  position: fixed;
+  top: 10%;
+  right: 10%;
+  border: 2px solid #C0C0C0;
+}
 .demo-log-in:hover{
   background-color: #1C1C1E;
   text-decoration:underline;
