@@ -398,7 +398,7 @@ function PlayerForm() {
 
 
       <p className='confirm-create-text'>
-        Are you sure you want to create this potion?
+        Are you sure you want to create this Player?
       </p>
 
         <div className="button-container">
@@ -406,7 +406,7 @@ function PlayerForm() {
             type="submit"
             className='create-potion-button'
           >
-            Yes (Create Potion)
+            Yes (Create Player)
           </button>
 
           <button
