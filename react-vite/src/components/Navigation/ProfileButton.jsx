@@ -81,10 +81,16 @@ function ProfileButton() {
 
               </div>
 
-              <NavLink to="coming-soon"
+              <NavLink to="/battle"
               className="pro-bar-text"
               >
               BATTLE
+              </NavLink>
+
+              <NavLink to="/adventure"
+              className="pro-bar-text"
+              >
+              ADVENTURE
               </NavLink>
 
               <NavLink to="/players/"

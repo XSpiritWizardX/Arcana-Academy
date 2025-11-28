@@ -1,0 +1,43 @@
+.adventure-card {
+  background: #1c1c1e;
+  border: 2px solid #7f00ff;
+  border-radius: 8px;
+  padding: 16px;
+  color: #f5f5fa;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 720px;
+}
+
+.adventure-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.adventure-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  font-size: 14px;
+}
+
+.adventure-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.adventure-error {
+  color: #ff4d4f;
+}
+
+.adventure-log {
+  border: 1px solid #2a2a2c;
+  border-radius: 6px;
+  background: #0f1115;
+  padding: 10px;
+  min-height: 120px;
+  font-size: 14px;
+}

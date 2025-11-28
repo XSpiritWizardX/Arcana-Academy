@@ -71,6 +71,19 @@ Preset reference (matching current defaults):
 - unique filename: false
 - use filename as display name: true
 
+## Turn-based adventure (prototype)
+- Start a session: `POST /api/game/session` (auth required) → returns session_id, map, entities.
+- Get state: `GET /api/game/session/<session_id>`
+- Move: `POST /api/game/session/<session_id>/move` with JSON `{ "direction": "up|down|left|right" }`
+- Attack: `POST /api/game/session/<session_id>/attack` with JSON `{ "target_id": "<entity_id>" }`
+- Prototype is Python-first: in-memory sessions, simple 10x10 map, basic AI turns after yours.
+
+## Adventure loop (LOTGD-inspired, early)
+- Get state: `GET /api/adventure/state`
+- Rest: `POST /api/adventure/rest` (restores HP/turns)
+- Explore: `POST /api/adventure/explore` (consumes a turn, fights a random encounter, grants gold/xp on win)
+- Frontend: `/adventure` route with buttons to rest/explore and view log.
+
 ## Deployment through Render.com
 
 First, recall that Vite is a development dependency, so it will not be used in

@@ -28,6 +28,7 @@ class User(db.Model, UserMixin):
 
     # Relationships
     player = db.relationship("Player", back_populates="user", cascade="all, delete-orphan")
+    adventure_state = db.relationship("AdventureState", back_populates="user", cascade="all, delete-orphan", uselist=False)
     spell = db.relationship("Spell", back_populates="user", cascade="all, delete-orphan", uselist=False)
     potion = db.relationship("Potion", back_populates="user", cascade="all, delete-orphan", uselist=False)
     sword = db.relationship("Sword", back_populates="user", cascade="all, delete-orphan", uselist=False)

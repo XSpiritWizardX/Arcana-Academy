@@ -1,0 +1,158 @@
+.battle-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #f5f5fa;
+  background: linear-gradient(180deg, #0d1b2a, #1c1c1e);
+  padding: 16px;
+  border: 2px solid #7f00ff;
+  border-radius: 8px;
+  max-width: 900px;
+}
+
+.battle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.battle-controls button {
+  margin-right: 8px;
+}
+
+.battle-error {
+  color: #ff4d4f;
+}
+
+.battle-grid {
+  display: none;
+}
+
+.battle-scene {
+  position: relative;
+  height: 260px;
+  border: 2px solid #2a2a2c;
+  border-radius: 10px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.65)),
+    url("https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745477673/coolmodalback_op5ldm.gif");
+  background-size: cover;
+  background-position: center;
+}
+
+.battle-background {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(0, 163, 255, 0.2), transparent 35%),
+    radial-gradient(circle at 80% 30%, rgba(127, 0, 255, 0.25), transparent 40%);
+  pointer-events: none;
+}
+
+.battle-ground {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #00a3ff, #7f00ff);
+  box-shadow: 0 0 12px rgba(127, 0, 255, 0.5);
+}
+
+.battle-entity {
+  position: absolute;
+  bottom: 30px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: left 0.25s ease;
+}
+
+.battle-entity.lunge {
+  animation: lunge 0.25s ease;
+}
+
+@keyframes lunge {
+  0% { transform: translateX(-50%) translateY(0); }
+  40% { transform: translateX(-50%) translateY(-6px); }
+  100% { transform: translateX(-50%) translateY(0); }
+}
+
+.battle-entity .nameplate {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid #2a2a2c;
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.battle-entity .sprite {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  border: 2px solid #2a2a2c;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.battle-entity.player .sprite {
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)),
+    url("https://res.cloudinary.com/dl6ls3rgu/image/upload/v1746905940/jhNonsuSc8ShAi6pP60N--0--x7uaq_bg-rmvd_sf5lbe.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.battle-entity.enemy .sprite {
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.55)),
+    url("https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745460859/TiisO45JvVhdMXUaM7ow--0--b4glo_bg-rmvd_rbtkpx.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.battle-entity.down .sprite {
+  filter: grayscale(0.7) brightness(0.5);
+}
+
+.battle-entity.player.slash .sprite::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  background: conic-gradient(from 200deg at 50% 50%, rgba(255,255,255,0.7), rgba(255,255,255,0));
+  transform: rotate(20deg);
+  animation: slash 0.3s ease;
+  pointer-events: none;
+}
+
+@keyframes slash {
+  0% { opacity: 0; transform: rotate(10deg) scale(0.9); }
+  40% { opacity: 1; transform: rotate(20deg) scale(1.05); }
+  100% { opacity: 0; transform: rotate(30deg) scale(1.1); }
+}
+
+.battle-actions {
+  display: flex;
+  gap: 24px;
+}
+
+.move-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.move-row {
+  display: flex;
+  gap: 4px;
+}
+
+.attack-controls button {
+  margin-right: 8px;
+}

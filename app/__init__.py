@@ -11,6 +11,8 @@ from .api.spell_routes import spell_routes
 from .api.potion_routes import potion_routes
 from .api.sword_routes import sword_routes
 from .api.player_routes import player_routes
+from .api.game_routes import game_routes
+from .api.adventure_routes import adventure_routes
 # from .api.schedule_routes import schedule_routes
 # from .api.review_routes import review_routes
 from .seeds import seed_commands
@@ -38,6 +40,8 @@ app.register_blueprint(spell_routes, url_prefix='/api/spells')
 app.register_blueprint(potion_routes, url_prefix='/api/potions')
 app.register_blueprint(sword_routes, url_prefix='/api/swords')
 app.register_blueprint(player_routes, url_prefix='/api/players')
+app.register_blueprint(game_routes, url_prefix='/api/game')
+app.register_blueprint(adventure_routes, url_prefix='/api/adventure')
 # app.register_blueprint(schedule_routes, url_prefix='/api/schedules')
 # app.register_blueprint(review_routes, url_prefix='/api/reviews')
 db.init_app(app)
