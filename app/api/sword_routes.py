@@ -1,8 +1,23 @@
 from flask import Blueprint, jsonify, request
-from flask_login import login_required, current_user
+from flask_login import current_user, login_required
+
+from app.api.upload_helper import (
+    allowed_file,
+    get_unique_filename,
+    upload_file_to_cloudinary,
+)
 from app.models import Sword, db
 
 sword_routes = Blueprint('swords', __name__)
+
+
+def _parse_decimal(field_name, value):
+    if value is None or value == "":
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        raise ValueError(f"{field_name} must be a number")
 
 
 @sword_routes.route('/all')
@@ -44,17 +59,30 @@ def create_sword():
     """
     Create a new sword for the logged-in user.
     """
-    print(f'Creating sword for user: {current_user.id}')
-    print(f'Request data: {request.get_json()}')
+    image = request.files.get("image")
+    data = request.form if request.form else (request.get_json(silent=True) or {})
 
-    data = request.get_json()
-    url = data.get("url")
+    if not image:
+        return jsonify({'error': 'Sword image is required'}), 400
+    if not allowed_file(image.filename):
+        return jsonify({'error': 'File type not permitted'}), 400
+
+    image.filename = get_unique_filename(image.filename)
+    upload = upload_file_to_cloudinary(image)
+    if "url" not in upload:
+        return jsonify(upload), 400
+
+    url = upload["url"]
     name = data.get("name")
     description = data.get("description")
-    damage = data.get("damage", 0.00)
-    cost = data.get("cost", 0.00)
-    mana_cost = data.get("mana_cost", 0.00)
     element = data.get("element")
+
+    try:
+        damage = _parse_decimal("damage", data.get("damage"))
+        cost = _parse_decimal("cost", data.get("cost"))
+        mana_cost = _parse_decimal("mana_cost", data.get("mana_cost"))
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
 
     if not name:
         return jsonify({'error': 'Sword name is required'}), 400
@@ -62,11 +90,11 @@ def create_sword():
         return jsonify({'error': 'Sword description is required'}), 400
     if not url:
         return jsonify({'error': 'Sword URL is required'}), 400
-    if not damage:
+    if damage is None:
         return jsonify({'error': 'Sword damage is required'}), 400
-    if not cost:
+    if cost is None:
         return jsonify({'error': 'Sword cost is required'}), 400
-    if not mana_cost:
+    if mana_cost is None:
         return jsonify({'error': 'Sword mana cost is required'}), 400
     if not element:
         return jsonify({'error': 'Sword element is required'}), 400
@@ -94,19 +122,36 @@ def update_sword(id):
     if not sword:
         return jsonify({'error': 'Sword not found'}), 404
 
-    data = request.get_json()
-    new_url = data.get('url')
+    data = request.form if request.form else (request.get_json(silent=True) or {})
+    image = request.files.get("image")
+
+    if image:
+        if not allowed_file(image.filename):
+            return jsonify({'error': 'File type not permitted'}), 400
+        image.filename = get_unique_filename(image.filename)
+        upload = upload_file_to_cloudinary(image)
+        if "url" not in upload:
+            return jsonify(upload), 400
+        sword.url = upload["url"]
+
     new_name = data.get('name')
     new_description = data.get('description')
-    new_damage = data.get('damage')
-    new_cost = data.get('cost')
-    new_mana_cost = data.get('mana_cost')
     new_element = data.get('element')
 
+    try:
+        new_damage = (
+            _parse_decimal("damage", data.get('damage')) if 'damage' in data else None
+        )
+        new_cost = _parse_decimal("cost", data.get('cost')) if 'cost' in data else None
+        new_mana_cost = (
+            _parse_decimal("mana_cost", data.get('mana_cost'))
+            if 'mana_cost' in data
+            else None
+        )
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
 
 
-    if new_url is not None:
-        sword.url = new_url
     if new_name is not None:
         sword.name = new_name
     if new_description is not None:

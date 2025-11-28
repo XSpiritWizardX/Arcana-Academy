@@ -10,7 +10,7 @@ function SwordForm() {
   const { closeModal } = useModal();
   const sessionUser = useSelector(state => state.session.user);
   console.log(`Trying to get user ID: ${ sessionUser }`)
-  const [url, setUrl] = useState("")
+  const [imageFile, setImageFile] = useState(null)
   const [name, setName] = useState("")
   const [description, setDescription]= useState("")
   const [damage, setDamage] = useState("")
@@ -22,16 +22,19 @@ function SwordForm() {
     e.preventDefault();    // prevent default form submission
 
     try {
-      const swordData = {
-        user_id: sessionUser.id,
-        url: url,
-        name: name,
-        description: description,
-        damage:damage,
-        cost: cost,
-        mana_cost: manaCost,
-        element: element
-      };
+      if (!imageFile) {
+        alert("Please add an image for your sword.");
+        return;
+      }
+
+      const swordData = new FormData();
+      swordData.append('image', imageFile);
+      swordData.append('name', name);
+      swordData.append('description', description);
+      swordData.append('damage', damage);
+      swordData.append('cost', cost);
+      swordData.append('mana_cost', manaCost);
+      swordData.append('element', element);
 
       await dispatch(swordActions.createSword(swordData));
       alert("Sword created successfully!");
@@ -70,16 +73,13 @@ function SwordForm() {
 
 
 
-        <label
-        className='create-sword-labels'
-        >
-        Image Url
+        <label className='create-sword-labels'>
+        Upload Image
         <input
         className='inputs'
-        placeholder='URL'
-        type="text"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
+        type="file"
+        accept="image/*"
+        onChange={(e) => setImageFile(e.target.files?.[0] || null)}
         required
         />
         </label>

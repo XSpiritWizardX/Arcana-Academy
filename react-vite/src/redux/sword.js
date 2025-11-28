@@ -111,25 +111,21 @@ export const createSword = (swordData) => async (dispatch) => {
   try {
     const response = await csrfFetch('/api/swords/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(swordData),
-      credentials: 'include'   // send auth. cookies in request
+      body: swordData,
     });
 
-    if (response.ok) {
-      const data = await response.json();
+    const data = await response.json();
 
-      dispatch(addSword(data));
-      // after creating a sword, fetch all swords to update the state
-      dispatch(fetchSwords());
-      return data;
-    } else {
-      // handle non-OK responses
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to create sword');
-    }
+    dispatch(addSword(data));
+    // after creating a sword, fetch all swords to update the state
+    dispatch(fetchSwords());
+    return data;
   } catch (error) {
     console.error('Error creating sword:', error);
+    if (error.json) {
+      const errorData = await error.json();
+      throw new Error(errorData.error || errorData.message || 'Failed to create sword');
+    }
     throw error;
   }
 };

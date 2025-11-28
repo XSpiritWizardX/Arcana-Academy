@@ -10,44 +10,47 @@ function PlayerForm() {
   const { closeModal } = useModal();
   const sessionUser = useSelector(state => state.session.user);
   console.log(`Trying to get user ID: ${ sessionUser }`)
-  const [name, setName] = useState()
-  const [url, setUrl] = useState()
-  const [magic_class, setMagicClass]= useState()
-  const [element, setElement] = useState()
-  const [level, setLevel] = useState()
-  const [xp, setXp] = useState()
-  const [gold, setGold] = useState()
-  const [health, setHealth] = useState()
-  const [mana, setMana] = useState()
-  const [damage, setDamage] = useState()
-  const [speed, setSpeed] = useState()
-  const [strength, setStrength] = useState()
-  const [intellect, setIntellect] = useState()
-  const [dexterity, setDexterity] = useState()
-  const [vitality, setVitality] = useState()
+  const [imageFile, setImageFile] = useState(null)
+  const [name, setName] = useState("")
+  const [magic_class, setMagicClass]= useState("")
+  const [element, setElement] = useState("")
+  const [level, setLevel] = useState("")
+  const [xp, setXp] = useState("")
+  const [gold, setGold] = useState("")
+  const [health, setHealth] = useState("")
+  const [mana, setMana] = useState("")
+  const [damage, setDamage] = useState("")
+  const [speed, setSpeed] = useState("")
+  const [strength, setStrength] = useState("")
+  const [intellect, setIntellect] = useState("")
+  const [dexterity, setDexterity] = useState("")
+  const [vitality, setVitality] = useState("")
 
   const handleSubmit = async (e) => {
     e.preventDefault();    // prevent default form submission
 
     try {
-      const playerData = {
-        user_id: sessionUser.id,
-        url,
-        magic_class,
-        name,
-        element,
-        level,
-        xp,
-        gold,
-        health,
-        mana,
-        damage,
-        speed,
-        strength,
-        intellect,
-        dexterity,
-        vitality
-      };
+      if (!imageFile) {
+        alert("Please add an image for your player.");
+        return;
+      }
+
+      const playerData = new FormData();
+      playerData.append('image', imageFile);
+      playerData.append('magic_class', magic_class);
+      playerData.append('name', name);
+      playerData.append('element', element);
+      playerData.append('level', level);
+      playerData.append('xp', xp);
+      playerData.append('gold', gold);
+      playerData.append('health', health);
+      playerData.append('mana', mana);
+      playerData.append('damage', damage);
+      playerData.append('speed', speed);
+      playerData.append('strength', strength);
+      playerData.append('intellect', intellect);
+      playerData.append('dexterity', dexterity);
+      playerData.append('vitality', vitality);
 
       await dispatch(playerActions.createPlayer(playerData));
       alert("Player created successfully!");
@@ -86,16 +89,13 @@ function PlayerForm() {
 
 
 
-        <label
-        className='create-player-labels'
-        >
-        Image Url
+        <label className='create-player-labels'>
+        Upload Image
         <input
         className='inputs'
-        placeholder='URL'
-        type="text"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
+        type="file"
+        accept="image/*"
+        onChange={(e) => setImageFile(e.target.files?.[0] || null)}
         required
         />
         </label>

@@ -111,25 +111,21 @@ export const createPotion = (potionData) => async (dispatch) => {
   try {
     const response = await csrfFetch('/api/potions/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(potionData),
-      credentials: 'include'   // send auth. cookies in request
+      body: potionData,
     });
 
-    if (response.ok) {
-      const data = await response.json();
+    const data = await response.json();
 
-      dispatch(addPotion(data));
-      // after creating a potion, fetch all potions to update the state
-      dispatch(fetchPotions());
-      return data;
-    } else {
-      // handle non-OK responses
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to create potion');
-    }
+    dispatch(addPotion(data));
+    // after creating a potion, fetch all potions to update the state
+    dispatch(fetchPotions());
+    return data;
   } catch (error) {
     console.error('Error creating potion:', error);
+    if (error.json) {
+      const errorData = await error.json();
+      throw new Error(errorData.error || errorData.message || 'Failed to create potion');
+    }
     throw error;
   }
 };

@@ -10,7 +10,7 @@ function PotionForm() {
   const { closeModal } = useModal();
   const sessionUser = useSelector(state => state.session.user);
   console.log(`Trying to get user ID: ${ sessionUser }`)
-  const [url, setUrl] = useState("")
+  const [imageFile, setImageFile] = useState(null)
   const [name, setName] = useState("")
   const [description, setDescription]= useState("")
   const [regeneration, setRegeneration] = useState("")
@@ -22,16 +22,19 @@ function PotionForm() {
     e.preventDefault();    // prevent default form submission
 
     try {
-      const potionData = {
-        user_id: sessionUser.id,
-        url: url,
-        name: name,
-        description: description,
-        regeneration:regeneration,
-        cost: cost,
-        type: type,
-        element: element
-      };
+      if (!imageFile) {
+        alert("Please add an image for your potion.");
+        return;
+      }
+
+      const potionData = new FormData();
+      potionData.append('image', imageFile);
+      potionData.append('name', name);
+      potionData.append('description', description);
+      potionData.append('regeneration', regeneration);
+      potionData.append('cost', cost);
+      potionData.append('type', type);
+      potionData.append('element', element);
 
       await dispatch(potionActions.createPotion(potionData));
       alert("Potion created successfully!");
@@ -70,16 +73,13 @@ function PotionForm() {
 
 
 
-        <label
-        className='create-potion-labels'
-        >
-        Image Url
+        <label className='create-potion-labels'>
+        Upload Image
         <input
         className='inputs'
-        placeholder='URL'
-        type="text"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
+        type="file"
+        accept="image/*"
+        onChange={(e) => setImageFile(e.target.files?.[0] || null)}
         required
         />
         </label>

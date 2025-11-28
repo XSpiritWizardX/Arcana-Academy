@@ -112,25 +112,21 @@ export const createSpell = (spellData) => async (dispatch) => {
   try {
     const response = await csrfFetch('/api/spells/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(spellData),
-      credentials: 'include'   // send auth. cookies in request
+      body: spellData,
     });
 
-    if (response.ok) {
-      const data = await response.json();
+    const data = await response.json();
 
-      dispatch(addSpell(data));
-      // after creating a portfolio, fetch all spells to update the state
-      dispatch(fetchSpells());
-      return data;
-    } else {
-      // handle non-OK responses
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to create spell');
-    }
+    dispatch(addSpell(data));
+    // after creating a portfolio, fetch all spells to update the state
+    dispatch(fetchSpells());
+    return data;
   } catch (error) {
     console.error('Error creating spell:', error);
+    if (error.json) {
+      const errorData = await error.json();
+      throw new Error(errorData.error || errorData.message || 'Failed to create spell');
+    }
     throw error;
   }
 };

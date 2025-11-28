@@ -111,25 +111,21 @@ export const createPlayer = (playerData) => async (dispatch) => {
   try {
     const response = await csrfFetch('/api/players/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(playerData),
-      credentials: 'include'   // send auth. cookies in request
+      body: playerData,
     });
 
-    if (response.ok) {
-      const data = await response.json();
+    const data = await response.json();
 
-      dispatch(addPlayer(data));
-      // after creating a player, fetch all players to update the state
-      dispatch(fetchPlayers());
-      return data;
-    } else {
-      // handle non-OK responses
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to create player');
-    }
+    dispatch(addPlayer(data));
+    // after creating a player, fetch all players to update the state
+    dispatch(fetchPlayers());
+    return data;
   } catch (error) {
     console.error('Error creating player:', error);
+    if (error.json) {
+      const errorData = await error.json();
+      throw new Error(errorData.error || errorData.message || 'Failed to create player');
+    }
     throw error;
   }
 };

@@ -1,8 +1,23 @@
 from flask import Blueprint, jsonify, request
-from flask_login import login_required, current_user
+from flask_login import current_user, login_required
+
+from app.api.upload_helper import (
+    allowed_file,
+    get_unique_filename,
+    upload_file_to_cloudinary,
+)
 from app.models import Potion, db
 
 potion_routes = Blueprint('potions', __name__)
+
+
+def _parse_decimal(field_name, value):
+    if value is None or value == "":
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        raise ValueError(f"{field_name} must be a number")
 
 
 @potion_routes.route('/all')
@@ -44,17 +59,30 @@ def create_potion():
     """
     Create a new potion for the logged-in user.
     """
-    print(f'Creating potion for user: {current_user.id}')
-    print(f'Request data: {request.get_json()}')
+    image = request.files.get("image")
+    data = request.form if request.form else (request.get_json(silent=True) or {})
 
-    data = request.get_json()
-    url = data.get("url")
+    if not image:
+        return jsonify({'error': 'Potion image is required'}), 400
+    if not allowed_file(image.filename):
+        return jsonify({'error': 'File type not permitted'}), 400
+
+    image.filename = get_unique_filename(image.filename)
+    upload = upload_file_to_cloudinary(image)
+    if "url" not in upload:
+        return jsonify(upload), 400
+
+    url = upload["url"]
     name = data.get("name")
     description = data.get("description")
-    regeneration = data.get("regeneration", 0.00)
-    cost = data.get("cost", 0.00)
-    type = data.get("type")
+    potion_type = data.get("type")
     element = data.get("element")
+
+    try:
+        regeneration = _parse_decimal("regeneration", data.get("regeneration"))
+        cost = _parse_decimal("cost", data.get("cost"))
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
 
     if not name:
         return jsonify({'error': 'Potion name is required'}), 400
@@ -62,11 +90,11 @@ def create_potion():
         return jsonify({'error': 'Potion description is required'}), 400
     if not url:
         return jsonify({'error': 'Potion URL is required'}), 400
-    if not regeneration:
+    if regeneration is None:
         return jsonify({'error': 'Potion regeneration is required'}), 400
-    if not cost:
+    if cost is None:
         return jsonify({'error': 'Potion cost is required'}), 400
-    if not type:
+    if not potion_type:
         return jsonify({'error': 'Potion type is required'}), 400
     if not element:
         return jsonify({'error': 'Potion element is required'}), 400
@@ -76,7 +104,7 @@ def create_potion():
     if existing_potion:
         return jsonify({'error': 'Potion with this name already exists'}), 400
     # Create a new potion
-    new_potion = Potion(user_id=current_user.id, url=url, name=name, description=description, regeneration=regeneration, cost=cost, type=type, element=element)
+    new_potion = Potion(user_id=current_user.id, url=url, name=name, description=description, regeneration=regeneration, cost=cost, type=potion_type, element=element)
     db.session.add(new_potion)
     db.session.commit()
 
@@ -94,19 +122,35 @@ def update_potion(id):
     if not potion:
         return jsonify({'error': 'Potion not found'}), 404
 
-    data = request.get_json()
-    new_url = data.get('url')
+    data = request.form if request.form else (request.get_json(silent=True) or {})
+    image = request.files.get("image")
+
+    if image:
+        if not allowed_file(image.filename):
+            return jsonify({'error': 'File type not permitted'}), 400
+        image.filename = get_unique_filename(image.filename)
+        upload = upload_file_to_cloudinary(image)
+        if "url" not in upload:
+            return jsonify(upload), 400
+        potion.url = upload["url"]
+
     new_name = data.get('name')
     new_description = data.get('description')
-    new_regeneration = data.get('regeneration')
-    new_cost = data.get('cost')
     new_type = data.get('type')
     new_element = data.get('element')
 
+    try:
+        new_regeneration = (
+            _parse_decimal("regeneration", data.get('regeneration'))
+            if 'regeneration' in data
+            else None
+        )
+        new_cost = _parse_decimal("cost", data.get('cost')) if 'cost' in data else None
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
 
 
-    if new_url is not None:
-        potion.url = new_url
+
     if new_name is not None:
         potion.name = new_name
     if new_description is not None:

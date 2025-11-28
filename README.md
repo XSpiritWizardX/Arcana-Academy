@@ -52,6 +52,25 @@ This is the starter for the Flask React project.
    folder whenever you change your code, keeping the production version up to
    date.
 
+## Media uploads (Cloudinary)
+
+User-uploaded images are now stored in Cloudinary instead of AWS. Add these
+environment variables to your `.env` (and hosting provider) so uploads work:
+
+- `CLOUDINARY_CLOUD_NAME`
+- `CLOUDINARY_API_KEY`
+- `CLOUDINARY_API_SECRET`
+- `CLOUDINARY_UPLOAD_FOLDER` (optional, defaults to `user-uploads` to match the preset below)
+- `CLOUDINARY_UPLOAD_PRESET` (optional; set if you want to force a specific signed/unsigned preset)
+
+Preset reference (matching current defaults):
+- Folder: `user-uploads`
+- Signing mode: your choice (set the preset name in `CLOUDINARY_UPLOAD_PRESET` if you use one)
+- overwrite: false
+- use filename: false
+- unique filename: false
+- use filename as display name: true
+
 ## Deployment through Render.com
 
 First, recall that Vite is a development dependency, so it will not be used in

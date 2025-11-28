@@ -10,7 +10,7 @@ function SpellForm() {
   const { closeModal } = useModal();
   const sessionUser = useSelector(state => state.session.user);
   console.log(`Trying to get user ID: ${ sessionUser }`)
-  const [url, setUrl] = useState("")
+  const [imageFile, setImageFile] = useState(null)
   const [name, setName] = useState("")
   const [description, setDescription]= useState("")
   const [damage, setDamage] = useState("")
@@ -22,19 +22,21 @@ function SpellForm() {
     e.preventDefault();    // prevent default form submission
 
     try {
-      // Default portfolio data plus user_id from sessionUser
-      const spellData = {
-        user_id: sessionUser.id,
-        url: url,
-        name: name,
-        description: description,
-        damage:damage,
-        cost: cost,
-        mana_cost: manaCost,
-        element: element
-      };
+      if (!imageFile) {
+        alert("Please add an image for your spell.");
+        return;
+      }
 
-      await dispatch(spellActions.createSpell(spellData));
+      const formData = new FormData();
+      formData.append('image', imageFile);
+      formData.append('name', name);
+      formData.append('description', description);
+      formData.append('damage', damage);
+      formData.append('cost', cost);
+      formData.append('mana_cost', manaCost);
+      formData.append('element', element);
+
+      await dispatch(spellActions.createSpell(formData));
       alert("Spell created successfully!");
       closeModal();
     } catch (error) {
@@ -71,16 +73,13 @@ function SpellForm() {
 
 
 
-        <label
-        className='create-spell-labels'
-        >
-        Image Url
+        <label className='create-spell-labels'>
+        Upload Image
         <input
         className='inputs'
-        placeholder='URL'
-        type="text"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
+        type="file"
+        accept="image/*"
+        onChange={(e) => setImageFile(e.target.files?.[0] || null)}
         required
         />
         </label>
