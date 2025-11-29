@@ -65,7 +65,7 @@ function Navigation() {
         </div>
 
             { advState && (
-              <div className="user-stats-grid">
+              <div className="user-stats-block">
                 <div>Level: <span className="stat-value">{advState.level}</span></div>
                 <div>HP: <span className="stat-value">{advState.hp}/{advState.max_hp}</span></div>
                 <div>Attack: <span className="stat-value">{advState.attack}</span></div>
@@ -75,6 +75,8 @@ function Navigation() {
                 <div>XP: <span className="stat-value">{advState.xp}</span></div>
                 <div>Turns: <span className="stat-value">{advState.turns}</span></div>
                 <div>Location: <span className="stat-value">{advState.location}</span></div>
+                <div>Weapon: <span className="stat-value">todo</span></div>
+                <div>Armor: <span className="stat-value">todo</span></div>
               </div>
             )}
 

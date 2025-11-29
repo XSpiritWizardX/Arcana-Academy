@@ -1,17 +1,16 @@
 .login-container {
     height: 230px;
     border-radius: 10px;
+  }
 
-}
-
-.submit-button-login {
-background-color: #7F00FF;
-color: white;
-width: 100%;
+  .submit-button-login {
+    background-color: #7F00FF;
+    color: white;
+    width: 100%;
 }
 
 .demo-log-in{
-   display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   width: auto;
@@ -31,6 +30,7 @@ width: 100%;
   top: 10%;
   right: 10%;
   border: 2px solid #C0C0C0;
+  background-color: #1C1C1E;
 }
 .demo-log-in:hover{
   background-color: #1C1C1E;

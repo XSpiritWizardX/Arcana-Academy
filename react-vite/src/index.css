@@ -1,11 +1,11 @@
 /* TODO: Add sitewide styles */
 *{
-    background-color: #1C1C1E;
     cursor: url(https://res.cloudinary.com/dl6ls3rgu/image/upload/a_hflip/c_pad,w_90,h_90/v1745983698/mAKmqaPgDvyyxNZlqdjt--0--pxxxn_bg-rmvd_ucyxld.png), auto;
 }
 
 html{
 
+    background-color: #1C1C1E;
     height: 100%;
 }
 h2{
@@ -69,25 +69,4 @@ input {
 
     border-color:#C0C0C0;
     color: #F5F5FA;
-}
-
-
-button {
-    color: #F5F5FA;
-    background-color: #7F00FF;
-    font-size: large;
-    border: 2px solid #C0C0C0;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-top: 10px;
-}
-
-button:hover {
-    box-shadow: 7px 6px 6px #C0C0C0;
-}
-
-button:active {
-    box-shadow: 6px 6px 12px #C0C0C0;
 }

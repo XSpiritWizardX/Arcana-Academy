@@ -1,19 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef } from "react";
 import "./CursorRibbon.css";
 
 export default function CursorRibbon() {
   const containerRef = useRef(null);
-  const [portalEl, setPortalEl] = useState(null);
-
-  useEffect(() => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
-    setPortalEl(el);
-    return () => {
-      document.body.removeChild(el);
-    };
-  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -61,8 +50,7 @@ export default function CursorRibbon() {
 
     window.addEventListener("mousemove", handleMove);
     return () => window.removeEventListener("mousemove", handleMove);
-  }, [portalEl]);
+  }, []);
 
-  if (!portalEl) return null;
-  return createPortal(<div className="ribbon-container" ref={containerRef} />, portalEl);
+  return <div className="ribbon-container" ref={containerRef} />;
 }

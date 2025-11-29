@@ -32,6 +32,7 @@ h1{
     top: 10%;
     right: 10%;
     border: 2px solid #C0C0C0;
+    background-color: #1C1C1E;
 }
 .inputs{
     display: flex;
