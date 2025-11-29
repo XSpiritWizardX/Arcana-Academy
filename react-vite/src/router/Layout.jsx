@@ -5,6 +5,7 @@ import { ModalProvider, Modal } from "../context/Modal";
 import { thunkAuthenticate } from "../redux/session";
 import Navigation from "../components/Navigation/Navigation";
 import CursorRibbon from "../components/CursorRibbon/CursorRibbon";
+import Snowfall from "../components/Snowfall/Snowfall";
 import "./Layout.css";
 
 export default function Layout() {
@@ -18,6 +19,7 @@ export default function Layout() {
   return (
     <ModalProvider>
       <div className="layout">
+        <Snowfall />
         <CursorRibbon />
         <Navigation />
         <div className="layout-container">
