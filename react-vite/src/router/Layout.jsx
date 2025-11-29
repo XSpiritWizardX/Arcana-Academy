@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { ModalProvider, Modal } from "../context/Modal";
 import { thunkAuthenticate } from "../redux/session";
 import Navigation from "../components/Navigation/Navigation";
-// import CursorRibbon from "../components/CursorRibbon/CursorRibbon";
+import CursorRibbon from "../components/CursorRibbon/CursorRibbon";
 import "./Layout.css";
 
 export default function Layout() {
@@ -16,10 +16,9 @@ export default function Layout() {
   }, [dispatch]);
 
   return (
-    <>
     <ModalProvider>
       <div className="layout">
-    {/* <CursorRibbon /> */}
+        <CursorRibbon />
         <Navigation />
         <div className="layout-container">
           <div className="content-area">{isLoaded && <Outlet />}</div>
@@ -27,6 +26,5 @@ export default function Layout() {
         <Modal />
       </div>
     </ModalProvider>
-    </>
   );
 }
