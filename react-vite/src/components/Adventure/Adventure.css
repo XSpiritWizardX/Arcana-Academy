@@ -30,6 +30,31 @@
   flex-wrap: wrap;
 }
 
+.area-select {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.area-btn {
+  border: 1px solid #2c2c2c;
+  background: #0c0c0c;
+  color: #e6e6e6;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.area-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.area-btn.active {
+  border-color: #5ac8fa;
+  box-shadow: 0 0 8px #5ac8fa55;
+}
 .adventure-error {
   color: #ff6b6b;
 }
@@ -41,6 +66,20 @@
   padding: 10px;
   min-height: 120px;
   font-size: 13px;
+}
+
+.battle-actions {
+  margin-top: 10px;
+  border: 1px solid #2c2c2c;
+  border-radius: 4px;
+  padding: 10px;
+  background: #0c0c0c;
+}
+
+.battle-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .adventure-scene {
@@ -56,7 +95,7 @@
 .scene-background {
   position: absolute;
   inset: 0;
-  background: url("https://res.cloudinary.com/dl6ls3rgu/image/upload/v1762821006/7Obz_vh42iu.gif") center/cover no-repeat;
+  background: url("https://res.cloudinary.com/dl6ls3rgu/image/upload/v1753828141/0287d3ba8b3330fca99f69e2001d3168_kgsgge.gif") center/cover no-repeat;
   opacity: 0.35;
   filter: blur(1px);
 }
@@ -77,6 +116,46 @@
 
 .enemy-sprite {
   right: 20px;
+}
+
+.hp-bar {
+  position: absolute;
+  bottom: 0;
+  width: 40%;
+  height: 14px;
+  border: 1px solid #2c2c2c;
+  background: #0b0b0b;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.player-hp {
+  left: 10px;
+}
+
+.enemy-hp {
+  right: 10px;
+}
+
+.hp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1fa2ff, #12d8fa);
+  transition: width 0.2s ease;
+}
+
+.hp-fill.enemy {
+  background: linear-gradient(90deg, #ff512f, #dd2476);
+}
+
+.hp-label {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: 10px;
+  color: #e6e6e6;
+  pointer-events: none;
 }
 
 .adventure-train {

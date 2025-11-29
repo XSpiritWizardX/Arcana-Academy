@@ -9,6 +9,21 @@ export default function Adventure() {
   const [log, setLog] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [area, setArea] = useState("fields");
+  const [battle, setBattle] = useState(null);
+
+  const areas = [
+    { id: "fields", name: "Fields", requires: 1 },
+    { id: "forest", name: "Forest", requires: 3 },
+    { id: "graveyard", name: "Graveyard", requires: 6 },
+    { id: "mountain", name: "Mountain", requires: 10 },
+    { id: "desert", name: "Desert", requires: 12 },
+    { id: "swamp", name: "Swamp", requires: 15 },
+    { id: "ruins", name: "Ruins", requires: 18 },
+    { id: "volcano", name: "Volcano", requires: 22 },
+    { id: "sky", name: "Sky", requires: 26 },
+    { id: "abyss", name: "Abyss", requires: 50 },
+  ];
 
   const fetchState = async () => {
     try {
@@ -42,17 +57,45 @@ export default function Adventure() {
     setLoading(true);
     setError(null);
     try {
-      const res = await csrfFetch("/api/adventure/explore", { method: "POST" });
+      const res = await csrfFetch("/api/adventure/start", {
+        method: "POST",
+        body: JSON.stringify({ area }),
+      });
       const data = await res.json();
       if (data.error) {
         setError(data.error);
       } else {
         setState(data.state);
         setLog(data.log || []);
+        setBattle(data.battle || null);
       }
     } catch (err) {
       console.error(err);
       setError("Explore failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const takeAction = async (action) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await csrfFetch("/api/adventure/action", {
+        method: "POST",
+        body: JSON.stringify({ action }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setState(data.state);
+        setLog((prev) => [...(data.log || []), ...(prev || [])]);
+        setBattle(data.battle || null);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Action failed");
     } finally {
       setLoading(false);
     }
@@ -156,6 +199,23 @@ export default function Adventure() {
         <button onClick={withdraw} disabled={loading}>Withdraw</button>
       </div>
 
+      <div className="area-select">
+        {areas.map((a) => {
+          const locked = (state?.level || 0) < a.requires;
+          return (
+            <button
+              key={a.id}
+              disabled={locked || loading}
+              className={area === a.id ? "area-btn active" : "area-btn"}
+              onClick={() => setArea(a.id)}
+              title={locked ? `Unlocks at level ${a.requires}` : ""}
+            >
+              {a.name} {locked ? `(lvl ${a.requires})` : ""}
+            </button>
+          );
+        })}
+      </div>
+
       <div className="adventure-train">
         <p>Train (20 gold):</p>
         <div className="train-buttons">
@@ -166,6 +226,18 @@ export default function Adventure() {
       </div>
 
       {error && <div className="adventure-error">{error}</div>}
+
+      {battle && (
+        <div className="battle-actions">
+          <p>Choose your action:</p>
+          <div className="battle-buttons">
+            <button onClick={() => takeAction("attack")} disabled={loading}>Attack (Sword)</button>
+            <button onClick={() => takeAction("spell")} disabled={loading}>Cast Spell</button>
+            <button onClick={() => takeAction("defend")} disabled={loading}>Defend</button>
+            <button onClick={() => takeAction("run")} disabled={loading}>Run</button>
+          </div>
+        </div>
+      )}
 
       <div className="adventure-log">
         {(log.length ? log : ["Head into the forest to seek adventure."]).map((line, idx) => (
@@ -180,11 +252,37 @@ export default function Adventure() {
           src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1762746206/30374998_Iwf9MVEY7ydoULV_oydwvj.gif"
           alt="Player"
         />
+        <div className="hp-bar player-hp">
+          <div
+            className="hp-fill"
+            style={{
+              width: `${state && state.max_hp ? Math.max(0, (state.hp / state.max_hp) * 100) : 0}%`,
+            }}
+          />
+          <span className="hp-label">
+            HP: {state?.hp ?? "--"}/{state?.max_hp ?? "--"}
+          </span>
+        </div>
         <img
           className="scene-sprite enemy-sprite"
           src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1764362424/user-uploads/3610ed80eb4442b580a4db79c6e3462c.gif.gif"
           alt="Enemy"
         />
+        <div className="hp-bar enemy-hp">
+          <div
+            className="hp-fill enemy"
+            style={{
+              width: `${
+                battle && battle.max_monster_hp
+                  ? Math.max(0, (battle.monster_hp / battle.max_monster_hp) * 100)
+                  : 0
+              }%`,
+            }}
+          />
+          <span className="hp-label">
+            {battle?.monster ?? "Enemy"} HP: {battle?.monster_hp ?? "--"}
+          </span>
+        </div>
       </div>
     </div>
   );
