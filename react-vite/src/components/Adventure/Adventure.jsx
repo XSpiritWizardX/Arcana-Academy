@@ -172,6 +172,20 @@ export default function Adventure() {
           <p key={idx}>{line}</p>
         ))}
       </div>
+
+      <div className="adventure-scene">
+        <div className="scene-background" />
+        <img
+          className="scene-sprite player-sprite"
+          src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1762746206/30374998_Iwf9MVEY7ydoULV_oydwvj.gif"
+          alt="Player"
+        />
+        <img
+          className="scene-sprite enemy-sprite"
+          src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1764362424/user-uploads/3610ed80eb4442b580a4db79c6e3462c.gif.gif"
+          alt="Enemy"
+        />
+      </div>
     </div>
   );
 }

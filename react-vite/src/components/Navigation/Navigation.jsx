@@ -49,6 +49,20 @@ function Navigation() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!user) return;
+    const id = setInterval(async () => {
+      try {
+        const res = await csrfFetch("/api/adventure/state");
+        const data = await res.json();
+        setAdvState(data.state);
+      } catch (err) {
+        // ignore polling errors
+      }
+    }, 4000);
+    return () => clearInterval(id);
+  }, [user]);
+
   return (
     <aside className="nav-shell">
       <div className="nav-title">Arcana Academy</div>

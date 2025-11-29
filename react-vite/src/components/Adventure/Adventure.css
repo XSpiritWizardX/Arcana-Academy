@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 680px;
   margin-left: 10%;
 }
 
@@ -42,6 +41,42 @@
   padding: 10px;
   min-height: 120px;
   font-size: 13px;
+}
+
+.adventure-scene {
+  position: relative;
+  margin-top: 12px;
+  height: 460px;
+  border: 1px solid #2c2c2c;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.scene-background {
+  position: absolute;
+  inset: 0;
+  background: url("https://res.cloudinary.com/dl6ls3rgu/image/upload/v1762821006/7Obz_vh42iu.gif") center/cover no-repeat;
+  opacity: 0.35;
+  filter: blur(1px);
+}
+
+.scene-sprite {
+  position: absolute;
+  bottom: 10px;
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.player-sprite {
+  left: 20px;
+  transform: scaleX(-1);
+}
+
+.enemy-sprite {
+  right: 20px;
 }
 
 .adventure-train {

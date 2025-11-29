@@ -66,27 +66,40 @@ def explore():
     if state.turns <= 0:
         return jsonify({"error": "No turns left. Rest to recover."}), 400
 
-    state.turns -= 1
     monster = roll_monster(state.level)
     log = []
-    # simple round of combat: player hits, then monster if alive
-    dmg_to_monster = max(1, state.attack - monster["defense"] + random.randint(0, 2))
-    monster_hp = monster["hp"] - dmg_to_monster
-    log.append(f"You strike the {monster['name']} for {dmg_to_monster} damage.")
+    monster_hp = monster["hp"]
+    battle_log = []
 
-    if monster_hp > 0:
+    while state.turns > 0 and monster_hp > 0 and state.hp > 0:
+        state.turns -= 1
+        dmg_to_monster = max(1, state.attack - monster["defense"] + random.randint(0, 2))
+        monster_hp -= dmg_to_monster
+        battle_log.append(
+            f"You strike the {monster['name']} for {dmg_to_monster} damage. "
+            f"Monster HP: {max(monster_hp, 0)}"
+        )
+
+        if monster_hp <= 0:
+            break
+
         dmg_to_player = max(1, monster["attack"] - state.defense + random.randint(0, 2))
         state.hp -= dmg_to_player
-        log.append(f"{monster['name']} hits you for {dmg_to_player} damage.")
-    else:
-        dmg_to_player = 0
+        battle_log.append(
+            f"{monster['name']} hits you for {dmg_to_player} damage. "
+            f"Your HP: {max(state.hp, 0)}"
+        )
 
     if state.hp <= 0:
         state.hp = state.max_hp
         state.gold = max(0, state.gold - 5)
         db.session.commit()
         log.append("You were defeated and crawl back to town, losing some gold.")
-        return jsonify({"state": state.to_dict(), "log": log})
+        return jsonify({"state": state.to_dict(), "log": log + battle_log, "battle": {
+            "monster": monster["name"],
+            "monster_hp": max(monster_hp, 0),
+            "player_hp": state.hp
+        }})
 
     if monster_hp <= 0:
         gold_gain = random.randint(*monster["gold"])
@@ -96,10 +109,14 @@ def explore():
         log.append(f"You defeated the {monster['name']}! +{gold_gain} gold, +{xp_gain} xp.")
         level_up_if_needed(state)
     else:
-        log.append("The fight ends in a stalemate. Try again.")
+        log.append("The monster survives. You may need more turns to finish it.")
 
     db.session.commit()
-    return jsonify({"state": state.to_dict(), "log": log})
+    return jsonify({"state": state.to_dict(), "log": log + battle_log, "battle": {
+        "monster": monster["name"],
+        "monster_hp": max(monster_hp, 0),
+        "player_hp": state.hp
+    }})
 
 
 @adventure_routes.route("/bank/deposit", methods=["POST"])
