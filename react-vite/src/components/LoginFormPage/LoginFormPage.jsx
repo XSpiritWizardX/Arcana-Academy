@@ -31,6 +31,18 @@ function LoginFormPage() {
     }
   };
 
+  const handleDemo = async (e) => {
+    e.preventDefault();
+    const serverResponse = await dispatch(
+      thunkLogin({ email: "demo@aa.io", password: "password" })
+    );
+    if (serverResponse) {
+      setErrors(serverResponse);
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <>
       <h1>Log In</h1>
@@ -58,6 +70,9 @@ function LoginFormPage() {
         </label>
         {errors.password && <p>{errors.password}</p>}
         <button type="submit">Log In</button>
+        <button type="button" onClick={handleDemo}>
+          Demo Login
+        </button>
       </form>
     </>
   );

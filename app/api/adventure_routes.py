@@ -100,3 +100,59 @@ def explore():
 
     db.session.commit()
     return jsonify({"state": state.to_dict(), "log": log})
+
+
+@adventure_routes.route("/bank/deposit", methods=["POST"])
+@login_required
+def bank_deposit():
+    state = get_or_create_state()
+    data = request.get_json() or {}
+    amount = int(data.get("amount", 0))
+    if amount <= 0:
+        return jsonify({"error": "Deposit must be positive"}), 400
+    if state.gold < amount:
+        return jsonify({"error": "Not enough gold"}), 400
+    state.gold -= amount
+    state.bank_gold += amount
+    db.session.commit()
+    return jsonify({"state": state.to_dict(), "log": [f"You deposit {amount} gold."]})
+
+
+@adventure_routes.route("/bank/withdraw", methods=["POST"])
+@login_required
+def bank_withdraw():
+    state = get_or_create_state()
+    data = request.get_json() or {}
+    amount = int(data.get("amount", 0))
+    if amount <= 0:
+        return jsonify({"error": "Withdraw must be positive"}), 400
+    if state.bank_gold < amount:
+        return jsonify({"error": "Not enough gold in bank"}), 400
+    state.bank_gold -= amount
+    state.gold += amount
+    db.session.commit()
+    return jsonify({"state": state.to_dict(), "log": [f"You withdraw {amount} gold."]})
+
+
+@adventure_routes.route("/train", methods=["POST"])
+@login_required
+def train():
+    state = get_or_create_state()
+    data = request.get_json() or {}
+    stat = data.get("stat", "attack")
+    cost = 20
+    if state.gold < cost:
+        return jsonify({"error": "Not enough gold to train"}), 400
+    state.gold -= cost
+    if stat == "defense":
+        state.defense += 1
+        msg = "Defense increased."
+    elif stat == "hp":
+        state.max_hp += 2
+        state.hp = state.max_hp
+        msg = "Max HP increased."
+    else:
+        state.attack += 1
+        msg = "Attack increased."
+    db.session.commit()
+    return jsonify({"state": state.to_dict(), "log": [msg]})

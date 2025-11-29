@@ -1,13 +1,13 @@
 .adventure-card {
-  background: #1c1c1e;
-  border: 2px solid #7f00ff;
-  border-radius: 8px;
+  background: #111111;
+  border: 1px solid #2c2c2c;
+  border-radius: 4px;
   padding: 16px;
-  color: #f5f5fa;
+  color: #e6e6e6;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 720px;
+  max-width: 680px;
 }
 
 .adventure-header {
@@ -21,23 +21,37 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .adventure-actions {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .adventure-error {
-  color: #ff4d4f;
+  color: #ff6b6b;
 }
 
 .adventure-log {
-  border: 1px solid #2a2a2c;
-  border-radius: 6px;
-  background: #0f1115;
+  border: 1px solid #2c2c2c;
+  border-radius: 4px;
+  background: #0c0c0c;
   padding: 10px;
   min-height: 120px;
-  font-size: 14px;
+  font-size: 13px;
+}
+
+.adventure-train {
+  border: 1px solid #2c2c2c;
+  border-radius: 4px;
+  padding: 10px;
+  background: #0c0c0c;
+}
+
+.train-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }

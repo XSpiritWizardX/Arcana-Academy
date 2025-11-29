@@ -2,12 +2,12 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  color: #f5f5fa;
-  background: linear-gradient(180deg, #0d1b2a, #1c1c1e);
+  color: #2b2b2b;
+  background: #f7f1dc;
   padding: 16px;
-  border: 2px solid #7f00ff;
-  border-radius: 8px;
-  max-width: 900px;
+  border: 1px solid #a38c6c;
+  border-radius: 4px;
+  max-width: 780px;
 }
 
 .battle-header {
@@ -34,11 +34,7 @@
   border: 2px solid #2a2a2c;
   border-radius: 10px;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.65)),
-    url("https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745477673/coolmodalback_op5ldm.gif");
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(180deg, #0f1710 0%, #0b0b0b 100%);
 }
 
 .battle-background {
@@ -101,19 +97,11 @@
 }
 
 .battle-entity.player .sprite {
-  background:
-    linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)),
-    url("https://res.cloudinary.com/dl6ls3rgu/image/upload/v1746905940/jhNonsuSc8ShAi6pP60N--0--x7uaq_bg-rmvd_sf5lbe.png");
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(135deg, #14591d, #2a7c2f);
 }
 
 .battle-entity.enemy .sprite {
-  background:
-    linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.55)),
-    url("https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745460859/TiisO45JvVhdMXUaM7ow--0--b4glo_bg-rmvd_rbtkpx.png");
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(135deg, #6a1b1b, #9b2c2c);
 }
 
 .battle-entity.down .sprite {

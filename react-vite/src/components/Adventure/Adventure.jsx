@@ -15,6 +15,7 @@ export default function Adventure() {
       const res = await csrfFetch("/api/adventure/state");
       const data = await res.json();
       setState(data.state);
+      if (data.log) setLog(data.log);
     } catch (err) {
       console.error(err);
       setError("Could not load adventure state");
@@ -57,6 +58,76 @@ export default function Adventure() {
     }
   };
 
+  const deposit = async () => {
+    const amount = parseInt(window.prompt("Deposit how much gold?") || "0", 10);
+    if (!amount || amount <= 0) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await csrfFetch("/api/adventure/bank/deposit", {
+        method: "POST",
+        body: JSON.stringify({ amount }),
+      });
+      const data = await res.json();
+      if (data.error) setError(data.error);
+      else {
+        setState(data.state);
+        setLog(data.log || []);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Deposit failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const withdraw = async () => {
+    const amount = parseInt(window.prompt("Withdraw how much gold?") || "0", 10);
+    if (!amount || amount <= 0) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await csrfFetch("/api/adventure/bank/withdraw", {
+        method: "POST",
+        body: JSON.stringify({ amount }),
+      });
+      const data = await res.json();
+      if (data.error) setError(data.error);
+      else {
+        setState(data.state);
+        setLog(data.log || []);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Withdraw failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const train = async (stat) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await csrfFetch("/api/adventure/train", {
+        method: "POST",
+        body: JSON.stringify({ stat }),
+      });
+      const data = await res.json();
+      if (data.error) setError(data.error);
+      else {
+        setState(data.state);
+        setLog(data.log || []);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Train failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (user) fetchState();
   }, [user]);
@@ -72,6 +143,7 @@ export default function Adventure() {
           <div>HP: {state?.hp}/{state?.max_hp}</div>
           <div>Turns: {state?.turns}</div>
           <div>Gold: {state?.gold}</div>
+          <div>Bank: {state?.bank_gold}</div>
           <div>XP: {state?.xp}</div>
           <div>Dragon Kills: {state?.dragon_kills}</div>
         </div>
@@ -80,6 +152,17 @@ export default function Adventure() {
       <div className="adventure-actions">
         <button onClick={rest} disabled={loading}>Rest</button>
         <button onClick={explore} disabled={loading || (state?.turns ?? 0) <= 0}>Explore</button>
+        <button onClick={deposit} disabled={loading}>Deposit</button>
+        <button onClick={withdraw} disabled={loading}>Withdraw</button>
+      </div>
+
+      <div className="adventure-train">
+        <p>Train (20 gold):</p>
+        <div className="train-buttons">
+          <button onClick={() => train("attack")} disabled={loading}>Attack</button>
+          <button onClick={() => train("defense")} disabled={loading}>Defense</button>
+          <button onClick={() => train("hp")} disabled={loading}>HP</button>
+        </div>
       </div>
 
       {error && <div className="adventure-error">{error}</div>}

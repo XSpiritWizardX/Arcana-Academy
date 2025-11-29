@@ -21,6 +21,7 @@ class AdventureState(db.Model):
     turns = db.Column(db.Integer, nullable=False, default=10)
     dragon_kills = db.Column(db.Integer, nullable=False, default=0)
     location = db.Column(db.String(50), nullable=False, default="town")
+    bank_gold = db.Column(db.Integer, nullable=False, default=0)
 
     user = db.relationship("User", back_populates="adventure_state")
 
@@ -38,4 +39,5 @@ class AdventureState(db.Model):
             "turns": self.turns,
             "dragon_kills": self.dragon_kills,
             "location": self.location,
+            "bank_gold": self.bank_gold,
         }

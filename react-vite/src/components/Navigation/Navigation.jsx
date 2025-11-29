@@ -1,80 +1,67 @@
 import { NavLink } from "react-router-dom";
-import ProfileButton from "./ProfileButton";
+import { useSelector } from "react-redux";
+import LogoutButton from "./LogoutButton";
 import "./Navigation.css";
 
 function Navigation() {
+  const user = useSelector((state) => state.session.user);
+  const baseLinks = [
+    { to: "/", label: "Town" },
+    { to: "/adventure", label: "Adventure" },
+    { to: "/battle", label: "Battle" },
+  ];
+  const contentLinks = [
+    { to: "/spells/all", label: "Spells" },
+    { to: "/swords/all", label: "Swords" },
+    { to: "/potions/all", label: "Potions" },
+    { to: "/coming-soon", label: "Bestiary" },
+  ];
+  const userLinks = user
+    ? [
+        { to: "/players", label: "Your Players" },
+        { to: "/spells", label: "Your Spells" },
+        { to: "/potions", label: "Your Potions" },
+        { to: "/swords", label: "Your Swords" },
+      ]
+    : [];
+
   return (
-    <div
-    className="nav-bar"
-    >
-
-      <ProfileButton
-     className="profile-button"
-      />
-
-
-        <NavLink to="/"
-        className="nav-bar-text"
-        >
-        <img
-        className="nav-logo"
-        src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1746905940/jhNonsuSc8ShAi6pP60N--0--x7uaq_bg-rmvd_sf5lbe.png"  />
-        HOME
-        </NavLink>
-
-
-
-        <NavLink to="/coming-soon"
-        className="nav-bar-text"
-        >
-        <img
-        className="nav-logo"
-        src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745460859/TiisO45JvVhdMXUaM7ow--0--b4glo_bg-rmvd_rbtkpx.png"  />
-        EVENTS
-        </NavLink>
-
-
-        <NavLink to="/spells/all"
-         className="nav-bar-text"
-        >
-        <img
-        className="nav-logo"
-        src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745484826/Am7bR1jx4aUXvJbRpWQw--0--cw7p8_bg-rmvd_jr24ip.png"  />
-        SPELLS
-        </NavLink>
-
-        <NavLink to="/potions/all"
-         className="nav-bar-text"
-        >
-        <img
-        className="nav-logo"
-        src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745484971/GiJw0GJ1Rdwf8p5r7KUS--0--d0hqh_bg-rmvd_nki2rx.png"  />
-        POTIONS
-        </NavLink>
-
-
-        <NavLink to="/swords/all"
-         className="nav-bar-text"
-        >
-        <img
-        className="nav-logo"
-        src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745485348/wklz2vTQExQbcA60FuJc--0--tooyc_bg-rmvd_i2vsng.png"  />
-        SWORDS
-        </NavLink>
-
-
-        <NavLink to="/coming-soon"
-         className="nav-bar-text"
-        >
-        <img
-        className="nav-logo"
-        src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1745460862/3WM05YxM5PzHXWcGmasV--0--93a4s_bg-rmvd_unzcvg.png"  />
-        BESTIARY
-        </NavLink>
-
-
-
-    </div>
+    <aside className="nav-shell">
+      <div className="nav-title">Arcana Academy</div>
+      <div className="nav-subtitle">A legend you write yourself</div>
+      <nav className="nav-links">
+        {[...baseLinks, ...contentLinks].map((link) => (
+          <NavLink key={link.to} to={link.to} className="nav-link">
+            {link.label}
+          </NavLink>
+        ))}
+        {userLinks.length > 0 && (
+          <>
+            <div className="nav-section">Your Stuff</div>
+            {userLinks.map((link) => (
+              <NavLink key={link.to} to={link.to} className="nav-link">
+                {link.label}
+              </NavLink>
+            ))}
+            <div className="nav-section user-info">
+              <div>{user.username}</div>
+              <div className="muted">{user.email}</div>
+            </div>
+            <LogoutButton />
+          </>
+        )}
+        {!user && (
+          <div className="nav-auth">
+            <NavLink to="/login" className="nav-link">
+              Log In
+            </NavLink>
+            <NavLink to="/signup" className="nav-link">
+              Sign Up
+            </NavLink>
+          </div>
+        )}
+      </nav>
+    </aside>
   );
 }
 

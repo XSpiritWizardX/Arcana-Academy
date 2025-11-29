@@ -1,134 +1,24 @@
 .layout{
-    display: flex;
-    width: 100%;
-    height: auto;
-   margin-top: 1%;;
-   margin-bottom: 1%;
-   min-height: 100vh;
+  min-height: 100vh;
+  background: #0b0b0b;
+  color: #e6e6e6;
+  font-family: "Georgia", serif;
 }
 .page-wrapper{
   height: 100%;
 }
 .layout-container{
-    height: 100%;
+  height: 100%;
+  padding: 16px 18px;
+  box-sizing: border-box;
+  margin-left: 200px;
 }
 
 .content-area{
   width: 100%;
   height: 100%;
-}
-
-
-.snow-container {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height:fit-content;
-  pointer-events: none;
-
-}
-
-body {
-    overflow-x: hidden;
-    background: linear-gradient(180deg, #0d1b2a, #1b263b, #415a77);
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
-
-
-.epic-logo{
-  display: flex;
-  justify-content: space-around;
-}
-
-  .green-mouseflake,
-  .green-snowflake,
-  .red-mouseflake,
-  .red-snowflake,
-  .snowflake,
-  .mouseflake {
-    position: absolute;
-    size:110%;
-    top: -10px;
-    background: #00CFFF;
-    border-radius: 50%;
-    border: 2px solid #C0C0C0;
-    pointer-events: none;
-    will-change: transform, opacity;
-    mix-blend-mode: lighten;
-    filter: blur(1px);
-    border-style: groove;
-    box-shadow: 10px 10px 10px #7F00FF;
-    /* box-shadow: 16px 20px #C60021; */
-  }
-
-  .mouseflake {
-    position: fixed;
-    background-color: #00CFFF;
-    border: 16px solid #00CFFF;
-    filter: blur(1px);
-  }
-
-
-
-
-
-  .Arcana-layout{
-    margin-top: 5%;
-    color: #7F00FF;
-  }
-
-  @keyframes titleGlow {
-    0% {
-      text-shadow: 0 0 10px rgba(166, 206, 224, 0.7), 0 0 20px rgba(17, 255, 96, 0.5);
-    }
-    100% {
-      text-shadow: 0 0 15px rgba(41, 174, 236, 0.9), 0 0 30px rgba(6, 175, 253, 0.7), 0 0 45px rgba(13, 250, 159, 0.5);
-    }
-  }
-
-
-
-  .arcana-title {
-    font-family: 'Cinzel Decorative', cursive, serif;
-    text-align: center;
-  font-size: 3.5rem;
-  margin: 1rem 0;
-  color: #7F00FF;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 0, 0, 0.5);
-  position: relative;
-  transition: font-size 0.3s ease;
-  animation: titleGlow 1s infinite alternate;
-}
-
-
-
-
-.green-snowflake {
-  background-color: #00FFB3;
-  box-shadow: 12px 10px 8px #FFD700;
-}
-
-
-
-.green-mouseflake {
-  position: fixed;
-  background-color: #00FFB3;
-  border: 22px solid #00FFB3;
-  box-shadow: 16px 16px 12px #FFD700;
-}
-
-.red-snowflake {
-  background-color: #C60021;
-  box-shadow: 12px 10px 8px #ff4dc4;
-}
-
-
-
-.red-mouseflake {
-  position: fixed;
-  background-color: #C60021;
-  border: 14px solid #C60021;
-
-  box-shadow: 16px 10px 8px #ff4dc4;
+  background: #111111;
+  border-left: 1px solid #1f1f1f;
+  padding: 18px;
+  box-sizing: border-box;
 }

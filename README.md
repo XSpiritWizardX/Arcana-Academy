@@ -84,6 +84,9 @@ Preset reference (matching current defaults):
 - Explore: `POST /api/adventure/explore` (consumes a turn, fights a random encounter, grants gold/xp on win)
 - Frontend: `/adventure` route with buttons to rest/explore and view log.
 
+## Navigation
+- Top bar with links to Town (home), Adventure, Battle, Spells, Swords, Potions, Bestiary, plus profile dropdown; simplified to match classic text menu.
+
 ## Deployment through Render.com
 
 First, recall that Vite is a development dependency, so it will not be used in

@@ -5,6 +5,7 @@ import SignupFormPage from '../components/SignupFormPage';
 
 import Layout from './Layout';
 import LandingPage from '../components/LandingPage/LandingPage';
+import Adventure from '../components/Adventure/Adventure';
 
 import SpellList from '../components/SpellList/SpellList';
 import SpellShow from '../components/SpellShow/SpellShow'
@@ -33,11 +34,6 @@ import UpdatePlayerForm from '../components/UpdatePlayerForm/UpdatePlayerForm';
 import DeletePlayerModal from '../components/DeletePlayer/DeletePlayerModal';
 
 import Battle from '../components/Battle/Battle';
-import Adventure from '../components/Adventure/Adventure';
-
-
-
-
 import BlankPage from '../components/BlankPage/BlankPage';
 
 

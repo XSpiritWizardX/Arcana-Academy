@@ -22,7 +22,11 @@
     width: 100%;
 }
 
-
+.nav-logo{
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
 .user-interface{
     display: flex;
     flex-direction: column;
