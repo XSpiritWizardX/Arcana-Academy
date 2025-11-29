@@ -1,0 +1,59 @@
+.ribbon-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  display: block;
+}
+
+.ribbon-dot {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(127, 0, 255, 0.3));
+  box-shadow:
+    0 0 18px rgba(127, 0, 255, 0.9),
+    0 0 30px rgba(0, 200, 255, 0.7);
+  filter: blur(0.5px);
+  transform: translate(-50%, -50%);
+  animation: ribbon-fade 1.2s ease-out forwards;
+  z-index: 10000;
+  will-change: transform, opacity;
+}
+
+@keyframes ribbon-fade {
+  0% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.1);
+  }
+}
+
+.ribbon-streak {
+  position: absolute;
+  height: 4px;
+  border-radius: 6px;
+  background: linear-gradient(90deg,
+    rgba(127, 0, 255, 0),
+    rgba(127, 0, 255, 0.9),
+    rgba(0, 200, 255, 0.9),
+    rgba(0, 200, 255, 0));
+  box-shadow:
+    0 0 12px rgba(127, 0, 255, 0.8),
+    0 0 22px rgba(0, 200, 255, 0.6);
+  animation: streak-fade 0.9s ease-out forwards;
+  transform-origin: 50% 50%;
+}
+
+@keyframes streak-fade {
+  0% { opacity: 0.85; }
+  100% { opacity: 0; }
+}

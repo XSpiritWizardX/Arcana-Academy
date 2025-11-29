@@ -9,8 +9,8 @@
     height: auto;
     display: flex;
     flex-direction: column;
-    margin-left: 1%;
     align-items: flex-start;
+    padding-left: 2%;
 }
 
 .landing-page-title{

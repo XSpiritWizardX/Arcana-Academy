@@ -1,17 +1,25 @@
 .nav-shell {
-  width: max-content;
-  min-width: 160px;
+  width: 240px;
   min-height: 100vh;
-  background: #0b2f1f;
+  background: linear-gradient(180deg, #163133, #dadada, #163133);
   color: #dfeeda;
   font-family: Georgia, serif;
-  padding: 16px 14px;
   box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   overflow-y: auto;
+  border-right: 2px outset #aaaaaa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  font-family: Georgia, serif;
+  border-bottom: 2px outset #aaaaaa;
+  height: max-content;
+  z-index: 1000;
+
 }
 
 .nav-title {
@@ -26,6 +34,68 @@
   margin-bottom: 12px;
 }
 
+.nav-usercard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid #789d78;
+  background: #16708ba9;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+.user-box{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.avatar-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px solid #789d78;
+  background: #b9b0ab;
+  color: #16708b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.user-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-line {
+  font-size: 13px;
+}
+
+.user-stats-block {
+  border-top: 1px solid #123d28;
+  padding-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.stat-value {
+  color: #c7f0c4;
+}
+.nav-links-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
 .nav-links {
   display: flex;
   flex-direction: column;
@@ -77,6 +147,15 @@
   font-size: 13px;
 }
 
+.user-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 12px;
+  width: 100%;
+}
+
 .muted {
   color: #9cb99c;
 }
@@ -87,20 +166,19 @@
   gap: 4px;
   margin-top: 8px;
 }
-.nav-shell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding: 10px 14px;
-  background: #0b2f1f;
-  color: #d4e8d5;
-  font-family: Georgia, serif;
-  border-bottom: 2px solid #08301f;
-  height: max-content;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
+
+.nav-modal-btn {
+  border: 1px solid transparent;
+  background: #123d28;
+  color: #dfeeda;
+  padding: 6px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.nav-modal-btn:hover {
+  border-color: #789d78;
+  background: #175036;
+  color: #ffffff;
 }

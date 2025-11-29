@@ -9,9 +9,9 @@
 }
 .layout-container{
   height: 100%;
-  padding: 16px 18px;
-  box-sizing: border-box;
+  padding: px 2px;
   margin-left: 200px;
+  display: flex;
 }
 
 .content-area{
@@ -19,6 +19,6 @@
   height: 100%;
   background: #111111;
   border-left: 1px solid #1f1f1f;
-  padding: 18px;
+  padding: 18px 60px;
   box-sizing: border-box;
 }
