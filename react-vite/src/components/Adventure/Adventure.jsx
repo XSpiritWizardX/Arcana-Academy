@@ -9,10 +9,11 @@ export default function Adventure() {
   const [log, setLog] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [area, setArea] = useState("fields");
+  const [area, setArea] = useState("tutorial");
   const [battle, setBattle] = useState(null);
 
   const areas = [
+    { id: "tutorial", name: "Tutorial - Dustfall", requires: 1 },
     { id: "fields", name: "Fields", requires: 1 },
     { id: "forest", name: "Forest", requires: 3 },
     { id: "graveyard", name: "Graveyard", requires: 6 },
@@ -24,6 +25,8 @@ export default function Adventure() {
     { id: "sky", name: "Sky", requires: 26 },
     { id: "abyss", name: "Abyss", requires: 50 },
   ];
+
+  const enemies = battle?.enemies || [];
 
   const fetchState = async () => {
     try {
@@ -227,6 +230,12 @@ export default function Adventure() {
 
       {error && <div className="adventure-error">{error}</div>}
 
+      {battle?.tutorial_progress && (
+        <div className="tutorial-banner">
+          Tutorial Stage {battle.tutorial_progress.stage}/{battle.tutorial_progress.total} — beetles then scorpions.
+        </div>
+      )}
+
       {battle && (
         <div className="battle-actions">
           <p>Choose your action:</p>
@@ -240,7 +249,7 @@ export default function Adventure() {
       )}
 
       <div className="adventure-log">
-        {(log.length ? log : ["Head into the forest to seek adventure."]).map((line, idx) => (
+        {(log.length ? log : ["Head into Dustfall to start the tutorial."]).map((line, idx) => (
           <p key={idx}>{line}</p>
         ))}
       </div>
@@ -263,25 +272,24 @@ export default function Adventure() {
             HP: {state?.hp ?? "--"}/{state?.max_hp ?? "--"}
           </span>
         </div>
-        <img
-          className="scene-sprite enemy-sprite"
-          src="https://res.cloudinary.com/dl6ls3rgu/image/upload/v1764362424/user-uploads/3610ed80eb4442b580a4db79c6e3462c.gif.gif"
-          alt="Enemy"
-        />
-        <div className="hp-bar enemy-hp">
-          <div
-            className="hp-fill enemy"
-            style={{
-              width: `${
-                battle && battle.max_monster_hp
-                  ? Math.max(0, (battle.monster_hp / battle.max_monster_hp) * 100)
-                  : 0
-              }%`,
-            }}
-          />
-          <span className="hp-label">
-            {battle?.monster ?? "Enemy"} HP: {battle?.monster_hp ?? "--"}
-          </span>
+        <div className="enemy-panel">
+          {enemies.length === 0 && <p className="muted">No enemies engaged.</p>}
+          {enemies.map((enemy, idx) => (
+            <div key={`${enemy.id}-${idx}`} className="enemy-row">
+              <div className="enemy-name">{enemy.name}</div>
+              <div className="hp-bar enemy-hp">
+                <div
+                  className="hp-fill enemy"
+                  style={{
+                    width: `${enemy.max_hp ? Math.max(0, (enemy.hp / enemy.max_hp) * 100) : 0}%`,
+                  }}
+                />
+                <span className="hp-label">
+                  HP: {enemy.hp}/{enemy.max_hp}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

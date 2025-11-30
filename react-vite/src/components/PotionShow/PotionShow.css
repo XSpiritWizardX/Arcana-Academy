@@ -3,8 +3,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 80vw;
+    width: 100%;
     height: auto;
+    padding: 0 12px;
+    box-sizing: border-box;
 }
 
 .potion-show-card{
@@ -12,9 +14,7 @@
     border-radius: 5%;
     width: 60vw;
     height: auto;
-    margin-left: 12%;
-    margin-bottom: 2%;
-    margin-right: 12%;
+    margin: 0 auto 2%;
     display: flex;
     flex-direction: column;
     /* justify-content: center; */
@@ -60,4 +60,31 @@
     display: flex;
     justify-content: space-around;
     margin-bottom: 5%;
+}
+
+@media (max-width: 768px) {
+    .potion-show-card {
+        width: 96%;
+        max-width: 580px;
+        padding: 16px;
+    }
+
+    .potion-show-text,
+    .potion-show-text-gold,
+    .potion-show-text-blue,
+    .potion-show-text-red {
+        font-size: 20px;
+    }
+
+    .potion-show-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .potion-modal-buttons {
+        width: 100%;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 }

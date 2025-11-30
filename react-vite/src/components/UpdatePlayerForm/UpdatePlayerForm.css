@@ -172,3 +172,49 @@
     .keep-player-button{
         margin-left: 5%;
     }
+
+    @media (max-width: 768px) {
+        .create-confirm{
+            position: static;
+            width: 100%;
+            max-width: 540px;
+            margin-top: 12px;
+            right: auto;
+            top: auto;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        .button-container{
+            width: 100%;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .inputs,
+        .create-player-labels{
+            width: 100%;
+        }
+
+        .create-player-form{
+            padding: 0 12px;
+            box-sizing: border-box;
+        }
+
+        .create-player-title{
+            margin-left: 0;
+            align-self: flex-start;
+        }
+
+        .select-magic-class-container{
+            flex-direction: column;
+        }
+
+        #magic-class-select{
+            margin-left: 0;
+        }
+
+        .keep-player-button{
+            margin-left: 0;
+        }
+    }

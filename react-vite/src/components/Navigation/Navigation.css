@@ -24,6 +24,40 @@
 
 }
 
+.nav-bar-row {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+.nav-toggle {
+  display: none;
+  background: #0f2c2d;
+  color: #dfeeda;
+  border: 1px solid #27484a;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.nav-brand {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.nav-inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
 .nav-title {
   font-size: 18px;
   font-weight: bold;
@@ -181,4 +215,79 @@
   background: #444444;
   border-radius: 15px;
   color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .nav-shell {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    min-height: unset;
+    height: auto;
+    flex-direction: column;
+    padding: 12px 14px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 2px solid #27484a;
+    gap: 10px;
+    align-items: flex-start;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .nav-bar-row {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-inner {
+    display: none;
+  }
+
+  .nav-shell.nav-open .nav-inner {
+    display: flex;
+  }
+
+  .nav-title,
+  .nav-subtitle {
+    display: none;
+  }
+
+  .nav-usercard {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .nav-links-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nav-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .nav-link {
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 1px solid #1f1f1f;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .nav-section {
+    width: 100%;
+    margin-top: 6px;
+    font-size: 11px;
+  }
+
+  .nav-modal-btn {
+    text-align: center;
+  }
 }

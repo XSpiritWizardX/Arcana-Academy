@@ -101,3 +101,25 @@
     color: #7F00FF;
     font-size: larger;
 }
+
+@media (max-width: 768px) {
+    .spell-list-container,
+    .spell-list {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .spell-card {
+        width: 94%;
+        padding: 16px 64px;
+        margin-right: 0;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .spell-image {
+        width: 80%;
+        height: auto;
+    }
+}

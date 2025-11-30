@@ -101,3 +101,25 @@
     color: #7F00FF;
     font-size: larger;
 }
+
+@media (max-width: 768px) {
+    .sword-list-container,
+    .sword-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sword-card {
+        width: 94%;
+        max-width: 540px;
+        padding: 16px 14px;
+        margin-right: 0;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .sword-image {
+        height: auto;
+        width: 80%;
+    }
+}

@@ -8,6 +8,7 @@
   flex-direction: column;
   gap: 12px;
   margin-left: 10%;
+  max-width: 960px;
 }
 
 .adventure-header {
@@ -55,6 +56,7 @@
   border-color: #5ac8fa;
   box-shadow: 0 0 8px #5ac8fa55;
 }
+
 .adventure-error {
   color: #ff6b6b;
 }
@@ -139,6 +141,13 @@
   right: 10px;
 }
 
+.enemy-panel .enemy-hp {
+  position: relative;
+  width: 100%;
+  bottom: auto;
+  right: auto;
+}
+
 .hp-fill {
   height: 100%;
   background: linear-gradient(90deg, #1fa2ff, #12d8fa);
@@ -156,6 +165,104 @@
   font-size: 10px;
   color: #e6e6e6;
   pointer-events: none;
+}
+
+.enemy-panel {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 42%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid #2c2c2c;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.enemy-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.enemy-name {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.tutorial-banner {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px solid #2c2c2c;
+  border-radius: 6px;
+  background: #0b0b0b;
+  color: #e6e6e6;
+  box-shadow: 0 0 8px #5ac8fa22;
+}
+
+.muted {
+  color: #9b9b9b;
+}
+
+@media (max-width: 768px) {
+  .adventure-card {
+    margin-left: 0;
+    padding: 14px;
+  }
+
+  .adventure-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .adventure-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .adventure-actions,
+  .area-select,
+  .train-buttons,
+  .battle-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .area-btn,
+  .battle-buttons button,
+  .train-buttons button,
+  .adventure-actions button {
+    width: calc(50% - 6px);
+  }
+
+  .adventure-scene {
+    height: 360px;
+  }
+
+  .scene-background {
+    opacity: 0.3;
+  }
+
+  .enemy-panel {
+    position: static;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .hp-bar {
+    height: 16px;
+  }
+
+  .player-sprite {
+    width: 120px;
+    height: 120px;
+  }
+
+  .hp-label {
+    font-size: 11px;
+  }
 }
 
 .adventure-train {

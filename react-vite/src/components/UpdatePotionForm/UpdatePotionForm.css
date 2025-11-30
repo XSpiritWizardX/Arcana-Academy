@@ -33,3 +33,52 @@
     display: flex;
     margin-left: 20%;
 }
+
+@media (max-width: 768px) {
+    .create-confirm{
+        position: static;
+        width: 100%;
+        max-width: 540px;
+        margin-top: 12px;
+        right: auto;
+        top: auto;
+        padding: 12px;
+        box-sizing: border-box;
+    }
+
+    .create-potion-form {
+        padding: 0 12px;
+        box-sizing: border-box;
+    }
+
+    .create-potion-labels {
+        width: 100%;
+    }
+
+    .inputs {
+        width: 100%;
+    }
+
+    .select-type-container,
+    .select-el-container {
+        flex-direction: column;
+    }
+
+    #type-select,
+    #element-select {
+        margin-left: 0;
+    }
+
+    .button-container{
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .create-potion-button,
+    .keep-potion-button {
+        margin-left: 0;
+        margin-right: 0;
+        justify-content: center;
+    }
+}

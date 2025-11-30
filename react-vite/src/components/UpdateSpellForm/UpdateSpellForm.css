@@ -1,0 +1,74 @@
+.create-confirm{
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1%;
+  border: 2px solid white;
+  position:fixed;
+  top: 2%;
+  right: 2%;
+}
+
+.create-spell-form{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.create-spell-labels{
+  width: 98%;
+}
+
+.inputs{
+  width: 70%;
+}
+
+.button-container{
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+
+@media (max-width: 768px) {
+  .create-confirm{
+    position: static;
+    width: 100%;
+    max-width: 540px;
+    margin-top: 12px;
+    right: auto;
+    top: auto;
+    padding: 12px;
+    box-sizing: border-box;
+  }
+
+  .create-spell-form{
+    padding: 0 12px;
+    box-sizing: border-box;
+  }
+
+  .create-spell-labels{
+    width: 100%;
+  }
+
+  .inputs{
+    width: 100%;
+  }
+
+  .button-container{
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .select-el-container{
+    flex-direction: column;
+  }
+
+  #element-select{
+    margin-left: 0;
+  }
+}

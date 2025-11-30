@@ -1,0 +1,57 @@
+.player-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+.create-confirm{
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1%;
+  border: 2px solid white;
+  position:fixed;
+  top: 2%;
+  right: 2%;
+}
+
+.player-form label {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.player-form input,
+.player-form select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.player-form .button-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .create-confirm{
+    position: static;
+    width: 100%;
+    max-width: 540px;
+    margin-top: 12px;
+    right: auto;
+    top: auto;
+    padding: 12px;
+    box-sizing: border-box;
+  }
+
+  .player-form .button-container {
+    flex-direction: column;
+  }
+}

@@ -76,3 +76,31 @@
     justify-self: center;
     color: #7F00FF;
 }
+
+@media (max-width: 768px) {
+    .title-cont {
+        margin-left: 0;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .player-list-container,
+    .player-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .player-card {
+        width: 94%;
+        max-width: 540px;
+        padding: 16px 14px;
+        margin-right: 0;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .player-image {
+        height: auto;
+        width: 90%;
+    }
+}

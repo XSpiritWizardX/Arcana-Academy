@@ -1,0 +1,62 @@
+.player-list-container,
+.player-list {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.player-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 10px double #7F00FF;
+  border-radius: 10px;
+  background-color: #1C1C1E;
+  color: #C0C0C0;
+  font-size: 1.5rem;
+  margin-right: 2%;
+  margin-bottom: 2%;
+  height: auto;
+  width: 20%;
+}
+
+.player-image {
+  margin-left: 3%;
+  width: 94%;
+  height: 50%;
+  object-fit: cover;
+}
+
+.player-list-title {
+  font-size: 2rem;
+  color: #7F00FF;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.player-name {
+  color: #7F00FF;
+}
+
+@media (max-width: 768px) {
+  .player-list-container,
+  .player-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .player-card {
+    width: 94%;
+    max-width: 540px;
+    padding: 16px 14px;
+    margin-right: 0;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .player-image {
+    height: auto;
+    width: 90%;
+  }
+}

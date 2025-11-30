@@ -8,6 +8,25 @@ from app.models import AdventureState, db
 adventure_routes = Blueprint("adventure", __name__)
 
 ENCOUNTERS = {}
+TUTORIAL_PROGRESS = {}
+
+TUTORIAL_CHAIN = [
+    [{"id": "beetle", "name": "Scrap Beetle", "hp": 8, "attack": 2, "defense": 0, "gold": (2, 4), "xp": (4, 8)}],
+    [
+        {"id": "beetle", "name": "Scrap Beetle", "hp": 8, "attack": 2, "defense": 0, "gold": (2, 4), "xp": (4, 8)},
+        {"id": "beetle", "name": "Scrap Beetle", "hp": 8, "attack": 2, "defense": 0, "gold": (2, 4), "xp": (4, 8)},
+    ],
+    [{"id": "scorpion", "name": "Dust Scorpion", "hp": 12, "attack": 3, "defense": 1, "gold": (3, 6), "xp": (6, 10)}],
+    [
+        {"id": "scorpion", "name": "Dust Scorpion", "hp": 12, "attack": 3, "defense": 1, "gold": (3, 6), "xp": (6, 10)},
+        {"id": "beetle", "name": "Scrap Beetle", "hp": 8, "attack": 2, "defense": 0, "gold": (2, 4), "xp": (4, 8)},
+    ],
+    [
+        {"id": "scorpion", "name": "Dust Scorpion", "hp": 12, "attack": 3, "defense": 1, "gold": (3, 6), "xp": (6, 10)},
+        {"id": "scorpion", "name": "Dust Scorpion", "hp": 12, "attack": 3, "defense": 1, "gold": (3, 6), "xp": (6, 10)},
+        {"id": "beetle", "name": "Scrap Beetle", "hp": 8, "attack": 2, "defense": 0, "gold": (2, 4), "xp": (4, 8)},
+    ],
+]
 
 
 def get_or_create_state():
@@ -142,6 +161,29 @@ def get_encounter(user_id: int):
     return ENCOUNTERS.get(user_id)
 
 
+def format_enemies(enemies):
+    """Clone enemies into serializable form with max_hp kept for UI."""
+    return [
+        {
+            "id": e["id"],
+            "name": e["name"],
+            "hp": e["hp"],
+            "max_hp": e["hp"],
+            "attack": e["attack"],
+            "defense": e["defense"],
+            "gold": e["gold"],
+            "xp": e["xp"],
+        }
+        for e in enemies
+    ]
+
+
+def tutorial_progress(user_id):
+    idx = TUTORIAL_PROGRESS.get(user_id, 0)
+    total = len(TUTORIAL_CHAIN)
+    return {"stage": idx + 1, "total": total}
+
+
 @adventure_routes.route("/state", methods=["GET"])
 @login_required
 def get_state():
@@ -165,28 +207,43 @@ def start_encounter():
     state = get_or_create_state()
     data = request.get_json(silent=True) or {}
     area = data.get("area", "fields")
-    area_info = AREAS.get(area, AREAS["fields"])
+    is_tutorial = area == "tutorial"
+    area_info = {"name": "Dustfall Tutorial", "requires_level": 1} if is_tutorial else AREAS.get(area, AREAS["fields"])
 
     if state.level < area_info["requires_level"]:
         return jsonify({"error": f"{area_info['name']} unlocks at level {area_info['requires_level']}."}), 400
     if state.turns <= 0:
         return jsonify({"error": "No turns left. Rest to recover."}), 400
 
-    monster = roll_monster(state.level, area)
-    ENCOUNTERS[current_user.id] = {
-        "area": area,
-        "monster": monster,
-        "monster_hp": monster["hp"],
-    }
+    intro_log = ""
+    if is_tutorial:
+        idx = min(TUTORIAL_PROGRESS.get(current_user.id, 0), len(TUTORIAL_CHAIN) - 1)
+        stage_enemies = TUTORIAL_CHAIN[idx]
+        enemies = format_enemies(stage_enemies)
+        ENCOUNTERS[current_user.id] = {
+            "area": area,
+            "enemies": enemies,
+            "tutorial_stage": idx,
+        }
+        names = ", ".join({e["name"] for e in enemies})
+        intro_log = f"Tutorial stage {idx + 1}/{len(TUTORIAL_CHAIN)}: {names} await."
+    else:
+        monster = roll_monster(state.level, area)
+        enemies = format_enemies([monster])
+        ENCOUNTERS[current_user.id] = {
+            "area": area,
+            "enemies": enemies,
+        }
+        intro_log = f"You encounter a {monster['name']} in the {area_info['name']}."
+
     return jsonify({
         "state": state.to_dict(),
         "battle": {
-            "monster": monster["name"],
-            "monster_hp": monster["hp"],
-            "max_monster_hp": monster["hp"],
+            "enemies": enemies,
             "player_hp": state.hp,
+            "tutorial_progress": tutorial_progress(current_user.id) if is_tutorial else None,
         },
-        "log": [f"You encounter a {monster['name']} in the {area_info['name']}."],
+        "log": [intro_log],
     })
 
 
@@ -203,17 +260,25 @@ def take_action():
         clear_encounter(current_user.id)
         return jsonify({"error": "No turns left. Rest to recover."}), 400
 
-    monster = encounter["monster"]
-    monster_hp = encounter["monster_hp"]
+    enemies = encounter.get("enemies", [])
+    area = encounter.get("area")
     log = []
 
+    alive_targets = [e for e in enemies if e["hp"] > 0]
+
     def end_and_reward():
-        gold_gain = random.randint(*monster["gold"])
-        xp_gain = random.randint(*monster["xp"])
+        gold_gain = sum(random.randint(*e["gold"]) for e in enemies)
+        xp_gain = sum(random.randint(*e["xp"]) for e in enemies)
         state.gold += gold_gain
         state.xp += xp_gain
-        log.append(f"You defeated the {monster['name']}! +{gold_gain} gold, +{xp_gain} xp.")
+        names = ", ".join({e["name"] for e in enemies})
+        log.append(f"You defeated {names}! +{gold_gain} gold, +{xp_gain} xp.")
         level_up_if_needed(state)
+        if area == "tutorial":
+            idx = encounter.get("tutorial_stage", 0)
+            next_idx = (idx + 1) % len(TUTORIAL_CHAIN)
+            TUTORIAL_PROGRESS[current_user.id] = next_idx
+            log.append(f"Tutorial progress: {next_idx + 1}/{len(TUTORIAL_CHAIN)} ready.")
         clear_encounter(current_user.id)
 
     state.turns -= 1
@@ -224,28 +289,38 @@ def take_action():
             clear_encounter(current_user.id)
         else:
             log.append("You failed to flee!")
-            dmg_to_player = max(1, monster["attack"] - state.defense + random.randint(0, 2))
-            state.hp -= dmg_to_player
-            log.append(f"{monster['name']} hits you for {dmg_to_player} damage. Your HP: {max(state.hp,0)}")
+            total_dmg = 0
+            for enemy in alive_targets:
+                dmg = max(1, enemy["attack"] - state.defense + random.randint(0, 2))
+                total_dmg += dmg
+                log.append(f"{enemy['name']} clips you for {dmg} damage.")
+            state.hp -= total_dmg
+            log.append(f"Your HP: {max(state.hp,0)}")
     else:
-        # attack or defend
+        # attack, spell, or defend
+        if not alive_targets:
+            clear_encounter(current_user.id)
+            return jsonify({"error": "No enemies left."}), 400
+        target = alive_targets[0]
         dmg_bonus = 0
         if action == "spell":
             dmg_bonus = 2
-        dmg_to_monster = max(1, state.attack + dmg_bonus - monster["defense"] + random.randint(0, 2))
-        monster_hp -= dmg_to_monster
-        log.append(f"You strike the {monster['name']} for {dmg_to_monster} damage. Monster HP: {max(monster_hp,0)}")
+        dmg_to_monster = max(1, state.attack + dmg_bonus - target["defense"] + random.randint(0, 2))
+        target["hp"] = max(0, target["hp"] - dmg_to_monster)
+        log.append(f"You strike the {target['name']} for {dmg_to_monster} damage. {target['name']} HP: {target['hp']}")
 
-        if monster_hp <= 0:
-            encounter["monster_hp"] = 0
+        if target["hp"] <= 0 and all(e["hp"] <= 0 for e in enemies):
             end_and_reward()
         else:
-            dmg_to_player = max(1, monster["attack"] - state.defense + random.randint(0, 2))
-            if action == "defend":
-                dmg_to_player = max(1, dmg_to_player // 2)
-            state.hp -= dmg_to_player
-            log.append(f"{monster['name']} hits you for {dmg_to_player} damage. Your HP: {max(state.hp,0)}")
-            encounter["monster_hp"] = monster_hp
+            incoming = [e for e in enemies if e["hp"] > 0]
+            for enemy in incoming:
+                dmg_to_player = max(1, enemy["attack"] - state.defense + random.randint(0, 2))
+                if action == "defend":
+                    dmg_to_player = max(1, dmg_to_player // 2)
+                state.hp -= dmg_to_player
+                log.append(f"{enemy['name']} hits you for {dmg_to_player} damage.")
+            log.append(f"Your HP: {max(state.hp,0)}")
+            encounter["enemies"] = enemies
 
     if state.hp <= 0:
         state.hp = state.max_hp
@@ -257,10 +332,9 @@ def take_action():
     return jsonify({
         "state": state.to_dict(),
         "battle": None if not get_encounter(current_user.id) else {
-            "monster": monster["name"],
-            "monster_hp": get_encounter(current_user.id)["monster_hp"],
-            "max_monster_hp": monster["hp"],
+            "enemies": get_encounter(current_user.id)["enemies"],
             "player_hp": state.hp,
+            "tutorial_progress": tutorial_progress(current_user.id) if area == "tutorial" else None,
         },
         "log": log,
     })
