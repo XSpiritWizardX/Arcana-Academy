@@ -1,0 +1,51 @@
+.arcana-title-wrap{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  margin: 1rem 0 2rem;
+  width: 100%;
+}
+
+.arcana-title-svg{
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.arcana-title-group text{
+  font-family: "Cinzel", "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(60px, 10vw, 100px);
+  letter-spacing: 3px;
+  font-weight: 700;
+}
+
+.arcana-letter{
+  fill: transparent;
+  stroke: #00ffb3;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+}
+
+.arcana-title-fill{
+  fill: #e9fff7;
+  stroke: none;
+  opacity: 0;
+  text-shadow: 0 0 16px rgba(0, 255, 179, 0.35);
+}
+
+.arcana-tagline{
+  margin: 0.1rem 0 0;
+  color: #9de8cf;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+@media (max-width: 640px){
+  .arcana-title-group text{
+    font-size: clamp(100px, 18vw, 200px);
+  }
+}

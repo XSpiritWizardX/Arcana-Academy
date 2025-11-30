@@ -1,25 +1,15 @@
 
 import "./LandingPage.css";
-
+import AnimatedTitle from "./AnimatedTitle";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import SignupFormModal from "../../components/SignupFormModal/SignupFormModal";
 
-
-
 export default function LandingPage() {
-
-
-
-
   return (
     <div className="landing-page">
       <div className="landing-page-container">
 
-          <p
-          className="landing-page-title"
-          >
-            ARCANA ACADEMY ~ A world you shape with your imagination
-          </p>
+          <AnimatedTitle />
 
           <p
           className="arc-para"
