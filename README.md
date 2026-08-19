@@ -1,166 +1,175 @@
-# Flask React Project
+# Arcana Academy
 
-This is the starter for the Flask React project.
+[![CI](https://github.com/XSpiritWizardX/Arcana-Academy/actions/workflows/ci.yml/badge.svg)](https://github.com/XSpiritWizardX/Arcana-Academy/actions/workflows/ci.yml)
+
+Arcana Academy is a full-stack fantasy application that combines authenticated character and equipment management with an adventure loop and turn-based combat systems. It began as a CRUD-focused Flask/React project and evolved into a larger game-oriented platform with player progression, spells, potions, swords, persistent adventure state, media uploads, and an experimental tactical engine.
+
+This public repository is maintained as an engineering showcase: product work is tracked through GitHub issues, implemented on branches, validated by automated CI, reviewed through pull requests, and published through semantic-version GitHub Releases.
+
+## Engineering highlights
+
+- Flask API with Flask-Login sessions, CSRF protection, SQLAlchemy models, and Alembic migrations
+- React 18 + Redux + React Router frontend with GSAP-driven interaction and fantasy-themed UI
+- CRUD workflows for players, spells, potions, and swords, including image/media support through Cloudinary
+- Persistent adventure state with dedicated adventure routes and database migrations
+- Standalone turn-based engine with grid movement, action points, range/damage rules, turn progression, serialization, and basic enemy AI
+- Automated regression coverage for deterministic game-engine behavior
+- GitHub Actions quality gates for Python tests/compile, frontend lint/build, and Docker image verification
+- Dependabot maintenance for Python, npm, and GitHub Actions dependencies
+- Structured issues, pull-request Definition of Done, security policy, architecture documentation, and tag-driven releases
+
+## Tech stack
+
+| Layer | Technology |
+| --- | --- |
+| Frontend | React 18, Redux, React Router, Vite, GSAP, CSS |
+| Backend | Flask, Flask-Login, Flask-WTF/CSRF, Flask-CORS |
+| Data | SQLAlchemy, Alembic / Flask-Migrate, SQLite development database |
+| Media | Cloudinary |
+| Testing | Python `unittest`, source compilation, ESLint, production Vite build |
+| Delivery | Docker, Gunicorn, GitHub Actions, GitHub Releases |
+
+## Architecture
+
+The browser owns routed UI and client state. Flask exposes authentication, player/content CRUD, adventure, and game endpoints. SQLAlchemy models provide persistence while Alembic tracks schema evolution. The tactical game engine is kept in `app/game/engine.py` so deterministic rules can be tested independently from UI behavior.
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the system boundaries and quality strategy.
+
+```text
+React / Redux / Router
+        |
+        | /api
+        v
+Flask blueprints + auth/CSRF
+        |
+        +---- game/adventure services
+        |
+        v
+SQLAlchemy models + Alembic migrations
+        |
+        v
+SQLite / production database
+```
+
+## Core application areas
+
+### Adventure and combat
+
+`react-vite/src/components/Adventure/` and `Battle/` provide the player-facing adventure/combat surfaces. The backend exposes adventure state and game routes, while `app/game/engine.py` contains a compact turn-based rules engine used for tactical experimentation.
+
+### Character and equipment systems
+
+The application models and exposes players, spells, potions, swords, galleries/bags/books, stages, images, schedules/events, reviews, and related fantasy content. React forms and Redux modules handle the implemented resource workflows.
+
+### Authentication and persistence
+
+Flask-Login manages authenticated sessions. Flask-WTF provides CSRF protection. SQLAlchemy maps application records and `migrations/` preserves explicit database history, including later adventure-state changes.
+
+### Media uploads
+
+Cloudinary upload behavior is isolated behind the backend upload helper. Deployment credentials are supplied through environment variables and are never expected in source control.
+
+## Repository layout
+
+```text
+app/
+  api/                Flask blueprints for auth, resources, game, adventure
+  forms/              Authentication and upload forms
+  game/               Testable turn-based game engine
+  models/             SQLAlchemy domain/data models
+  seeds/              Development/demo seed commands
+migrations/           Alembic schema history
+react-vite/
+  src/components/     UI, adventure, battle, CRUD surfaces
+  src/redux/          Client state and API actions
+  src/router/         Application routing
+tests/                Automated Python regression tests
+docs/                 Architecture and release documentation
+.github/              CI, releases, issue forms, PR template, Dependabot
+Dockerfile            Current production container definition
+```
 
 ## Getting started
 
-1. Clone this repository (only this branch).
+### Prerequisites
 
-2. Install dependencies.
+- Python 3.9
+- Node.js 20+ and npm
+- PostgreSQL for a production-like database, or the local SQLite configuration for development
 
-   ```bash
-   pipenv install -r requirements.txt
-   ```
+### Backend
 
-3. Create a __.env__ file based on the example with proper settings for your
-   development environment.
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+flask db upgrade
+flask seed all
+flask run
+```
 
-4. Make sure the SQLite3 database connection URL is in the __.env__ file.
+The checked-in `.flaskenv` identifies the Flask application for local development. Use environment variables for production secrets and service credentials.
 
-5. This starter organizes all tables inside the `flask_schema` schema, defined
-   by the `SCHEMA` environment variable.  Replace the value for
-   `SCHEMA` with a unique name, **making sure you use the snake_case
-   convention.**
+### Frontend
 
-6. Get into your pipenv, migrate your database, seed your database, and run your
-   Flask app:
+```bash
+cd react-vite
+npm ci
+npm run dev
+```
 
-   ```bash
-   pipenv shell
-   ```
+For a one-shot production build:
 
-   ```bash
-   flask db upgrade
-   ```
+```bash
+npm run build
+```
 
-   ```bash
-   flask seed all
-   ```
+Watch-mode builds remain available separately as `npm run build:watch`.
 
-   ```bash
-   flask run
-   ```
+## Testing and quality gates
 
-7. The React frontend has no styling applied. Copy the __.css__ files from your
-   Authenticate Me project into the corresponding locations in the
-   __react-vite__ folder to give your project a unique look.
+Run the deterministic Python regression suite:
 
-8. To run the React frontend in development, `cd` into the __react-vite__
-   directory and run `npm i` to install dependencies. Next, run `npm run build`
-   to create the `dist` folder. The starter has modified the `npm run build`
-   command to include the `--watch` flag. This flag will rebuild the __dist__
-   folder whenever you change your code, keeping the production version up to
-   date.
+```bash
+python -m unittest discover -s tests -v
+```
 
-## Media uploads (Cloudinary)
+Compile backend source:
 
-User-uploaded images are now stored in Cloudinary instead of AWS. Add these
-environment variables to your `.env` (and hosting provider) so uploads work:
+```bash
+python -m compileall -q app
+```
 
-- `CLOUDINARY_CLOUD_NAME`
-- `CLOUDINARY_API_KEY`
-- `CLOUDINARY_API_SECRET`
-- `CLOUDINARY_UPLOAD_FOLDER` (optional, defaults to `user-uploads` to match the preset below)
-- `CLOUDINARY_UPLOAD_PRESET` (optional; set if you want to force a specific signed/unsigned preset)
+Validate the frontend:
 
-Preset reference (matching current defaults):
-- Folder: `user-uploads`
-- Signing mode: your choice (set the preset name in `CLOUDINARY_UPLOAD_PRESET` if you use one)
-- overwrite: false
-- use filename: false
-- unique filename: false
-- use filename as display name: true
+```bash
+npm --prefix react-vite ci
+npm --prefix react-vite run lint
+npm --prefix react-vite run build
+```
 
-## Turn-based adventure (prototype)
-- Start a session: `POST /api/game/session` (auth required) → returns session_id, map, entities.
-- Get state: `GET /api/game/session/<session_id>`
-- Move: `POST /api/game/session/<session_id>/move` with JSON `{ "direction": "up|down|left|right" }`
-- Attack: `POST /api/game/session/<session_id>/attack` with JSON `{ "target_id": "<entity_id>" }`
-- Prototype is Python-first: in-memory sessions, simple 10x10 map, basic AI turns after yours.
+The CI workflow runs these checks for pull requests and pushes to `main` and also verifies the current Docker image can be built. The initial regression suite protects map boundaries, session ownership, movement rules, combat damage/action points, turn refresh behavior, and the serialized client contract.
 
-## Adventure loop (LOTGD-inspired, early)
-- Get state: `GET /api/adventure/state`
-- Rest: `POST /api/adventure/rest` (restores HP/turns)
-- Explore: `POST /api/adventure/explore` (consumes a turn, fights a random encounter, grants gold/xp on win)
-- Frontend: `/adventure` route with buttons to rest/explore and view log.
+## Development workflow
 
-## Navigation
-- Top bar with links to Town (home), Adventure, Battle, Spells, Swords, Potions, Bestiary, plus profile dropdown; simplified to match classic text menu.
+1. Create or link a GitHub issue with acceptance criteria.
+2. Work on a focused branch from `main`.
+3. Add or update tests and migrations alongside behavior changes.
+4. Open a pull request using the repository checklist.
+5. Merge only after CI is green and review concerns are resolved.
+6. Record notable changes in `CHANGELOG.md`.
+7. Publish semantic-version tags through the Release workflow.
 
-## Deployment through Render.com
+See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [docs/RELEASES.md](docs/RELEASES.md).
 
-First, recall that Vite is a development dependency, so it will not be used in
-production. This means that you must already have the __dist__ folder located in
-the root of your __react-vite__ folder when you push to GitHub. This __dist__
-folder contains your React code and all necessary dependencies minified and
-bundled into a smaller footprint, ready to be served from your Python API.
+## Release model
 
-Begin deployment by running `npm run build` in your __react-vite__ folder and
-pushing any changes to GitHub.
+Tags matching `vMAJOR.MINOR.PATCH` trigger `.github/workflows/release.yml`. The workflow reruns automated verification before creating a GitHub Release with generated notes. Release publication and production deployment remain separate so a release can be verified without hiding deployment concerns.
 
-Refer to your Render.com deployment articles for more detailed instructions
-about getting started with [Render.com], creating a production database, and
-deployment debugging tips.
+## Known engineering follow-up
 
-From the Render [Dashboard], click on the "New +" button in the navigation bar,
-and click on "Web Service" to create the application that will be deployed.
+The current Dockerfile reflects an older deployment approach: it runs database migrations and seed commands while the image is being built and relies on the committed frontend bundle. That behavior is intentionally tracked as a separate issue so the container can be modernized and production-verified without mixing deployment risk into this workflow/documentation baseline.
 
-Select that you want to "Build and deploy from a Git repository" and click
-"Next". On the next page, find the name of the application repo you want to
-deploy and click the "Connect" button to the right of the name.
+## Security
 
-Now you need to fill out the form to configure your app. Most of the setup will
-be handled by the __Dockerfile__, but you do need to fill in a few fields.
-
-Start by giving your application a name.
-
-Make sure the Region is set to the location closest to you, the Branch is set to
-"main", and Runtime is set to "Docker". You can leave the Root Directory field
-blank. (By default, Render will run commands from the root directory.)
-
-Select "Free" as your Instance Type.
-
-### Add environment variables
-
-In the development environment, you have been securing your environment
-variables in a __.env__ file, which has been removed from source control (i.e.,
-the file is gitignored). In this step, you will need to input the keys and
-values for the environment variables you need for production into the Render
-GUI.
-
-Add the following keys and values in the Render GUI form:
-
-- SECRET_KEY (click "Generate" to generate a secure secret for production)
-- FLASK_ENV production
-- FLASK_APP app
-- SCHEMA (your unique schema name, in snake_case)
-
-In a new tab, navigate to your dashboard and click on your Postgres database
-instance.
-
-Add the following keys and values:
-
-- DATABASE_URL (copy value from the **External Database URL** field)
-
-**Note:** Add any other keys and values that may be present in your local
-__.env__ file. As you work to further develop your project, you may need to add
-more environment variables to your local __.env__ file. Make sure you add these
-environment variables to the Render GUI as well for the next deployment.
-
-### Deploy
-
-Now you are finally ready to deploy! Click "Create Web Service" to deploy your
-project. The deployment process will likely take about 10-15 minutes if
-everything works as expected. You can monitor the logs to see your Dockerfile
-commands being executed and any errors that occur.
-
-When deployment is complete, open your deployed site and check to see that you
-have successfully deployed your Flask application to Render! You can find the
-URL for your site just below the name of the Web Service at the top of the page.
-
-**Note:** By default, Render will set Auto-Deploy for your project to true. This
-setting will cause Render to re-deploy your application every time you push to
-main, always keeping it up to date.
-
-[Render.com]: https://render.com/
-[Dashboard]: https://dashboard.render.com/
+Do not commit database URLs, Flask secrets, Cloudinary credentials, `.env` files, or real user data. Security-sensitive reports should use GitHub's private vulnerability-reporting path rather than a public issue. See [SECURITY.md](SECURITY.md).
