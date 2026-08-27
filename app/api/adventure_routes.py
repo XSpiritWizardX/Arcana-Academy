@@ -3,6 +3,18 @@ import random
 from flask import Blueprint, jsonify, request
 from flask_login import current_user, login_required
 
+from app.game.adventure_rules import (
+    INTENT_GUARD,
+    INTENT_HEAVY,
+    VALID_ACTIONS,
+    calculate_monster_damage,
+    calculate_player_damage,
+    defeat_gold_loss,
+    intent_message,
+    is_dragon_boss,
+    roll_monster_intent,
+    training_cost,
+)
 from app.models import AdventureState, db
 
 adventure_routes = Blueprint("adventure", __name__)
@@ -20,6 +32,7 @@ def get_or_create_state():
 
 
 def level_up_if_needed(state: AdventureState):
+    levels_gained = 0
     needed = state.level * 50
     while state.xp >= needed:
         state.level += 1
@@ -27,7 +40,9 @@ def level_up_if_needed(state: AdventureState):
         state.attack += 1
         state.defense += 1
         state.hp = state.max_hp
+        levels_gained += 1
         needed = state.level * 50
+    return levels_gained
 
 
 AREAS = {
@@ -124,70 +139,124 @@ AREAS = {
 }
 
 
+def area_summaries():
+    return [
+        {
+            "id": area_id,
+            "name": area["name"],
+            "requires_level": area["requires_level"],
+        }
+        for area_id, area in AREAS.items()
+    ]
+
+
 def roll_monster(level: int, area_key: str):
-    area = AREAS.get(area_key, AREAS["fields"])
+    area = AREAS[area_key]
     pool = area["monsters"]
-    # weight higher-level monsters slightly as level increases
     if len(pool) > 1 and level > area["requires_level"] + 2:
         return random.choice(pool[1:])
     return random.choice(pool)
 
 
 def clear_encounter(user_id: int):
-    if user_id in ENCOUNTERS:
-        ENCOUNTERS.pop(user_id, None)
+    ENCOUNTERS.pop(user_id, None)
 
 
 def get_encounter(user_id: int):
     return ENCOUNTERS.get(user_id)
 
 
+def battle_to_dict(state: AdventureState, encounter):
+    if not encounter:
+        return None
+    monster = encounter["monster"]
+    intent = encounter["monster_intent"]
+    return {
+        "area": encounter["area"],
+        "monster": monster["name"],
+        "monster_hp": encounter["monster_hp"],
+        "max_monster_hp": monster["hp"],
+        "player_hp": state.hp,
+        "round": encounter["round"],
+        "spell_cooldown": encounter["spell_cooldown"],
+        "intent": intent,
+        "intent_message": intent_message(monster["name"], intent),
+    }
+
+
+def adventure_payload(state: AdventureState, log=None):
+    encounter = get_encounter(current_user.id)
+    payload = {
+        "state": state.to_dict(),
+        "battle": battle_to_dict(state, encounter),
+        "areas": area_summaries(),
+        "training_cost": training_cost(state.level),
+        "next_level_xp": state.level * 50,
+    }
+    if log is not None:
+        payload["log"] = log
+    return payload
+
+
+def reject_town_action_during_battle():
+    if get_encounter(current_user.id):
+        return jsonify({"error": "Finish the encounter or flee before using town actions."}), 400
+    return None
+
+
 @adventure_routes.route("/state", methods=["GET"])
 @login_required
 def get_state():
     state = get_or_create_state()
-    return jsonify({"state": state.to_dict()})
+    return jsonify(adventure_payload(state))
 
 
 @adventure_routes.route("/rest", methods=["POST"])
 @login_required
 def rest():
+    blocked = reject_town_action_during_battle()
+    if blocked:
+        return blocked
     state = get_or_create_state()
     state.hp = state.max_hp
     state.turns = 10
     db.session.commit()
-    return jsonify({"state": state.to_dict()})
+    return jsonify(adventure_payload(state, ["You rest at the inn, restoring HP and turns."]))
 
 
 @adventure_routes.route("/start", methods=["POST"])
 @login_required
 def start_encounter():
     state = get_or_create_state()
+    if get_encounter(current_user.id):
+        return jsonify({"error": "You are already in combat. Finish the fight or flee first."}), 400
+
     data = request.get_json(silent=True) or {}
     area = data.get("area", "fields")
-    area_info = AREAS.get(area, AREAS["fields"])
+    if area not in AREAS:
+        return jsonify({"error": "Unknown adventure area."}), 400
 
+    area_info = AREAS[area]
     if state.level < area_info["requires_level"]:
         return jsonify({"error": f"{area_info['name']} unlocks at level {area_info['requires_level']}."}), 400
     if state.turns <= 0:
         return jsonify({"error": "No turns left. Rest to recover."}), 400
 
     monster = roll_monster(state.level, area)
-    ENCOUNTERS[current_user.id] = {
+    encounter = {
         "area": area,
         "monster": monster,
         "monster_hp": monster["hp"],
+        "round": 1,
+        "spell_cooldown": 0,
+        "monster_intent": roll_monster_intent(),
     }
-    return jsonify({
-        "state": state.to_dict(),
-        "battle": {
-            "monster": monster["name"],
-            "monster_hp": monster["hp"],
-            "max_monster_hp": monster["hp"],
-            "player_hp": state.hp,
-        },
-        "log": [f"You encounter a {monster['name']} in the {area_info['name']}."],
-    })
+    ENCOUNTERS[current_user.id] = encounter
+    log = [
+        f"You encounter a {monster['name']} in the {area_info['name']}.",
+        intent_message(monster["name"], encounter["monster_intent"]),
+    ]
+    return jsonify(adventure_payload(state, log))
 
 
 @adventure_routes.route("/action", methods=["POST"])
@@ -197,78 +266,126 @@ def take_action():
     data = request.get_json(silent=True) or {}
     action = data.get("action")
     encounter = get_encounter(current_user.id)
+
     if not encounter:
         return jsonify({"error": "No active encounter. Start a hunt first."}), 400
+    if action not in VALID_ACTIONS:
+        return jsonify({"error": "Choose attack, spell, defend, or run."}), 400
+    if action == "spell" and encounter["spell_cooldown"] > 0:
+        return jsonify({"error": f"Arcane Blast is ready in {encounter['spell_cooldown']} round(s)."}), 400
     if state.turns <= 0:
         clear_encounter(current_user.id)
         return jsonify({"error": "No turns left. Rest to recover."}), 400
 
     monster = encounter["monster"]
-    monster_hp = encounter["monster_hp"]
+    monster_intent = encounter["monster_intent"]
     log = []
+    state.turns -= 1
 
     def end_and_reward():
         gold_gain = random.randint(*monster["gold"])
         xp_gain = random.randint(*monster["xp"])
         state.gold += gold_gain
         state.xp += xp_gain
+        if is_dragon_boss(monster["id"]):
+            state.dragon_kills += 1
+            log.append("Dragon slain! Your dragon-kill record increases.")
         log.append(f"You defeated the {monster['name']}! +{gold_gain} gold, +{xp_gain} xp.")
-        level_up_if_needed(state)
+        levels_gained = level_up_if_needed(state)
+        if levels_gained:
+            log.append(f"Level up! You reached level {state.level} and your HP is fully restored.")
         clear_encounter(current_user.id)
-
-    state.turns -= 1
 
     if action == "run":
         if random.random() < 0.65:
-            log.append("You successfully fled.")
+            log.append("You successfully fled back to town.")
             clear_encounter(current_user.id)
         else:
             log.append("You failed to flee!")
-            dmg_to_player = max(1, monster["attack"] - state.defense + random.randint(0, 2))
-            state.hp -= dmg_to_player
-            log.append(f"{monster['name']} hits you for {dmg_to_player} damage. Your HP: {max(state.hp,0)}")
+            damage = calculate_monster_damage(
+                monster["attack"],
+                state.defense,
+                monster_intent,
+                defending=False,
+            )
+            if damage:
+                state.hp -= damage
+                if monster_intent == INTENT_HEAVY:
+                    log.append(f"{monster['name']} punishes the escape with a crushing blow for {damage} damage.")
+                else:
+                    log.append(f"{monster['name']} hits you for {damage} damage.")
+            else:
+                log.append(f"{monster['name']} stays behind its guard instead of pursuing.")
     else:
-        # attack or defend
-        dmg_bonus = 0
-        if action == "spell":
-            dmg_bonus = 2
-        dmg_to_monster = max(1, state.attack + dmg_bonus - monster["defense"] + random.randint(0, 2))
-        monster_hp -= dmg_to_monster
-        log.append(f"You strike the {monster['name']} for {dmg_to_monster} damage. Monster HP: {max(monster_hp,0)}")
+        defending = action == "defend"
+        if defending:
+            log.append("You brace for impact, sacrificing your attack to sharply reduce incoming damage.")
+        else:
+            damage, critical = calculate_player_damage(
+                state.attack,
+                monster["defense"],
+                action,
+                monster_intent,
+            )
+            encounter["monster_hp"] -= damage
+            if action == "spell":
+                encounter["spell_cooldown"] = 2
+                log.append(f"Arcane Blast tears through the {monster['name']} for {damage} damage.")
+            else:
+                prefix = "Critical hit! " if critical else ""
+                if monster_intent == INTENT_GUARD:
+                    log.append(f"{prefix}The {monster['name']}'s guard absorbs part of your strike: {damage} damage.")
+                else:
+                    log.append(f"{prefix}You strike the {monster['name']} for {damage} damage.")
 
-        if monster_hp <= 0:
+        if encounter["monster_hp"] <= 0:
             encounter["monster_hp"] = 0
             end_and_reward()
         else:
-            dmg_to_player = max(1, monster["attack"] - state.defense + random.randint(0, 2))
-            if action == "defend":
-                dmg_to_player = max(1, dmg_to_player // 2)
-            state.hp -= dmg_to_player
-            log.append(f"{monster['name']} hits you for {dmg_to_player} damage. Your HP: {max(state.hp,0)}")
-            encounter["monster_hp"] = monster_hp
+            damage = calculate_monster_damage(
+                monster["attack"],
+                state.defense,
+                monster_intent,
+                defending=defending,
+            )
+            if damage:
+                state.hp -= damage
+                if monster_intent == INTENT_HEAVY:
+                    log.append(f"{monster['name']} unleashes its heavy attack for {damage} damage.")
+                else:
+                    log.append(f"{monster['name']} strikes for {damage} damage.")
+            else:
+                log.append(f"{monster['name']} holds its guard and does not attack this round.")
 
     if state.hp <= 0:
+        loss = defeat_gold_loss(state.gold)
         state.hp = state.max_hp
-        state.gold = max(0, state.gold - 5)
+        state.gold -= loss
         clear_encounter(current_user.id)
-        log.append("You were defeated and crawl back to town, losing some gold.")
+        log.append(f"You were defeated and return to town, losing {loss} carried gold.")
+    elif get_encounter(current_user.id):
+        encounter = get_encounter(current_user.id)
+        if action != "spell" and encounter["spell_cooldown"] > 0:
+            encounter["spell_cooldown"] -= 1
+
+        if state.turns <= 0:
+            clear_encounter(current_user.id)
+            log.append("Exhausted, you retreat to town. Rest before hunting again.")
+        else:
+            encounter["round"] += 1
+            encounter["monster_intent"] = roll_monster_intent()
+            log.append(intent_message(monster["name"], encounter["monster_intent"]))
 
     db.session.commit()
-    return jsonify({
-        "state": state.to_dict(),
-        "battle": None if not get_encounter(current_user.id) else {
-            "monster": monster["name"],
-            "monster_hp": get_encounter(current_user.id)["monster_hp"],
-            "max_monster_hp": monster["hp"],
-            "player_hp": state.hp,
-        },
-        "log": log,
-    })
+    return jsonify(adventure_payload(state, log))
 
 
 @adventure_routes.route("/bank/deposit", methods=["POST"])
 @login_required
 def bank_deposit():
+    blocked = reject_town_action_during_battle()
+    if blocked:
+        return blocked
     state = get_or_create_state()
     data = request.get_json() or {}
     amount = int(data.get("amount", 0))
@@ -279,12 +396,15 @@ def bank_deposit():
     state.gold -= amount
     state.bank_gold += amount
     db.session.commit()
-    return jsonify({"state": state.to_dict(), "log": [f"You deposit {amount} gold."]})
+    return jsonify(adventure_payload(state, [f"You deposit {amount} gold."]))
 
 
 @adventure_routes.route("/bank/withdraw", methods=["POST"])
 @login_required
 def bank_withdraw():
+    blocked = reject_town_action_during_battle()
+    if blocked:
+        return blocked
     state = get_or_create_state()
     data = request.get_json() or {}
     amount = int(data.get("amount", 0))
@@ -295,18 +415,21 @@ def bank_withdraw():
     state.bank_gold -= amount
     state.gold += amount
     db.session.commit()
-    return jsonify({"state": state.to_dict(), "log": [f"You withdraw {amount} gold."]})
+    return jsonify(adventure_payload(state, [f"You withdraw {amount} gold."]))
 
 
 @adventure_routes.route("/train", methods=["POST"])
 @login_required
 def train():
+    blocked = reject_town_action_during_battle()
+    if blocked:
+        return blocked
     state = get_or_create_state()
     data = request.get_json() or {}
     stat = data.get("stat", "attack")
-    cost = 20
+    cost = training_cost(state.level)
     if state.gold < cost:
-        return jsonify({"error": "Not enough gold to train"}), 400
+        return jsonify({"error": f"Not enough gold to train. Training costs {cost} gold."}), 400
     state.gold -= cost
     if stat == "defense":
         state.defense += 1
@@ -319,4 +442,4 @@ def train():
         state.attack += 1
         msg = "Attack increased."
     db.session.commit()
-    return jsonify({"state": state.to_dict(), "log": [msg]})
+    return jsonify(adventure_payload(state, [f"{msg} Training cost: {cost} gold."]))
