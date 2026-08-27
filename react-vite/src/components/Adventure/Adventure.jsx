@@ -114,6 +114,12 @@ export default function Adventure() {
       body: JSON.stringify({ action: "fight", rounds }),
     });
 
+  const useSpecialMove = (moveId) =>
+    callAdventure("/action", {
+      method: "POST",
+      body: JSON.stringify({ action: "special", move: moveId }),
+    });
+
   const flee = async () => {
     const data = await callAdventure("/action", {
       method: "POST",
@@ -212,13 +218,31 @@ export default function Adventure() {
               <strong>{battle.monster_hp}/{battle.max_monster_hp} HP</strong>
             </div>
             <div className="enemy-bar"><div style={{ width: `${Math.max(0, (battle.monster_hp / battle.max_monster_hp) * 100)}%` }} /></div>
-            <p>You have {state.hp}/{state.max_hp} HP. Choose how many rounds to commit.</p>
+            <p>You have {state.hp}/{state.max_hp} HP and {state.mana}/{state.max_mana} Mana. Choose your action.</p>
             <div className="fight-grid">
               <button disabled={loading} onClick={() => fight(1)}>Fight</button>
               <button disabled={loading} onClick={() => fight(5)}>Fight 5 Rounds</button>
               <button disabled={loading} onClick={() => fight(10)}>Fight 10 Rounds</button>
               <button className="danger" disabled={loading} onClick={() => fight("end")}>Fight to the End</button>
               {battle.kind === "forest" && <button disabled={loading} onClick={flee}>Run</button>}
+            </div>
+
+            <div className="special-moves">
+              <p className="eyebrow">Special Skills</p>
+              <div className="fight-grid special-fight-grid">
+                {(state.special_moves || []).map((move) => (
+                  <button
+                    key={move.id}
+                    className="special-skill"
+                    disabled={loading || state.mana < move.mana_cost}
+                    onClick={() => useSpecialMove(move.id)}
+                    title={move.description}
+                  >
+                    {move.name} · {move.mana_cost} Mana
+                  </button>
+                ))}
+              </div>
+              <p className="special-skill-hint">Special skills use one combat round. Mana refreshes at the next New Day.</p>
             </div>
           </section>
         )}
