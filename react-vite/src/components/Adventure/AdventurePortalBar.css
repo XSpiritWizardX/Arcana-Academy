@@ -78,7 +78,8 @@
   font-size: 12px;
 }
 
-.adventure-portal-group {
+.adventure-portal-group,
+.adventure-portal-auth {
   display: grid;
   gap: 3px;
   margin-top: 14px;
@@ -93,41 +94,42 @@
   text-transform: uppercase;
 }
 
-.adventure-portal-link {
+.adventure-portal-link,
+.adventure-portal-auth-button,
+.adventure-portal-logout {
   display: block;
+  width: 100%;
+  box-sizing: border-box;
   border: 1px solid transparent;
   border-left: 2px solid transparent;
+  background: transparent;
   color: #c9d3c5;
   padding: 6px 8px;
   text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
   font-size: 12px;
 }
 
 .adventure-portal-link:hover,
-.adventure-portal-link.active {
+.adventure-portal-link.active,
+.adventure-portal-auth-button:hover,
+.adventure-portal-logout:hover {
   border-color: rgba(185, 156, 80, 0.24);
   border-left-color: #b99c50;
   background: rgba(185, 156, 80, 0.08);
   color: #f3de94;
 }
 
-.adventure-portal-logout {
-  width: 100%;
-  margin-top: 14px;
-  border: 1px solid #465d40;
-  background: #17251a;
-  color: #dce5d5;
-  padding: 7px 9px;
-  cursor: pointer;
-  text-align: left;
-  font: inherit;
-  font-size: 12px;
+.adventure-portal-account-actions {
+  padding-top: 12px;
+  border-top: 1px solid #344432;
 }
 
-.adventure-portal-logout:hover {
-  border-color: #b99c50;
-  background: #213423;
-  color: #f4dc88;
+.adventure-portal-auth {
+  padding-top: 12px;
+  border-top: 1px solid #344432;
 }
 
 @media (max-width: 850px) {
@@ -136,7 +138,8 @@
     grid-row: 1;
   }
 
-  .adventure-portal-group {
+  .adventure-portal-group,
+  .adventure-portal-auth {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -150,7 +153,8 @@
     padding: 12px;
   }
 
-  .adventure-portal-group {
+  .adventure-portal-group,
+  .adventure-portal-auth {
     grid-template-columns: 1fr;
   }
 }
