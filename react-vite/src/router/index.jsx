@@ -33,7 +33,7 @@ import CurrentPlayers from '../components/CurrentPlayers/CurrentPlayers';
 import UpdatePlayerForm from '../components/UpdatePlayerForm/UpdatePlayerForm';
 import DeletePlayerModal from '../components/DeletePlayer/DeletePlayerModal';
 
-import Battle from '../components/Battle/Battle';
+// import Battle from '../components/Battle/Battle';
 import BlankPage from '../components/BlankPage/BlankPage';
 
 
@@ -156,10 +156,10 @@ export const router = createBrowserRouter([
         element: <PlayerShow />
       },
 
-      {
-        path:'/battle',
-        element: <Battle />
-      },
+      // {
+      //   path:'/battle',
+      //   element: <Battle />
+      // },
       {
         path:'/adventure',
         element: <Adventure />
