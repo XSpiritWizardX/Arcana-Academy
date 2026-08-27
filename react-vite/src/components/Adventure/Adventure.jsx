@@ -4,16 +4,8 @@ import { useSelector } from "react-redux";
 import { csrfFetch } from "../../redux/csrf";
 import "./Adventure.css";
 
-const ADVENTURE_SCREENS = new Set(["town", "forest", "healer", "weapons", "armor", "bank"]);
-
-const SCREEN_TITLES = {
-  town: "Academy Square",
-  forest: "The Forest",
-  healer: "The Healer",
-  weapons: "Weapon Shop",
-  armor: "Armor Shop",
-  bank: "Academy Bank",
-};
+const ADVENTURE_SCREENS = new Set(["town", "forest", "travel", "place", "healer", "weapons", "armor", "bank"]);
+const ACADEMY_PLACE_SCREENS = new Set(["healer", "weapons", "armor", "bank"]);
 
 export default function Adventure() {
   const user = useSelector((store) => store.session.user);
@@ -27,6 +19,7 @@ export default function Adventure() {
 
   const requestedScreen = searchParams.get("screen");
   const screen = ADVENTURE_SCREENS.has(requestedScreen) ? requestedScreen : "town";
+  const place = searchParams.get("place");
 
   const publishAdventureState = (nextState) => {
     if (!nextState) return;
@@ -92,12 +85,22 @@ export default function Adventure() {
     loadAdventure();
   }, [user]);
 
-  const goToScreen = (nextScreen) => {
+  const goToScreen = (nextScreen, nextPlace = null) => {
     if (nextScreen === "town") {
       setSearchParams({});
       return;
     }
-    setSearchParams({ screen: nextScreen });
+    const next = { screen: nextScreen };
+    if (nextPlace) next.place = nextPlace;
+    setSearchParams(next);
+  };
+
+  const openLocalPlace = (placeId) => {
+    if (state.town === "academy" && ACADEMY_PLACE_SCREENS.has(placeId)) {
+      goToScreen(placeId);
+      return;
+    }
+    goToScreen("place", placeId);
   };
 
   const hunt = async (mode) => {
@@ -108,17 +111,23 @@ export default function Adventure() {
     if (data?.battle) goToScreen("forest");
   };
 
-  const fight = (rounds) =>
-    callAdventure("/action", {
+  const fight = async (rounds) => {
+    const travelBattle = battle?.kind === "travel";
+    const data = await callAdventure("/action", {
       method: "POST",
       body: JSON.stringify({ action: "fight", rounds }),
     });
+    if (travelBattle && data && !data.battle && data.state?.alive) goToScreen("town");
+  };
 
-  const activateSpecialMove = (moveId) =>
-    callAdventure("/action", {
+  const activateSpecialMove = async (moveId) => {
+    const travelBattle = battle?.kind === "travel";
+    const data = await callAdventure("/action", {
       method: "POST",
       body: JSON.stringify({ action: "special", move: moveId }),
     });
+    if (travelBattle && data && !data.battle && data.state?.alive) goToScreen("town");
+  };
 
   const flee = async () => {
     const data = await callAdventure("/action", {
@@ -137,6 +146,20 @@ export default function Adventure() {
     const data = await callAdventure("/dragon/start", { method: "POST" });
     if (data?.battle) goToScreen("forest");
   };
+
+  const travel = async (destination = null, wander = false) => {
+    const data = await callAdventure("/travel", {
+      method: "POST",
+      body: JSON.stringify(wander ? { mode: "wander" } : { mode: "direct", destination }),
+    });
+    if (data && !data.battle) goToScreen("town");
+  };
+
+  const localAction = (action) =>
+    callAdventure("/local/action", {
+      method: "POST",
+      body: JSON.stringify({ action }),
+    });
 
   const heal = () => callAdventure("/heal", { method: "POST" });
 
@@ -184,17 +207,39 @@ export default function Adventure() {
     );
   }
 
+  const currentPlace = state.local_places?.find((item) => item.id === place);
+  const headerTitle = battle
+    ? battle.monster
+    : !state.alive
+      ? "The Graveyard"
+      : screen === "forest"
+        ? "The Forest"
+        : screen === "travel"
+          ? "Travel the Realm"
+          : screen === "place" && currentPlace
+            ? currentPlace.name
+            : screen === "healer"
+              ? "The Healer"
+              : screen === "weapons"
+                ? "Weapon Shop"
+                : screen === "armor"
+                  ? "Armor Shop"
+                  : screen === "bank"
+                    ? "Academy Bank"
+                    : state.town_info.name;
+
   return (
     <main className="lotgd-shell">
       <section className="lotgd-main">
         <header className="lotgd-header">
           <div>
-            <p className="eyebrow">Arcana Academy</p>
-            <h1>{battle ? battle.monster : state.alive ? SCREEN_TITLES[screen] : "The Graveyard"}</h1>
+            <p className="eyebrow">{state.town_info.region}</p>
+            <h1>{headerTitle}</h1>
           </div>
           <div className="equipment-summary">
             <span>{state.weapon.name}</span>
             <span>{state.armor.name}</span>
+            {state.mount && <span>{state.mount_info.name}</span>}
           </div>
         </header>
 
@@ -212,7 +257,9 @@ export default function Adventure() {
           <section className="lotgd-panel battle-panel">
             <div className="battle-heading">
               <div>
-                <p className="eyebrow">{battle.kind === "forest" ? `${battle.hunt_mode} forest encounter` : battle.kind}</p>
+                <p className="eyebrow">
+                  {battle.kind === "forest" ? `${battle.hunt_mode} forest encounter` : battle.kind === "travel" ? "Road Ambush" : battle.kind}
+                </p>
                 <h3>{battle.monster} <small>Level {battle.monster_level}</small></h3>
               </div>
               <strong>{battle.monster_hp}/{battle.max_monster_hp} HP</strong>
@@ -224,7 +271,7 @@ export default function Adventure() {
               <button disabled={loading} onClick={() => fight(5)}>Fight 5 Rounds</button>
               <button disabled={loading} onClick={() => fight(10)}>Fight 10 Rounds</button>
               <button className="danger" disabled={loading} onClick={() => fight("end")}>Fight to the End</button>
-              {battle.kind === "forest" && <button disabled={loading} onClick={flee}>Run</button>}
+              {(battle.kind === "forest" || battle.kind === "travel") && <button disabled={loading} onClick={flee}>Run</button>}
             </div>
 
             <div className="special-moves">
@@ -248,14 +295,30 @@ export default function Adventure() {
         )}
 
         {state.alive && !battle && screen === "town" && (
-          <section className="lotgd-panel">
-            <h3>Academy Square</h3>
-            <p>The square is the center of your adventure. Prepare here, then spend your limited forest fights hunting for experience and gold.</p>
+          <section className={`lotgd-panel town-hub town-${state.town}`}>
+            <p className="eyebrow">{state.town_info.region}</p>
+            <h3>{state.town_info.name}</h3>
+            <p>{state.town_info.description}</p>
+            {state.town === "veilcross" && (
+              <p className="mystery-warning">There is no known road back to Veilcross. Once you leave, only aimless wandering can reveal it again.</p>
+            )}
+
             <div className="town-actions">
               <button disabled={loading || state.turns <= 0} onClick={() => goToScreen("forest")}>Enter the Forest</button>
+              <button disabled={loading} onClick={() => goToScreen("travel")}>Travel</button>
               {state.can_challenge_master && <button className="important" disabled={loading} onClick={challengeMaster}>Challenge Your Master</button>}
               {state.can_hunt_dragon && <button className="dragon" disabled={loading} onClick={huntDragon}>Hunt the Emerald Archdragon</button>}
             </div>
+
+            <div className="local-places-grid">
+              {(state.local_places || []).map((localPlace) => (
+                <button key={localPlace.id} disabled={loading} onClick={() => openLocalPlace(localPlace.id)}>
+                  <strong>{localPlace.name}</strong>
+                  <span>{localPlace.description}</span>
+                </button>
+              ))}
+            </div>
+
             {state.level < 15 && !state.can_challenge_master && (
               <p className="hint">Earn {Math.max(0, state.xp_required - state.xp)} more experience to challenge your master.</p>
             )}
@@ -274,9 +337,47 @@ export default function Adventure() {
           </section>
         )}
 
+        {state.alive && !battle && screen === "travel" && (
+          <section className="lotgd-panel travel-panel">
+            <p className="eyebrow">Roads from {state.town_info.name}</p>
+            <h3>Travel the Realm</h3>
+            <p>
+              You have <strong>{state.travels}/{state.max_travels}</strong> safe travels remaining this New Day.
+              When those are gone you may still travel, but the road can become dangerous.
+            </p>
+
+            <div className="travel-destinations">
+              {(state.travel_destinations || []).map((destination) => (
+                <button key={destination.id} disabled={loading} onClick={() => travel(destination.id)}>
+                  <strong>{destination.name}</strong>
+                  <span>{destination.region}</span>
+                  <small>{destination.description}</small>
+                </button>
+              ))}
+            </div>
+
+            <div className="wander-card">
+              <p className="eyebrow">No destination</p>
+              <h4>Wander Aimlessly</h4>
+              <p>Ignore the road signs and see where Arcana leads you. Most journeys reach a known settlement. Very rarely, the road leads somewhere that should not exist.</p>
+              <button className="mystery-travel" disabled={loading} onClick={() => travel(null, true)}>Wander Without a Destination</button>
+            </div>
+          </section>
+        )}
+
+        {state.alive && !battle && screen === "place" && (
+          <LocalPlace
+            state={state}
+            place={currentPlace}
+            loading={loading}
+            onAction={localAction}
+            goToScreen={goToScreen}
+          />
+        )}
+
         {state.alive && !battle && screen === "forest" && (
           <section className="lotgd-panel forest-panel">
-            <h3>The Forest</h3>
+            <h3>The Forest outside {state.town_info.name}</h3>
             <p>You have <strong>{state.turns}</strong> forest fights remaining this game day. Random forest events do not consume a fight.</p>
             <div className="hunt-options">
               <button disabled={loading || state.turns <= 0} onClick={() => hunt("normal")}>
@@ -323,7 +424,7 @@ export default function Adventure() {
 
         {state.alive && !battle && screen === "weapons" && (
           <Shop
-            title="Weapon Shop"
+            title={state.town === "stonevein" ? "The Deep Forge · Weapons" : "Weapon Shop"}
             items={shops.weapons}
             currentTier={state.weapon_level}
             gold={state.gold}
@@ -335,7 +436,7 @@ export default function Adventure() {
 
         {state.alive && !battle && screen === "armor" && (
           <Shop
-            title="Armor Shop"
+            title={state.town === "stonevein" ? "The Deep Forge · Armor" : "Armor Shop"}
             items={shops.armor}
             currentTier={state.armor_level}
             gold={state.gold}
@@ -347,10 +448,96 @@ export default function Adventure() {
 
         <section className="lotgd-log">
           <h3>Recent Events</h3>
-          {(log.length ? log : ["The forest waits beyond the Academy gates."]).map((line, index) => <p key={`${index}-${line}`}>{line}</p>)}
+          {(log.length ? log : ["The roads and forest wait beyond the town gates."]).map((line, index) => <p key={`${index}-${line}`}>{line}</p>)}
         </section>
       </section>
     </main>
+  );
+}
+
+function LocalPlace({ state, place, loading, onAction, goToScreen }) {
+  if (!place) {
+    return (
+      <section className="lotgd-panel">
+        <h3>Unknown Doorway</h3>
+        <p>Whatever you were looking for is not in this town.</p>
+        <button onClick={() => goToScreen("town")}>Return to Town</button>
+      </section>
+    );
+  }
+
+  const key = `${state.town}:${place.id}`;
+  const actions = {
+    "highfield:stable": [
+      { label: state.mount === "plains_courser" || state.mount === "mistwalker" ? `Current Mount: ${state.mount_info.name}` : "Buy Plains Courser · 400 Gold + 1 Gem", action: "buy_courser", disabled: Boolean(state.mount) },
+    ],
+    "highfield:bar": [
+      { label: "Hot Meal & Ale · 15 Gold", action: "bar_meal" },
+    ],
+    "highfield:pawn": [
+      { label: "Pawn Current Weapon", action: "pawn_weapon", disabled: state.weapon_level <= 0 },
+      { label: "Pawn Current Armor", action: "pawn_armor", disabled: state.armor_level <= 0 },
+    ],
+    "highfield:merchant": [
+      { label: "Buy Road Provisions · 50 Gold · +1 Safe Travel", action: "buy_ration" },
+    ],
+    "lunewater:jeweler": [
+      { label: state.jewelry ? `Wearing: ${state.jewelry_info.name}` : "Buy Moonwater Pendant · 250 Gold + 2 Gems", action: "buy_pendant", disabled: Boolean(state.jewelry) },
+    ],
+    "lunewater:river_market": [
+      { label: "Drink Moonwater Tonic · 25 Gold · Restore 4 Mana", action: "river_tonic" },
+    ],
+    "lunewater:waterside_inn": [
+      { label: "Rest at The Willow Inn · 20 Gold", action: "inn_rest" },
+    ],
+    "lunewater:alchemist": [
+      { label: "Silverleaf Mana Draught · 40 Gold · Restore 6 Mana", action: "alchemist_draught" },
+    ],
+    "stonevein:rune_hall": [
+      { label: `Etch Mana Rune · ${200 + state.mana_runes * 100} Gold + 1 Gem · +1 Max Mana`, action: "etch_mana_rune", disabled: state.mana_runes >= 10 },
+    ],
+    "stonevein:deep_forge": [
+      { label: "Browse Dwarven Weapons", screen: "weapons" },
+      { label: "Browse Dwarven Armor", screen: "armor" },
+    ],
+    "stonevein:gem_broker": [
+      { label: "Sell 1 Gem · Receive 175 Gold", action: "sell_gem", disabled: state.gems < 1 },
+    ],
+    "stonevein:dwarf_bar": [
+      { label: "Stonebarrel Stew & Ale · 20 Gold", action: "stonebarrel_meal" },
+    ],
+    "veilcross:whispering_well": [
+      { label: "Offer 1 Gem · Fully Restore Mana", action: "whispering_well", disabled: state.gems < 1 },
+    ],
+    "veilcross:curio_dealer": [
+      { label: "Trade 1 Gem for a Strange Offer", action: "curio_trade", disabled: state.gems < 1 },
+    ],
+    "veilcross:lanternless_inn": [
+      { label: "Sleep at the Lanternless Inn · 30 Gold · Full Heal", action: "mystery_rest" },
+    ],
+    "veilcross:lost_stable": [
+      { label: state.mount === "mistwalker" ? "The Mistwalker is already yours" : "Buy Mistwalker · 750 Gold + 3 Gems · +2 Safe Travels", action: "buy_mistwalker", disabled: state.mount === "mistwalker" },
+    ],
+  }[key] || [];
+
+  return (
+    <section className={`lotgd-panel local-place local-place-${state.town}`}>
+      <p className="eyebrow">{state.town_info.name}</p>
+      <h3>{place.name}</h3>
+      <p>{place.description}</p>
+      <div className="town-actions">
+        {actions.map((item) => (
+          <button
+            key={item.label}
+            disabled={loading || item.disabled}
+            onClick={() => item.screen ? goToScreen(item.screen) : onAction(item.action)}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+      <button className="text-link" disabled={loading} onClick={() => goToScreen("town")}>Return to {state.town_info.name}</button>
+    </section>
   );
 }
 
@@ -371,15 +558,8 @@ function Shop({ title, items, currentTier, gold, loading, priceFor, onBuy }) {
                 <span>Power +{item.power} · Tier {item.tier}</span>
               </div>
               <div className="shop-buy">
-                {current ? (
-                  <span>Equipped</span>
-                ) : upgrade ? (
-                  <button disabled={loading || price === null || gold < price} onClick={() => onBuy(item.tier)}>
-                    Buy · {price} gold
-                  </button>
-                ) : (
-                  <span>Lower tier</span>
-                )}
+                {current && <strong>Equipped</strong>}
+                {upgrade && <button disabled={loading || price === null || gold < price} onClick={() => onBuy(item.tier)}>Buy · {price} gold</button>}
               </div>
             </div>
           );
