@@ -28,8 +28,52 @@
 }
 
 .adventure-content-area {
+  width: min(1180px, calc(100% - 32px));
   min-height: 100vh;
+  margin: 24px auto 48px;
   padding: 0;
   border-left: 0;
   background: #0b0b0b;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  gap: 14px;
+}
+
+.adventure-content-area > .lotgd-shell {
+  display: contents;
+}
+
+.adventure-content-area .lotgd-sidebar {
+  grid-column: 1;
+  grid-row: 2;
+  width: auto;
+  margin: 0;
+}
+
+.adventure-content-area .lotgd-main {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: auto;
+  margin: 0;
+}
+
+@media (max-width: 850px) {
+  .adventure-content-area {
+    width: min(100% - 18px, 760px);
+    margin-top: 10px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .adventure-content-area .lotgd-sidebar {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .adventure-content-area .lotgd-main {
+    grid-column: 1;
+    grid-row: 3;
+  }
 }
