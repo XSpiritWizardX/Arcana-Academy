@@ -32,6 +32,20 @@ from app.game.forest_rules import (
     xp_after_death,
     xp_required,
 )
+from app.game.world_rules import (
+    ACADEMY_TOWN,
+    MYSTERY_TOWN,
+    STANDARD_TOWNS,
+    build_travel_enemy,
+    direct_destinations,
+    jewelry_info,
+    mount_info,
+    risky_travel_ambush,
+    town_info,
+    town_places,
+    travels_per_day,
+    wander_destination,
+)
 from app.models import AdventureState, db
 
 adventure_routes = Blueprint("adventure", __name__)
@@ -58,11 +72,16 @@ def apply_new_day_if_needed(state):
         state.bank_gold += interest
         log.append(f"The Academy Bank pays {interest} gold in interest.")
 
+    if state.town == MYSTERY_TOWN:
+        state.town = ACADEMY_TOWN
+        log.append("At New Day, Veilcross is gone. You awaken back at Arcana Academy with no road leading to where it stood.")
+
     state.game_day = current_day
     state.alive = True
     state.hp = state.max_hp
     state.mana = state.max_mana
     state.turns = forest_fights_per_day(state.dragon_fights)
+    state.travels = travels_per_day(state.mount)
     state.specialty_uses = BASE_SPECIALTY_USES
     state.location = "town"
     clear_encounter(state.user_id)
@@ -79,7 +98,9 @@ def get_or_create_state():
             max_mana=BASE_MANA,
             game_day=game_day_key(),
             turns=forest_fights_per_day(0),
+            travels=travels_per_day(""),
             specialty_uses=BASE_SPECIALTY_USES,
+            town=ACADEMY_TOWN,
         )
         db.session.add(state)
         db.session.commit()
@@ -111,11 +132,13 @@ def battle_payload(state):
         "max_monster_hp": monster["max_hp"],
         "player_hp": state.hp,
         "hunt_mode": monster.get("hunt_mode"),
+        "travel_destination": encounter.get("travel_destination"),
     }
 
 
 def state_payload(state):
     payload = state.to_dict()
+    current_town = town_info(state.town)
     payload.update(
         {
             "title": title_for_dragon_kills(state.dragon_kills),
@@ -125,11 +148,17 @@ def state_payload(state):
             and state.xp >= xp_required(state.level),
             "can_hunt_dragon": state.alive and state.level >= MAX_LEVEL,
             "max_forest_fights": forest_fights_per_day(state.dragon_fights),
+            "max_travels": travels_per_day(state.mount),
             "effective_attack": effective_attack(state.attack, state.weapon_level),
             "effective_defense": effective_defense(state.defense, state.armor_level),
             "weapon": weapon_for_tier(state.weapon_level),
             "armor": armor_for_tier(state.armor_level),
             "healing_cost": healing_cost(state.hp, state.max_hp, state.level),
+            "town_info": {"id": state.town, **current_town},
+            "local_places": town_places(state.town),
+            "travel_destinations": direct_destinations(state.town),
+            "mount_info": mount_info(state.mount),
+            "jewelry_info": jewelry_info(state.jewelry),
             "special_moves": [
                 {
                     "id": BASIC_SPECIAL_MOVE,
@@ -158,7 +187,7 @@ def response_payload(state, log=None):
 
 def town_action_error(state):
     if not state.alive:
-        return "You are dead. The town is beyond your reach until the next game day."
+        return "You are dead. The living world is beyond your reach until the next game day."
     if get_encounter(state.user_id):
         return "Finish or flee from your current battle first."
     return None
@@ -188,12 +217,17 @@ def award_forest_victory(state, encounter, log):
     state.xp += xp_gain
     log.append(f"You defeat {monster['name']} and gain {gold_gain} gold and {xp_gain} experience.")
 
-    gem_chance = 0.03 if monster.get("hunt_mode") == "slum" else 0.08 if monster.get("hunt_mode") == "thrill" else 0.05
+    base_gem_chance = 0.03 if monster.get("hunt_mode") == "slum" else 0.08 if monster.get("hunt_mode") == "thrill" else 0.05
+    gem_chance = base_gem_chance + jewelry_info(state.jewelry)["gem_bonus"]
     if random.random() < gem_chance:
         state.gems += 1
-        log.append("Something glitters in the leaves: you found a gem.")
+        log.append("Something glitters nearby: you found a gem.")
 
-    if encounter["damage_taken"] == 0 and monster.get("hunt_mode") != "slum":
+    if (
+        monster.get("kind") == "forest"
+        and encounter["damage_taken"] == 0
+        and monster.get("hunt_mode") != "slum"
+    ):
         state.turns += 1
         log.append("Flawless victory! You recover the forest fight you spent.")
 
@@ -237,8 +271,10 @@ def award_dragon_victory(state, log):
     state.gems = 0
     state.mana = state.max_mana
     state.turns = forest_fights_per_day(state.dragon_fights)
+    state.travels = travels_per_day(state.mount)
     state.specialty_uses = BASE_SPECIALTY_USES
     state.alive = True
+    state.town = ACADEMY_TOWN
     state.location = "town"
     state.game_day = game_day_key()
     clear_encounter(state.user_id)
@@ -253,6 +289,12 @@ def resolve_victory(state, encounter, log):
         award_master_victory(state, log)
     elif kind == "dragon":
         award_dragon_victory(state, log)
+    elif kind == "travel":
+        destination = encounter.get("travel_destination", state.town)
+        award_forest_victory(state, encounter, log)
+        state.town = destination
+        state.location = "town"
+        log.append(f"With the road clear, you continue on to {town_info(destination)['name']}.")
     else:
         award_forest_victory(state, encounter, log)
 
@@ -279,10 +321,239 @@ def maybe_forest_event(state, hunt_mode):
     return ["You discover a raw arcane gem beneath an ancient root. No forest fight is spent."]
 
 
+def complete_travel(state, destination, log):
+    previous = town_info(state.town)["name"]
+    state.town = destination
+    state.location = "town"
+    if destination == MYSTERY_TOWN:
+        log.append(
+            "The road folds strangely around you. Through a curtain of pale mist, a town appears where no town should exist: Veilcross."
+        )
+    else:
+        log.append(f"You travel from {previous} to {town_info(destination)['name']}.")
+
+
+def start_travel(state, destination, log):
+    safe_travel = state.travels > 0
+    if safe_travel:
+        state.travels -= 1
+        complete_travel(state, destination, log)
+        return False
+
+    log.append("You have used all of your safe travels for this New Day. You continue anyway, knowing the road is dangerous.")
+    if not risky_travel_ambush():
+        complete_travel(state, destination, log)
+        return False
+
+    monster = build_travel_enemy(state.level)
+    state.location = "travel"
+    ENCOUNTERS[state.user_id] = {
+        "monster": monster,
+        "monster_hp": monster["hp"],
+        "damage_taken": 0,
+        "travel_destination": destination,
+    }
+    log.append(f"Before you reach your destination, {monster['name']} blocks the road!")
+    return True
+
+
 @adventure_routes.route("/state", methods=["GET"])
 @login_required
 def get_state():
     state, log = get_or_create_state()
+    return jsonify(response_payload(state, log))
+
+
+@adventure_routes.route("/travel", methods=["POST"])
+@login_required
+def travel():
+    state, new_day_log = get_or_create_state()
+    error = town_action_error(state)
+    if error:
+        return jsonify({"error": error}), 400
+
+    data = request.get_json(silent=True) or {}
+    mode = data.get("mode", "direct")
+    if mode == "wander":
+        destination = wander_destination(state.town)
+        log = list(new_day_log)
+        log.append("You leave the road signs behind and wander with no destination in mind...")
+    else:
+        destination = data.get("destination")
+        if destination not in STANDARD_TOWNS:
+            return jsonify({"error": "That destination cannot be reached by a known road."}), 400
+        if destination == state.town:
+            return jsonify({"error": "You are already there."}), 400
+        log = list(new_day_log)
+
+    started_battle = start_travel(state, destination, log)
+    db.session.commit()
+    status = 201 if started_battle else 200
+    return jsonify(response_payload(state, log)), status
+
+
+@adventure_routes.route("/local/action", methods=["POST"])
+@login_required
+def local_action():
+    state, new_day_log = get_or_create_state()
+    error = town_action_error(state)
+    if error:
+        return jsonify({"error": error}), 400
+
+    data = request.get_json(silent=True) or {}
+    action = data.get("action")
+    log = list(new_day_log)
+
+    if state.town == "highfield" and action == "buy_courser":
+        if state.mount in {"plains_courser", "mistwalker"}:
+            return jsonify({"error": "You already own a mount at least this capable."}), 400
+        if state.gold < 400 or state.gems < 1:
+            return jsonify({"error": "A Plains Courser costs 400 gold and 1 gem."}), 400
+        state.gold -= 400
+        state.gems -= 1
+        state.mount = "plains_courser"
+        state.travels += 1
+        log.append("Highfield Stable sells you a Plains Courser. You gain +1 safe travel every New Day.")
+
+    elif state.town == "highfield" and action == "bar_meal":
+        if state.gold < 15:
+            return jsonify({"error": "A hot meal and drink at The Copper Cup costs 15 gold."}), 400
+        state.gold -= 15
+        healed = min(state.max_hp - state.hp, 4)
+        restored = min(state.max_mana - state.mana, 2)
+        state.hp += healed
+        state.mana += restored
+        log.append(f"The Copper Cup restores {healed} HP and {restored} Mana for 15 gold.")
+
+    elif state.town == "highfield" and action in {"pawn_weapon", "pawn_armor"}:
+        is_weapon = action == "pawn_weapon"
+        tier = state.weapon_level if is_weapon else state.armor_level
+        catalog = WEAPONS if is_weapon else ARMORS
+        if tier <= 0:
+            return jsonify({"error": f"You have no upgraded {'weapon' if is_weapon else 'armor'} to pawn."}), 400
+        value = max(1, catalog[tier]["cost"] // 2)
+        item_name = catalog[tier]["name"]
+        state.gold += value
+        if is_weapon:
+            state.weapon_level = 0
+        else:
+            state.armor_level = 0
+        log.append(f"The Highfield pawn broker gives you {value} gold for {item_name}.")
+
+    elif state.town == "highfield" and action == "buy_ration":
+        if state.gold < 50:
+            return jsonify({"error": "Road provisions cost 50 gold."}), 400
+        if state.travels >= travels_per_day(state.mount) + 2:
+            return jsonify({"error": "You cannot carry any more road provisions today."}), 400
+        state.gold -= 50
+        state.travels += 1
+        log.append("The Plains Merchant packs you fresh road provisions. You gain 1 additional safe travel today.")
+
+    elif state.town == "lunewater" and action == "buy_pendant":
+        if state.jewelry == "moonwater_pendant":
+            return jsonify({"error": "You already wear a Moonwater Pendant."}), 400
+        if state.gold < 250 or state.gems < 2:
+            return jsonify({"error": "The Moonwater Pendant costs 250 gold and 2 gems."}), 400
+        state.gold -= 250
+        state.gems -= 2
+        state.jewelry = "moonwater_pendant"
+        log.append("The Moonstone Jeweler fits you with a Moonwater Pendant. Your chance to find gems after victories increases.")
+
+    elif state.town == "lunewater" and action == "river_tonic":
+        if state.gold < 25:
+            return jsonify({"error": "Moonwater tonic costs 25 gold."}), 400
+        state.gold -= 25
+        restored = min(state.max_mana - state.mana, 4)
+        state.mana += restored
+        log.append(f"A cool Moonwater tonic restores {restored} Mana.")
+
+    elif state.town == "lunewater" and action == "inn_rest":
+        if state.gold < 20:
+            return jsonify({"error": "A room at The Willow Inn costs 20 gold."}), 400
+        state.gold -= 20
+        healed = min(state.max_hp - state.hp, max(3, state.max_hp // 3))
+        state.hp += healed
+        log.append(f"A quiet rest at The Willow Inn restores {healed} HP.")
+
+    elif state.town == "lunewater" and action == "alchemist_draught":
+        if state.gold < 40:
+            return jsonify({"error": "Silverleaf Mana Draught costs 40 gold."}), 400
+        state.gold -= 40
+        restored = min(state.max_mana - state.mana, 6)
+        state.mana += restored
+        log.append(f"Silverleaf Mana Draught restores {restored} Mana.")
+
+    elif state.town == "stonevein" and action == "etch_mana_rune":
+        if state.mana_runes >= 10:
+            return jsonify({"error": "The Rune Hall says your mortal frame cannot hold another Mana rune."}), 400
+        cost = 200 + state.mana_runes * 100
+        if state.gold < cost or state.gems < 1:
+            return jsonify({"error": f"Your next Mana rune costs {cost} gold and 1 gem."}), 400
+        state.gold -= cost
+        state.gems -= 1
+        state.mana_runes += 1
+        state.max_mana += 1
+        state.mana += 1
+        log.append(f"The Rune Hall etches a permanent Mana rune into your training focus. Maximum Mana rises to {state.max_mana}.")
+
+    elif state.town == "stonevein" and action == "sell_gem":
+        if state.gems < 1:
+            return jsonify({"error": "You have no gem to sell."}), 400
+        state.gems -= 1
+        state.gold += 175
+        log.append("The Stonevein Gem Broker pays you 175 gold for a raw gem.")
+
+    elif state.town == "stonevein" and action == "stonebarrel_meal":
+        if state.gold < 20:
+            return jsonify({"error": "Stonebarrel stew and ale costs 20 gold."}), 400
+        state.gold -= 20
+        healed = min(state.max_hp - state.hp, 5)
+        restored = min(state.max_mana - state.mana, 3)
+        state.hp += healed
+        state.mana += restored
+        log.append(f"Stonebarrel fare restores {healed} HP and {restored} Mana.")
+
+    elif state.town == MYSTERY_TOWN and action == "whispering_well":
+        if state.gems < 1:
+            return jsonify({"error": "The Whispering Well accepts only a gem."}), 400
+        state.gems -= 1
+        restored = state.max_mana - state.mana
+        state.mana = state.max_mana
+        log.append(f"The gem disappears before it reaches the water. Your Mana is fully restored (+{restored}).")
+
+    elif state.town == MYSTERY_TOWN and action == "curio_trade":
+        if state.gems < 1:
+            return jsonify({"error": "The Curio Dealer wants one gem."}), 400
+        state.gems -= 1
+        gold = random.randint(125, 325)
+        state.gold += gold
+        log.append(f"The Curio Dealer weighs your gem, smiles without explanation, and gives you {gold} gold.")
+
+    elif state.town == MYSTERY_TOWN and action == "mystery_rest":
+        cost = 30
+        if state.gold < cost:
+            return jsonify({"error": "The Lanternless Inn asks for 30 gold."}), 400
+        state.gold -= cost
+        state.hp = state.max_hp
+        log.append("You sleep without remembering closing your eyes. You awaken fully healed.")
+
+    elif state.town == MYSTERY_TOWN and action == "buy_mistwalker":
+        if state.mount == "mistwalker":
+            return jsonify({"error": "The Mistwalker already follows you."}), 400
+        if state.gold < 750 or state.gems < 3:
+            return jsonify({"error": "The Mistwalker costs 750 gold and 3 gems."}), 400
+        previous_bonus = mount_info(state.mount)["travel_bonus"]
+        state.gold -= 750
+        state.gems -= 3
+        state.mount = "mistwalker"
+        new_bonus = mount_info(state.mount)["travel_bonus"]
+        state.travels += max(0, new_bonus - previous_bonus)
+        log.append("A pale Mistwalker chooses you at the Lost Stable. It grants +2 safe travels every New Day.")
+
+    else:
+        return jsonify({"error": "That service is not available in this town."}), 400
+
+    db.session.commit()
     return jsonify(response_payload(state, log))
 
 
@@ -381,13 +652,14 @@ def take_action():
     log = list(new_day_log)
 
     if action == "run":
-        if monster["kind"] != "forest":
+        if monster["kind"] not in {"forest", "travel"}:
             return jsonify({"error": "You cannot flee this challenge."}), 400
         if random.random() < 0.65:
             clear_encounter(state.user_id)
             state.location = "town"
             db.session.commit()
-            return jsonify(response_payload(state, log + ["You escape back toward town."]))
+            message = "You escape back toward town." if monster["kind"] == "forest" else "You abandon the dangerous road and retreat to the town you came from."
+            return jsonify(response_payload(state, log + [message]))
 
         damage = roll_enemy_damage(monster["attack"], state.defense, state.armor_level)
         state.hp -= damage
