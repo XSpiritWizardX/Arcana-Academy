@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 
 from app.game.forest_rules import (
     ARMORS,
+    BASE_MANA,
+    BASIC_SPECIAL_COST,
     WEAPONS,
     armor_for_tier,
     build_dragon,
@@ -16,6 +18,8 @@ from app.game.forest_rules import (
     game_day_key,
     healing_cost,
     purchase_price,
+    roll_player_damage,
+    roll_special_damage,
     title_for_dragon_kills,
     weapon_for_tier,
     xp_after_death,
@@ -77,6 +81,17 @@ class ForestProgressionRulesTests(unittest.TestCase):
         self.assertEqual(effective_attack(5, 0), 5)
         self.assertEqual(effective_attack(5, 3), 5 + weapon_for_tier(3)["power"])
         self.assertEqual(effective_defense(2, 4), 2 + armor_for_tier(4)["power"])
+
+    def test_starter_mana_and_special_cost(self):
+        self.assertEqual(BASE_MANA, 10)
+        self.assertEqual(BASIC_SPECIAL_COST, 5)
+
+    def test_arcane_strike_doubles_one_round_damage(self):
+        normal_rng = random.Random(7)
+        special_rng = random.Random(7)
+        normal = roll_player_damage(8, 2, 4, normal_rng)
+        special = roll_special_damage(8, 2, 4, special_rng)
+        self.assertEqual(special, normal * 2)
 
     def test_dragon_titles_are_persistent_progression(self):
         self.assertEqual(title_for_dragon_kills(0), "Academy Initiate")
