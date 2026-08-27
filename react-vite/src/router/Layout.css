@@ -31,7 +31,7 @@
   box-shadow: inset 0 0 0 1px rgba(186, 158, 87, 0.06);
 }
 
-.arcana-app-shell:not(.adventure-mode) > .adventure-portal-bar {
+.arcana-app-shell > .adventure-portal-bar {
   position: sticky;
   top: 16px;
   max-height: calc(100vh - 32px);
@@ -48,6 +48,16 @@
   grid-row: 2;
   width: auto;
   margin: 0;
+  padding: 10px;
+  position: static;
+}
+
+.adventure-content-area .lotgd-sidebar > :not(.lotgd-nav) {
+  display: none;
+}
+
+.adventure-content-area .lotgd-sidebar .lotgd-nav {
+  margin-top: 0;
 }
 
 .adventure-content-area .lotgd-main {
@@ -74,6 +84,9 @@
 
   .arcana-app-shell > .adventure-portal-bar {
     grid-row: 1;
+    position: static;
+    max-height: none;
+    overflow: visible;
   }
 
   .standard-content-area,
@@ -83,12 +96,6 @@
 
   .adventure-content-area .lotgd-main {
     grid-row: 3;
-  }
-
-  .arcana-app-shell:not(.adventure-mode) > .adventure-portal-bar {
-    position: static;
-    max-height: none;
-    overflow: visible;
   }
 }
 
