@@ -5,6 +5,10 @@ from datetime import datetime, timezone
 GAME_DAY_SECONDS = 6 * 60 * 60  # four Arcana game days per real day
 BASE_FOREST_FIGHTS = 10
 BASE_SPECIALTY_USES = 5
+BASE_MANA = 10
+BASIC_SPECIAL_MOVE = "arcane_strike"
+BASIC_SPECIAL_NAME = "Arcane Strike"
+BASIC_SPECIAL_COST = 5
 BANK_INTEREST_RATE = 0.05
 MAX_LEVEL = 15
 
@@ -222,6 +226,11 @@ def roll_player_damage(base_attack, weapon_tier, target_defense, rng=None):
     rng = rng or random
     raw = effective_attack(base_attack, weapon_tier) + rng.randint(0, 3)
     return max(1, raw - int(target_defense))
+
+
+def roll_special_damage(base_attack, weapon_tier, target_defense, rng=None):
+    normal_damage = roll_player_damage(base_attack, weapon_tier, target_defense, rng)
+    return max(2, normal_damage * 2)
 
 
 def roll_enemy_damage(enemy_attack, base_defense, armor_tier, rng=None):

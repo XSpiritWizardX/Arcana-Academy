@@ -5,8 +5,12 @@ from flask_login import current_user, login_required
 
 from app.game.forest_rules import (
     ARMORS,
-    BASE_SPECIALTY_USES,
     BANK_INTEREST_RATE,
+    BASE_MANA,
+    BASE_SPECIALTY_USES,
+    BASIC_SPECIAL_COST,
+    BASIC_SPECIAL_MOVE,
+    BASIC_SPECIAL_NAME,
     MAX_LEVEL,
     WEAPONS,
     armor_for_tier,
@@ -22,6 +26,7 @@ from app.game.forest_rules import (
     purchase_price,
     roll_enemy_damage,
     roll_player_damage,
+    roll_special_damage,
     title_for_dragon_kills,
     weapon_for_tier,
     xp_after_death,
@@ -56,6 +61,7 @@ def apply_new_day_if_needed(state):
     state.game_day = current_day
     state.alive = True
     state.hp = state.max_hp
+    state.mana = state.max_mana
     state.turns = forest_fights_per_day(state.dragon_fights)
     state.specialty_uses = BASE_SPECIALTY_USES
     state.location = "town"
@@ -69,6 +75,8 @@ def get_or_create_state():
         state = AdventureState(
             user_id=current_user.id,
             gold=100,
+            mana=BASE_MANA,
+            max_mana=BASE_MANA,
             game_day=game_day_key(),
             turns=forest_fights_per_day(0),
             specialty_uses=BASE_SPECIALTY_USES,
@@ -122,6 +130,15 @@ def state_payload(state):
             "weapon": weapon_for_tier(state.weapon_level),
             "armor": armor_for_tier(state.armor_level),
             "healing_cost": healing_cost(state.hp, state.max_hp, state.level),
+            "special_moves": [
+                {
+                    "id": BASIC_SPECIAL_MOVE,
+                    "name": BASIC_SPECIAL_NAME,
+                    "mana_cost": BASIC_SPECIAL_COST,
+                    "rounds": 1,
+                    "description": "A focused arcane attack that deals double normal damage for one round.",
+                }
+            ],
         }
     )
     return payload
@@ -218,6 +235,7 @@ def award_dragon_victory(state, log):
     state.gold = 0
     state.bank_gold = 0
     state.gems = 0
+    state.mana = state.max_mana
     state.turns = forest_fights_per_day(state.dragon_fights)
     state.specialty_uses = BASE_SPECIALTY_USES
     state.alive = True
@@ -377,6 +395,35 @@ def take_action():
         log.append(f"You fail to escape. {monster['name']} hits you for {damage} damage.")
         if state.hp <= 0:
             defeat_player(state, log)
+        db.session.commit()
+        return jsonify(response_payload(state, log))
+
+    if action == "special":
+        move = data.get("move")
+        if move != BASIC_SPECIAL_MOVE:
+            return jsonify({"error": "That special skill is not available."}), 400
+        if state.mana < BASIC_SPECIAL_COST:
+            return jsonify({"error": f"{BASIC_SPECIAL_NAME} requires {BASIC_SPECIAL_COST} mana."}), 400
+
+        state.mana -= BASIC_SPECIAL_COST
+        damage = roll_special_damage(state.attack, state.weapon_level, monster["defense"])
+        encounter["monster_hp"] -= damage
+        log.append(
+            f"You unleash {BASIC_SPECIAL_NAME} for {damage} damage. "
+            f"{BASIC_SPECIAL_COST} mana is consumed."
+        )
+
+        if encounter["monster_hp"] <= 0:
+            encounter["monster_hp"] = 0
+            resolve_victory(state, encounter, log)
+        else:
+            counter = roll_enemy_damage(monster["attack"], state.defense, state.armor_level)
+            state.hp -= counter
+            encounter["damage_taken"] += counter
+            log.append(f"{monster['name']} hits you for {counter} damage.")
+            if state.hp <= 0:
+                defeat_player(state, log)
+
         db.session.commit()
         return jsonify(response_payload(state, log))
 

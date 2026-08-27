@@ -14,6 +14,8 @@ class AdventureState(db.Model):
 
     hp = db.Column(db.Integer, nullable=False, default=20)
     max_hp = db.Column(db.Integer, nullable=False, default=20)
+    mana = db.Column(db.Integer, nullable=False, default=10)
+    max_mana = db.Column(db.Integer, nullable=False, default=10)
     attack = db.Column(db.Integer, nullable=False, default=5)
     defense = db.Column(db.Integer, nullable=False, default=2)
     gold = db.Column(db.Integer, nullable=False, default=0)
@@ -24,6 +26,7 @@ class AdventureState(db.Model):
 
     # `turns` is the number of forest fights remaining in the current game day.
     turns = db.Column(db.Integer, nullable=False, default=10)
+    # Legacy specialty counter retained for backwards compatibility while mana powers skills.
     specialty_uses = db.Column(db.Integer, nullable=False, default=5)
     game_day = db.Column(db.Integer, nullable=False, default=0)
     alive = db.Column(db.Boolean, nullable=False, default=True)
@@ -48,6 +51,8 @@ class AdventureState(db.Model):
             "user_id": self.user_id,
             "hp": self.hp,
             "max_hp": self.max_hp,
+            "mana": self.mana,
+            "max_mana": self.max_mana,
             "attack": self.attack,
             "defense": self.defense,
             "gold": self.gold,
