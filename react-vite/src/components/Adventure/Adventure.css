@@ -17,6 +17,12 @@
   gap: 12px;
 }
 
+.adventure-subtitle {
+  margin: 4px 0 0;
+  color: #a9a9a9;
+  font-size: 13px;
+}
+
 .adventure-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -28,6 +34,13 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+.adventure-actions button:disabled,
+.battle-buttons button:disabled,
+.train-buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .area-select {
@@ -55,6 +68,7 @@
   border-color: #5ac8fa;
   box-shadow: 0 0 8px #5ac8fa55;
 }
+
 .adventure-error {
   color: #ff6b6b;
 }
@@ -66,6 +80,10 @@
   padding: 10px;
   min-height: 120px;
   font-size: 13px;
+}
+
+.adventure-log p {
+  margin: 0 0 7px;
 }
 
 .battle-actions {
@@ -80,6 +98,48 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.enemy-intent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background: #151515;
+}
+
+.enemy-intent span {
+  font-size: 14px;
+}
+
+.enemy-intent small {
+  color: #bdbdbd;
+}
+
+.intent-heavy {
+  border-color: #d98c35;
+  box-shadow: inset 3px 0 0 #d98c35;
+}
+
+.intent-guard {
+  border-color: #5ac8fa;
+  box-shadow: inset 3px 0 0 #5ac8fa;
+}
+
+.intent-strike {
+  border-color: #d95b5b;
+  box-shadow: inset 3px 0 0 #d95b5b;
+}
+
+.combat-help {
+  display: grid;
+  gap: 4px;
+  margin-top: 10px;
+  color: #bdbdbd;
+  font-size: 12px;
 }
 
 .adventure-scene {
@@ -169,4 +229,33 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .adventure-card {
+    margin-left: 0;
+    padding: 12px;
+  }
+
+  .adventure-header {
+    flex-direction: column;
+  }
+
+  .adventure-stats {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .adventure-scene {
+    height: 340px;
+  }
+
+  .scene-sprite {
+    width: 110px;
+    height: 110px;
+  }
+
+  .hp-bar {
+    width: 46%;
+  }
 }
