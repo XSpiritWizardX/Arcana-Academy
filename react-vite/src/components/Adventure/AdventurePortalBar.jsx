@@ -1,10 +1,14 @@
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkLogout } from "../../redux/session";
+import { csrfFetch } from "../../redux/csrf";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
 import "./AdventurePortalBar.css";
+
+const GAME_DAY_MS = 6 * 60 * 60 * 1000;
 
 const COMMUNITY_LINKS = [
   { to: "/", label: "Town" },
@@ -22,19 +26,125 @@ const USER_LINKS = [
   { to: "/swords", label: "Your Swords" },
 ];
 
+function formatCountdown(milliseconds) {
+  const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
+}
+
 export default function AdventurePortalBar() {
   const user = useSelector((store) => store.session.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const initial = user?.username?.[0]?.toUpperCase() || "?";
+  const [advState, setAdvState] = useState(null);
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    if (!user) {
+      setAdvState(null);
+      return undefined;
+    }
+
+    let cancelled = false;
+
+    const loadAdventureState = async () => {
+      try {
+        const response = await csrfFetch("/api/adventure/state");
+        const data = await response.json();
+        if (!cancelled && data.state) setAdvState(data.state);
+      } catch {
+        if (!cancelled) setAdvState(null);
+      }
+    };
+
+    const receiveAdventureState = (event) => {
+      if (event.detail) setAdvState(event.detail);
+    };
+
+    loadAdventureState();
+    const poller = window.setInterval(loadAdventureState, 4000);
+    window.addEventListener("arcana:adventure-state", receiveAdventureState);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(poller);
+      window.removeEventListener("arcana:adventure-state", receiveAdventureState);
+    };
+  }, [user]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   const logout = async () => {
     await dispatch(thunkLogout());
     navigate("/");
   };
 
+  const hpPercent = advState
+    ? Math.max(0, Math.min(100, (advState.hp / Math.max(1, advState.max_hp)) * 100))
+    : 0;
+  const xpPercent = advState
+    ? Math.min(100, (advState.xp / Math.max(1, advState.xp_required)) * 100)
+    : 0;
+  const nextNewDayAt = advState ? (Number(advState.game_day) + 1) * GAME_DAY_MS : 0;
+  const remainingUntilNewDay = advState ? Math.max(0, nextNewDayAt - now) : 0;
+  const newDayReady = Boolean(advState) && remainingUntilNewDay <= 0;
+  const nextNewDayLocalTime = advState
+    ? new Date(nextNewDayAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })
+    : "";
+
   return (
     <aside className="adventure-portal-bar" aria-label="Arcana Academy navigation">
+      {user && advState && (
+        <section className="adventure-portal-stats" aria-label="Adventure character stats">
+          <div className="adventure-portal-stats-heading">
+            <span className="adventure-portal-label">Character</span>
+            <strong>{advState.title}</strong>
+          </div>
+
+          <div className="adventure-portal-stat"><span>Level</span><strong>{advState.level}</strong></div>
+          <div className="adventure-portal-stat"><span>HP</span><strong>{advState.hp}/{advState.max_hp}</strong></div>
+          <div className="adventure-portal-meter"><div style={{ width: `${hpPercent}%` }} /></div>
+          <div className="adventure-portal-stat"><span>Forest Fights</span><strong>{advState.turns}/{advState.max_forest_fights}</strong></div>
+
+          <div className={`adventure-portal-new-day${newDayReady ? " ready" : ""}`} aria-live="polite">
+            <span>Next New Day</span>
+            <strong>{newDayReady ? "NEW DAY READY" : formatCountdown(remainingUntilNewDay)}</strong>
+            <small>{newDayReady ? "Next action refreshes turns." : `Reset at ${nextNewDayLocalTime}`}</small>
+          </div>
+
+          <div className="adventure-portal-stat"><span>Gold</span><strong>{advState.gold}</strong></div>
+          <div className="adventure-portal-stat"><span>Bank</span><strong>{advState.bank_gold}</strong></div>
+          <div className="adventure-portal-stat"><span>Gems</span><strong>{advState.gems}</strong></div>
+          <div className="adventure-portal-stat"><span>Attack</span><strong>{advState.effective_attack}</strong></div>
+          <div className="adventure-portal-stat"><span>Defense</span><strong>{advState.effective_defense}</strong></div>
+          <div className="adventure-portal-stat"><span>Dragon Kills</span><strong>{advState.dragon_kills}</strong></div>
+          <div className="adventure-portal-stat"><span>Dragon Points</span><strong>{advState.dragon_points}</strong></div>
+
+          <div className="adventure-portal-xp">
+            <span>Experience {advState.xp}/{advState.xp_required}</span>
+            <div className="adventure-portal-meter xp"><div style={{ width: `${xpPercent}%` }} /></div>
+          </div>
+
+          <div className="adventure-portal-equipment">
+            <span>{advState.weapon?.name || "No weapon"}</span>
+            <span>{advState.armor?.name || "No armor"}</span>
+          </div>
+        </section>
+      )}
+
+      {user && !advState && (
+        <section className="adventure-portal-stats adventure-portal-stats-loading">
+          <span className="adventure-portal-label">Character</span>
+          <strong>Loading adventure stats…</strong>
+        </section>
+      )}
+
       <div className="adventure-portal-brand">
         <div className="adventure-portal-mark">AA</div>
         <div>
