@@ -19,6 +19,8 @@ RUN pip install psycopg2
 
 COPY . .
 
+RUN cd react-vite && npm ci --no-audit --no-fund && npm run build
+
 RUN flask db upgrade
 RUN flask seed all
 CMD gunicorn app:app
