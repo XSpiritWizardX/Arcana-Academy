@@ -388,6 +388,106 @@
   white-space: nowrap;
 }
 
+.local-places-grid,
+.travel-destinations {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.local-places-grid button,
+.travel-destinations button {
+  min-height: 108px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  gap: 6px;
+}
+
+.local-places-grid button strong,
+.travel-destinations button strong {
+  color: #f5f5fa;
+  font-size: 15px;
+}
+
+.local-places-grid button span,
+.travel-destinations button span,
+.travel-destinations button small {
+  color: #a8a8b1;
+  line-height: 1.4;
+}
+
+.travel-destinations button span {
+  color: #bcb0ff;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.travel-destinations button small {
+  font-size: 12px;
+}
+
+.wander-card {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px dashed #6a5f83;
+  background: linear-gradient(180deg, rgba(71, 55, 96, 0.18), rgba(26, 23, 32, 0.4));
+}
+
+.wander-card h4 {
+  margin-top: 4px;
+}
+
+button.mystery-travel {
+  border-color: #8270aa;
+  background: rgba(113, 89, 153, 0.22);
+  color: #eee8ff;
+}
+
+.mystery-warning {
+  padding: 10px 12px;
+  border-left: 3px solid #8e7cff;
+  background: rgba(142, 124, 255, 0.08);
+  color: #d9d3ff !important;
+}
+
+.town-highfield {
+  border-color: #706853;
+}
+
+.town-lunewater {
+  border-color: #536d79;
+  background: linear-gradient(180deg, rgba(29, 40, 47, 0.99), rgba(22, 27, 31, 0.99));
+}
+
+.town-stonevein {
+  border-color: #69636a;
+  background: linear-gradient(180deg, rgba(39, 37, 39, 0.99), rgba(25, 24, 25, 0.99));
+}
+
+.town-veilcross,
+.local-place-veilcross {
+  border-color: #75648d;
+  background: linear-gradient(180deg, rgba(41, 32, 52, 0.99), rgba(22, 18, 28, 0.99));
+  box-shadow: inset 0 0 34px rgba(142, 124, 255, 0.055);
+}
+
+.local-place-lunewater {
+  border-color: #536d79;
+}
+
+.local-place-stonevein {
+  border-color: #69636a;
+}
+
+.local-place-highfield {
+  border-color: #706853;
+}
+
 .lotgd-log {
   max-height: 320px;
   overflow: auto;
@@ -425,7 +525,9 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .hunt-options {
+  .hunt-options,
+  .local-places-grid,
+  .travel-destinations {
     grid-template-columns: 1fr;
   }
 
