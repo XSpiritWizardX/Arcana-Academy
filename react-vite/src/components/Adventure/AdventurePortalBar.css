@@ -11,6 +11,123 @@
   color: #e7e1c7;
 }
 
+.adventure-portal-stats {
+  margin: -16px -16px 16px;
+  padding: 16px;
+  border-bottom: 1px solid #596d45;
+  background: linear-gradient(180deg, rgba(20, 35, 21, 0.99), rgba(11, 21, 13, 0.99));
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+}
+
+.adventure-portal-stats-heading {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.adventure-portal-stats-heading strong,
+.adventure-portal-stats-loading strong {
+  color: #e0c56f;
+  font-size: 16px;
+}
+
+.adventure-portal-stat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 0;
+  color: #aebaa9;
+  font-size: 11px;
+}
+
+.adventure-portal-stat strong {
+  color: #f0e9cf;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.adventure-portal-meter {
+  height: 5px;
+  margin: 2px 0 7px;
+  overflow: hidden;
+  border: 1px solid #344432;
+  background: #09100a;
+}
+
+.adventure-portal-meter > div {
+  height: 100%;
+  background: linear-gradient(90deg, #476844, #7ca06b);
+}
+
+.adventure-portal-meter.xp > div {
+  background: linear-gradient(90deg, #75632e, #c6a94f);
+}
+
+.adventure-portal-new-day {
+  display: grid;
+  gap: 3px;
+  margin: 9px 0;
+  padding: 9px 10px;
+  border: 1px solid #596d45;
+  background: rgba(7, 14, 9, 0.7);
+}
+
+.adventure-portal-new-day > span {
+  color: #879b82;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.adventure-portal-new-day strong {
+  color: #e8d58d;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.adventure-portal-new-day small {
+  color: #8ea088;
+  font-size: 10px;
+}
+
+.adventure-portal-new-day.ready {
+  border-color: #b99c50;
+  background: rgba(185, 156, 80, 0.09);
+}
+
+.adventure-portal-xp {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+  color: #aebaa9;
+  font-size: 10px;
+}
+
+.adventure-portal-xp .adventure-portal-meter {
+  margin: 0;
+}
+
+.adventure-portal-equipment {
+  display: grid;
+  gap: 3px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid #344432;
+}
+
+.adventure-portal-equipment span {
+  color: #c9d3c5;
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
+.adventure-portal-stats-loading {
+  display: grid;
+  gap: 5px;
+}
+
 .adventure-portal-brand {
   display: flex;
   align-items: center;
@@ -122,11 +239,7 @@
   color: #f3de94;
 }
 
-.adventure-portal-account-actions {
-  padding-top: 12px;
-  border-top: 1px solid #344432;
-}
-
+.adventure-portal-account-actions,
 .adventure-portal-auth {
   padding-top: 12px;
   border-top: 1px solid #344432;
@@ -136,6 +249,10 @@
   .adventure-portal-bar {
     grid-column: 1;
     grid-row: 1;
+  }
+
+  .adventure-portal-stats {
+    margin: -16px -16px 16px;
   }
 
   .adventure-portal-group,
@@ -150,6 +267,11 @@
 
 @media (max-width: 520px) {
   .adventure-portal-bar {
+    padding: 12px;
+  }
+
+  .adventure-portal-stats {
+    margin: -12px -12px 14px;
     padding: 12px;
   }
 
