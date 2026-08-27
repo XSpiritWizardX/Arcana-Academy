@@ -22,3 +22,14 @@
   padding: 18px 60px;
   box-sizing: border-box;
 }
+
+.adventure-layout-container {
+  margin-left: 0;
+}
+
+.adventure-content-area {
+  min-height: 100vh;
+  padding: 0;
+  border-left: 0;
+  background: #0b0b0b;
+}
