@@ -1,40 +1,41 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { csrfFetch } from "../../redux/csrf";
 import "./Adventure.css";
 
-const GAME_DAY_MS = 6 * 60 * 60 * 1000;
+const ADVENTURE_SCREENS = new Set(["town", "forest", "healer", "weapons", "armor", "bank"]);
 
-const NAV_ITEMS = [
-  ["town", "Academy Square"],
-  ["forest", "The Forest"],
-  ["healer", "Healer"],
-  ["weapons", "Weapon Shop"],
-  ["armor", "Armor Shop"],
-  ["bank", "Academy Bank"],
-];
-
-function formatCountdown(milliseconds) {
-  const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
-}
+const SCREEN_TITLES = {
+  town: "Academy Square",
+  forest: "The Forest",
+  healer: "The Healer",
+  weapons: "Weapon Shop",
+  armor: "Armor Shop",
+  bank: "Academy Bank",
+};
 
 export default function Adventure() {
   const user = useSelector((store) => store.session.user);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [state, setState] = useState(null);
   const [battle, setBattle] = useState(null);
   const [shops, setShops] = useState({ weapons: [], armor: [] });
   const [log, setLog] = useState([]);
-  const [screen, setScreen] = useState("town");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [now, setNow] = useState(() => Date.now());
+
+  const requestedScreen = searchParams.get("screen");
+  const screen = ADVENTURE_SCREENS.has(requestedScreen) ? requestedScreen : "town";
+
+  const publishAdventureState = (nextState) => {
+    if (!nextState) return;
+    setState(nextState);
+    window.dispatchEvent(new CustomEvent("arcana:adventure-state", { detail: nextState }));
+  };
 
   const applyPayload = (data, appendLog = false) => {
-    if (data.state) setState(data.state);
+    if (data.state) publishAdventureState(data.state);
     if (Object.prototype.hasOwnProperty.call(data, "battle")) setBattle(data.battle);
     if (data.shops) setShops(data.shops);
     if (data.log?.length) {
@@ -76,7 +77,7 @@ export default function Adventure() {
       try {
         const response = await csrfFetch("/api/adventure/state");
         const data = await response.json();
-        if (data.state) setState(data.state);
+        if (data.state) publishAdventureState(data.state);
         if (Object.prototype.hasOwnProperty.call(data, "battle")) setBattle(data.battle);
         if (data.shops) setShops(data.shops);
         if (data.log?.length) setLog(data.log);
@@ -91,17 +92,20 @@ export default function Adventure() {
     loadAdventure();
   }, [user]);
 
-  useEffect(() => {
-    const timer = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(timer);
-  }, []);
+  const goToScreen = (nextScreen) => {
+    if (nextScreen === "town") {
+      setSearchParams({});
+      return;
+    }
+    setSearchParams({ screen: nextScreen });
+  };
 
   const hunt = async (mode) => {
     const data = await callAdventure("/start", {
       method: "POST",
       body: JSON.stringify({ mode }),
     });
-    if (data?.battle) setScreen("forest");
+    if (data?.battle) goToScreen("forest");
   };
 
   const fight = (rounds) =>
@@ -115,17 +119,17 @@ export default function Adventure() {
       method: "POST",
       body: JSON.stringify({ action: "run" }),
     });
-    if (data && !data.battle) setScreen("town");
+    if (data && !data.battle) goToScreen("town");
   };
 
   const challengeMaster = async () => {
     const data = await callAdventure("/master/start", { method: "POST" });
-    if (data?.battle) setScreen("forest");
+    if (data?.battle) goToScreen("forest");
   };
 
   const huntDragon = async () => {
     const data = await callAdventure("/dragon/start", { method: "POST" });
-    if (data?.battle) setScreen("forest");
+    if (data?.battle) goToScreen("forest");
   };
 
   const heal = () => callAdventure("/heal", { method: "POST" });
@@ -158,77 +162,29 @@ export default function Adventure() {
     return Math.max(0, next.cost - Math.floor(current.cost / 2));
   };
 
-  if (!user) return <main className="lotgd-shell"><section className="lotgd-panel">Log in to enter Arcana Academy.</section></main>;
-  if (!state) return <main className="lotgd-shell"><section className="lotgd-panel">Loading Arcana Academy...</section></main>;
+  if (!user) {
+    return (
+      <main className="lotgd-shell">
+        <section className="lotgd-main"><section className="lotgd-panel">Log in to enter Arcana Academy.</section></section>
+      </main>
+    );
+  }
 
-  const xpPercent = Math.min(100, (state.xp / Math.max(1, state.xp_required)) * 100);
-  const hpPercent = Math.max(0, Math.min(100, (state.hp / Math.max(1, state.max_hp)) * 100));
-  const townLocked = Boolean(battle) || !state.alive;
-  const nextNewDayAt = (Number(state.game_day) + 1) * GAME_DAY_MS;
-  const remainingUntilNewDay = Math.max(0, nextNewDayAt - now);
-  const newDayReady = remainingUntilNewDay <= 0;
-  const nextNewDayLocalTime = new Date(nextNewDayAt).toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit",
-  });
+  if (!state) {
+    return (
+      <main className="lotgd-shell">
+        <section className="lotgd-main"><section className="lotgd-panel">Loading Arcana Academy...</section></section>
+      </main>
+    );
+  }
 
   return (
     <main className="lotgd-shell">
-      <aside className="lotgd-sidebar">
-        <h2>{state.title}</h2>
-        <div className="lotgd-stat"><span>Level</span><strong>{state.level}</strong></div>
-        <div className="lotgd-stat"><span>HP</span><strong>{state.hp}/{state.max_hp}</strong></div>
-        <div className="mini-bar"><div style={{ width: `${hpPercent}%` }} /></div>
-        <div className="lotgd-stat"><span>Forest Fights</span><strong>{state.turns}/{state.max_forest_fights}</strong></div>
-
-        <section
-          className="lotgd-panel"
-          aria-live="polite"
-          style={{ margin: "10px 0 14px", padding: "12px", borderColor: newDayReady ? "#d6bd72" : "#596d45" }}
-        >
-          <p className="eyebrow">Next New Day</p>
-          <h3 style={{ margin: "5px 0 3px", fontVariantNumeric: "tabular-nums" }}>
-            {newDayReady ? "NEW DAY READY" : formatCountdown(remainingUntilNewDay)}
-          </h3>
-          <p className="hint" style={{ margin: 0, fontSize: "12px" }}>
-            {newDayReady
-              ? "Your next game action will refresh your turns."
-              : `Turns reset at ${nextNewDayLocalTime}.`}
-          </p>
-        </section>
-
-        <div className="lotgd-stat"><span>Gold</span><strong>{state.gold}</strong></div>
-        <div className="lotgd-stat"><span>Bank</span><strong>{state.bank_gold}</strong></div>
-        <div className="lotgd-stat"><span>Gems</span><strong>{state.gems}</strong></div>
-        <div className="lotgd-stat"><span>Attack</span><strong>{state.effective_attack}</strong></div>
-        <div className="lotgd-stat"><span>Defense</span><strong>{state.effective_defense}</strong></div>
-        <div className="lotgd-stat"><span>Dragon Kills</span><strong>{state.dragon_kills}</strong></div>
-        <div className="lotgd-stat"><span>Dragon Points</span><strong>{state.dragon_points}</strong></div>
-
-        <div className="xp-block">
-          <span>Experience {state.xp}/{state.xp_required}</span>
-          <div className="mini-bar xp"><div style={{ width: `${xpPercent}%` }} /></div>
-        </div>
-
-        <nav className="lotgd-nav">
-          {NAV_ITEMS.map(([id, label]) => (
-            <button
-              key={id}
-              className={screen === id ? "active" : ""}
-              disabled={loading || townLocked}
-              onClick={() => setScreen(id)}
-            >
-              {label}
-            </button>
-          ))}
-        </nav>
-      </aside>
-
       <section className="lotgd-main">
         <header className="lotgd-header">
           <div>
             <p className="eyebrow">Arcana Academy</p>
-            <h1>{battle ? battle.monster : state.alive ? "Academy Square" : "The Graveyard"}</h1>
+            <h1>{battle ? battle.monster : state.alive ? SCREEN_TITLES[screen] : "The Graveyard"}</h1>
           </div>
           <div className="equipment-summary">
             <span>{state.weapon.name}</span>
@@ -272,7 +228,7 @@ export default function Adventure() {
             <h3>Academy Square</h3>
             <p>The square is the center of your adventure. Prepare here, then spend your limited forest fights hunting for experience and gold.</p>
             <div className="town-actions">
-              <button disabled={loading || state.turns <= 0} onClick={() => setScreen("forest")}>Enter the Forest</button>
+              <button disabled={loading || state.turns <= 0} onClick={() => goToScreen("forest")}>Enter the Forest</button>
               {state.can_challenge_master && <button className="important" disabled={loading} onClick={challengeMaster}>Challenge Your Master</button>}
               {state.can_hunt_dragon && <button className="dragon" disabled={loading} onClick={huntDragon}>Hunt the Emerald Archdragon</button>}
             </div>
