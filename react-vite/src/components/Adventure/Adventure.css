@@ -1,172 +1,448 @@
-.adventure-card {
-  background: #111111;
-  border: 1px solid #2c2c2c;
-  border-radius: 4px;
-  padding: 16px;
-  color: #e6e6e6;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-left: 10%;
+.lotgd-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 24px auto 48px;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 14px;
+  color: #e7e1c7;
 }
 
-.adventure-header {
+.lotgd-sidebar,
+.lotgd-main,
+.lotgd-panel,
+.lotgd-log {
+  border: 1px solid #394c36;
+  background: linear-gradient(180deg, rgba(13, 25, 15, 0.98), rgba(7, 14, 9, 0.98));
+  box-shadow: inset 0 0 0 1px rgba(186, 158, 87, 0.08);
+}
+
+.lotgd-sidebar {
+  align-self: start;
+  position: sticky;
+  top: 12px;
+  padding: 16px;
+}
+
+.lotgd-sidebar h2 {
+  margin: 0 0 14px;
+  color: #d8bd6a;
+  font-size: 19px;
+  letter-spacing: 0.04em;
+}
+
+.lotgd-stat {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
   gap: 12px;
-}
-
-.adventure-stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+  padding: 5px 0;
+  border-bottom: 1px dotted rgba(217, 189, 106, 0.18);
   font-size: 13px;
 }
 
-.adventure-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+.lotgd-stat span {
+  color: #9faf9c;
 }
 
-.area-select {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 8px;
+.lotgd-stat strong {
+  color: #f0e7c8;
+  font-weight: 600;
 }
 
-.area-btn {
-  border: 1px solid #2c2c2c;
-  background: #0c0c0c;
-  color: #e6e6e6;
-  padding: 6px 10px;
+.mini-bar,
+.enemy-bar {
+  height: 7px;
+  overflow: hidden;
+  border: 1px solid #31432f;
+  background: #050a06;
+}
+
+.mini-bar > div {
+  height: 100%;
+  background: linear-gradient(90deg, #7d1b20, #ba3c37);
+  transition: width 160ms ease;
+}
+
+.mini-bar.xp > div {
+  background: linear-gradient(90deg, #8a7130, #d2b455);
+}
+
+.xp-block {
+  margin: 14px 0;
+  display: grid;
+  gap: 6px;
+  color: #b7c0ae;
+  font-size: 12px;
+}
+
+.lotgd-nav {
+  display: grid;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.lotgd-nav button,
+.lotgd-panel button,
+.fight-grid button,
+.shop-row button,
+.text-link {
+  border: 1px solid #465d40;
+  background: #17251a;
+  color: #dce5d5;
+  padding: 9px 11px;
   cursor: pointer;
-  border-radius: 4px;
+  font: inherit;
 }
 
-.area-btn:disabled {
-  opacity: 0.5;
+.lotgd-nav button {
+  width: 100%;
+  text-align: left;
+}
+
+.lotgd-nav button:hover:not(:disabled),
+.lotgd-panel button:hover:not(:disabled),
+.fight-grid button:hover:not(:disabled),
+.shop-row button:hover:not(:disabled) {
+  border-color: #b99c50;
+  background: #213423;
+  color: #fff4c7;
+}
+
+.lotgd-nav button.active {
+  border-color: #b99c50;
+  color: #f4dc88;
+  background: #263822;
+}
+
+.lotgd-nav button:disabled,
+.lotgd-panel button:disabled,
+.fight-grid button:disabled,
+.shop-row button:disabled {
+  opacity: 0.42;
   cursor: not-allowed;
 }
 
-.area-btn.active {
-  border-color: #5ac8fa;
-  box-shadow: 0 0 8px #5ac8fa55;
-}
-.adventure-error {
-  color: #ff6b6b;
+.lotgd-main {
+  min-height: 720px;
+  padding: 18px;
 }
 
-.adventure-log {
-  border: 1px solid #2c2c2c;
-  border-radius: 4px;
-  background: #0c0c0c;
-  padding: 10px;
-  min-height: 120px;
+.lotgd-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid #394c36;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+}
+
+.lotgd-header h1 {
+  margin: 2px 0 0;
+  color: #e0c56f;
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 500;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #7f987a;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.equipment-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  color: #aebba9;
+  font-size: 12px;
+}
+
+.lotgd-panel,
+.lotgd-log {
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.lotgd-panel h3,
+.lotgd-log h3 {
+  margin: 0 0 10px;
+  color: #d6bd72;
+  font-size: 20px;
+}
+
+.lotgd-panel h4 {
+  color: #ccb566;
+  margin: 12px 0 4px;
+}
+
+.lotgd-panel p,
+.lotgd-log p {
+  color: #c5cdbc;
+  line-height: 1.55;
+}
+
+.lotgd-error {
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  border: 1px solid #7b3434;
+  background: #2e1111;
+  color: #ffaaa2;
+}
+
+.town-actions,
+.fight-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.town-actions button.important {
+  border-color: #8d7338;
+  color: #f4df95;
+}
+
+.town-actions button.dragon,
+.fight-grid button.danger {
+  border-color: #8a3934;
+  background: #351614;
+  color: #ffb4a8;
+}
+
+.hint {
+  color: #84977f !important;
+  font-style: italic;
+}
+
+.dragon-points {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #344432;
+}
+
+.hunt-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.hunt-options button {
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+  gap: 7px;
+}
+
+.hunt-options strong {
+  color: #edd888;
+}
+
+.hunt-options span {
+  color: #9cab97;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.text-link {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  text-align: left;
+  border-style: dashed;
+}
+
+.dragon-text {
+  color: #f2aa9f;
+  border-color: #78413d;
+}
+
+.battle-panel {
+  border-color: #6b5433;
+}
+
+.battle-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.battle-heading h3 {
+  margin-top: 4px;
+}
+
+.battle-heading small {
+  color: #8da187;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.enemy-bar {
+  height: 12px;
+  margin: 10px 0 14px;
+  border-color: #653e35;
+}
+
+.enemy-bar > div {
+  height: 100%;
+  background: linear-gradient(90deg, #7f1e20, #cc503c);
+  transition: width 160ms ease;
+}
+
+.bank-balances {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 440px;
+}
+
+.bank-balances > div {
+  border: 1px solid #344832;
+  background: #0b130c;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bank-balances span {
+  color: #859781;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.bank-balances strong {
+  color: #eedc95;
+  font-size: 22px;
+}
+
+.shop-list {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.shop-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #2d402c;
+  background: #0a120b;
+  padding: 10px 12px;
+}
+
+.shop-row.current {
+  border-color: #9c843d;
+  background: #1c2617;
+}
+
+.shop-row > div:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.shop-row strong {
+  color: #dcd3ae;
+}
+
+.shop-row span {
+  color: #82927d;
+  font-size: 12px;
+}
+
+.shop-buy {
+  white-space: nowrap;
+}
+
+.lotgd-log {
+  max-height: 320px;
+  overflow: auto;
+  background: #080e09;
+}
+
+.lotgd-log p {
+  margin: 5px 0;
+  padding-bottom: 5px;
+  border-bottom: 1px dotted rgba(149, 171, 142, 0.12);
   font-size: 13px;
 }
 
-.battle-actions {
-  margin-top: 10px;
-  border: 1px solid #2c2c2c;
-  border-radius: 4px;
-  padding: 10px;
-  background: #0c0c0c;
+.graveyard-panel {
+  border-color: #50445e;
+  background: linear-gradient(180deg, #18131d, #0c090f);
 }
 
-.battle-buttons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+.graveyard-panel h3 {
+  color: #c4a9db;
 }
 
-.adventure-scene {
-  position: relative;
-  margin-top: 12px;
-  height: 460px;
-  border: 1px solid #2c2c2c;
-  border-radius: 6px;
-  overflow: hidden;
-  background: #0a0a0a;
+@media (max-width: 850px) {
+  .lotgd-shell {
+    grid-template-columns: 1fr;
+    width: min(100% - 18px, 760px);
+    margin-top: 10px;
+  }
+
+  .lotgd-sidebar {
+    position: static;
+  }
+
+  .lotgd-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hunt-options {
+    grid-template-columns: 1fr;
+  }
+
+  .lotgd-header,
+  .battle-heading {
+    flex-direction: column;
+  }
+
+  .equipment-summary {
+    align-items: flex-start;
+  }
 }
 
-.scene-background {
-  position: absolute;
-  inset: 0;
-  background: url("https://res.cloudinary.com/dl6ls3rgu/image/upload/v1753828141/0287d3ba8b3330fca99f69e2001d3168_kgsgge.gif") center/cover no-repeat;
-  opacity: 0.35;
-  filter: blur(1px);
-}
+@media (max-width: 520px) {
+  .lotgd-main,
+  .lotgd-sidebar,
+  .lotgd-panel,
+  .lotgd-log {
+    padding: 12px;
+  }
 
-.scene-sprite {
-  position: absolute;
-  bottom: 10px;
-  width: 140px;
-  height: 140px;
-  object-fit: contain;
-  z-index: 1;
-}
+  .lotgd-nav {
+    grid-template-columns: 1fr;
+  }
 
-.player-sprite {
-  left: 20px;
-  transform: scaleX(-1);
-}
+  .fight-grid,
+  .town-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
 
-.enemy-sprite {
-  right: 20px;
-}
+  .bank-balances {
+    grid-template-columns: 1fr;
+  }
 
-.hp-bar {
-  position: absolute;
-  bottom: 0;
-  width: 40%;
-  height: 14px;
-  border: 1px solid #2c2c2c;
-  background: #0b0b0b;
-  border-radius: 6px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-}
+  .shop-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 
-.player-hp {
-  left: 10px;
-}
-
-.enemy-hp {
-  right: 10px;
-}
-
-.hp-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #1fa2ff, #12d8fa);
-  transition: width 0.2s ease;
-}
-
-.hp-fill.enemy {
-  background: linear-gradient(90deg, #ff512f, #dd2476);
-}
-
-.hp-label {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  font-size: 10px;
-  color: #e6e6e6;
-  pointer-events: none;
-}
-
-.adventure-train {
-  border: 1px solid #2c2c2c;
-  border-radius: 4px;
-  padding: 10px;
-  background: #0c0c0c;
-}
-
-.train-buttons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  .shop-buy,
+  .shop-buy button {
+    width: 100%;
+  }
 }
