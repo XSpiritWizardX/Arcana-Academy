@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { csrfFetch } from "../../redux/csrf";
 import "./Adventure.css";
 
+const GAME_DAY_MS = 6 * 60 * 60 * 1000;
+
 const NAV_ITEMS = [
   ["town", "Academy Square"],
   ["forest", "The Forest"],
@@ -11,6 +13,14 @@ const NAV_ITEMS = [
   ["armor", "Armor Shop"],
   ["bank", "Academy Bank"],
 ];
+
+function formatCountdown(milliseconds) {
+  const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
+}
 
 export default function Adventure() {
   const user = useSelector((store) => store.session.user);
@@ -21,6 +31,7 @@ export default function Adventure() {
   const [screen, setScreen] = useState("town");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [now, setNow] = useState(() => Date.now());
 
   const applyPayload = (data, appendLog = false) => {
     if (data.state) setState(data.state);
@@ -79,6 +90,11 @@ export default function Adventure() {
 
     loadAdventure();
   }, [user]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   const hunt = async (mode) => {
     const data = await callAdventure("/start", {
@@ -148,6 +164,13 @@ export default function Adventure() {
   const xpPercent = Math.min(100, (state.xp / Math.max(1, state.xp_required)) * 100);
   const hpPercent = Math.max(0, Math.min(100, (state.hp / Math.max(1, state.max_hp)) * 100));
   const townLocked = Boolean(battle) || !state.alive;
+  const nextNewDayAt = (Number(state.game_day) + 1) * GAME_DAY_MS;
+  const remainingUntilNewDay = Math.max(0, nextNewDayAt - now);
+  const newDayReady = remainingUntilNewDay <= 0;
+  const nextNewDayLocalTime = new Date(nextNewDayAt).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+  });
 
   return (
     <main className="lotgd-shell">
@@ -157,6 +180,23 @@ export default function Adventure() {
         <div className="lotgd-stat"><span>HP</span><strong>{state.hp}/{state.max_hp}</strong></div>
         <div className="mini-bar"><div style={{ width: `${hpPercent}%` }} /></div>
         <div className="lotgd-stat"><span>Forest Fights</span><strong>{state.turns}/{state.max_forest_fights}</strong></div>
+
+        <section
+          className="lotgd-panel"
+          aria-live="polite"
+          style={{ margin: "10px 0 14px", padding: "12px", borderColor: newDayReady ? "#d6bd72" : "#596d45" }}
+        >
+          <p className="eyebrow">Next New Day</p>
+          <h3 style={{ margin: "5px 0 3px", fontVariantNumeric: "tabular-nums" }}>
+            {newDayReady ? "NEW DAY READY" : formatCountdown(remainingUntilNewDay)}
+          </h3>
+          <p className="hint" style={{ margin: 0, fontSize: "12px" }}>
+            {newDayReady
+              ? "Your next game action will refresh your turns."
+              : `Turns reset at ${nextNewDayLocalTime}.`}
+          </p>
+        </section>
+
         <div className="lotgd-stat"><span>Gold</span><strong>{state.gold}</strong></div>
         <div className="lotgd-stat"><span>Bank</span><strong>{state.bank_gold}</strong></div>
         <div className="lotgd-stat"><span>Gems</span><strong>{state.gems}</strong></div>
