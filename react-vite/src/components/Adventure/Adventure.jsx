@@ -114,7 +114,7 @@ export default function Adventure() {
       body: JSON.stringify({ action: "fight", rounds }),
     });
 
-  const useSpecialMove = (moveId) =>
+  const activateSpecialMove = (moveId) =>
     callAdventure("/action", {
       method: "POST",
       body: JSON.stringify({ action: "special", move: moveId }),
@@ -235,7 +235,7 @@ export default function Adventure() {
                     key={move.id}
                     className="special-skill"
                     disabled={loading || state.mana < move.mana_cost}
-                    onClick={() => useSpecialMove(move.id)}
+                    onClick={() => activateSpecialMove(move.id)}
                     title={move.description}
                   >
                     {move.name} · {move.mana_cost} Mana
