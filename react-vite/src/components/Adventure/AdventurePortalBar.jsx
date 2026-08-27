@@ -9,21 +9,13 @@ import SignupFormModal from "../SignupFormModal";
 import "./AdventurePortalBar.css";
 
 const GAME_DAY_MS = 6 * 60 * 60 * 1000;
+const ACADEMY_PLACE_SCREENS = new Set(["healer", "weapons", "armor", "bank"]);
 
 const COLLECTION_LINKS = [
   { to: "/spells/all", label: "Spells" },
   { to: "/swords/all", label: "Swords" },
   { to: "/potions/all", label: "Potions" },
   { to: "/coming-soon", label: "Bestiary" },
-];
-
-const ACADEMY_LINKS = [
-  { screen: "town", to: "/adventure", label: "Academy Square" },
-  { screen: "forest", to: "/adventure?screen=forest", label: "The Forest" },
-  { screen: "healer", to: "/adventure?screen=healer", label: "Healer" },
-  { screen: "weapons", to: "/adventure?screen=weapons", label: "Weapon Shop" },
-  { screen: "armor", to: "/adventure?screen=armor", label: "Armor Shop" },
-  { screen: "bank", to: "/adventure?screen=bank", label: "Academy Bank" },
 ];
 
 const USER_LINKS = [
@@ -39,6 +31,13 @@ function formatCountdown(milliseconds) {
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
   return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
+}
+
+function placeLink(town, place) {
+  if (town === "academy" && ACADEMY_PLACE_SCREENS.has(place.id)) {
+    return `/adventure?screen=${place.id}`;
+  }
+  return `/adventure?screen=place&place=${place.id}`;
 }
 
 export default function AdventurePortalBar() {
@@ -108,12 +107,10 @@ export default function AdventurePortalBar() {
   const nextNewDayLocalTime = advState
     ? new Date(nextNewDayAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })
     : "";
-  const requestedAdventureScreen = location.pathname === "/adventure"
-    ? new URLSearchParams(location.search).get("screen") || "town"
-    : null;
-  const activeAdventureScreen = ACADEMY_LINKS.some((link) => link.screen === requestedAdventureScreen)
-    ? requestedAdventureScreen
-    : location.pathname === "/adventure" ? "town" : null;
+
+  const params = location.pathname === "/adventure" ? new URLSearchParams(location.search) : null;
+  const activeScreen = params?.get("screen") || (location.pathname === "/adventure" ? "town" : null);
+  const activePlace = params?.get("place") || null;
 
   return (
     <aside className="adventure-portal-bar" aria-label="Arcana Academy navigation">
@@ -142,12 +139,14 @@ export default function AdventurePortalBar() {
                 <strong>{advState.title}</strong>
               </div>
 
+              <div className="adventure-portal-stat"><span>Location</span><strong>{advState.town_info?.name}</strong></div>
               <div className="adventure-portal-stat"><span>Level</span><strong>{advState.level}</strong></div>
               <div className="adventure-portal-stat"><span>HP</span><strong>{advState.hp}/{advState.max_hp}</strong></div>
               <div className="adventure-portal-meter hp"><div style={{ width: `${hpPercent}%` }} /></div>
               <div className="adventure-portal-stat"><span>Mana</span><strong>{advState.mana}/{advState.max_mana}</strong></div>
               <div className="adventure-portal-meter mana"><div style={{ width: `${manaPercent}%` }} /></div>
               <div className="adventure-portal-stat"><span>Forest Fights</span><strong>{advState.turns}/{advState.max_forest_fights}</strong></div>
+              <div className="adventure-portal-stat"><span>Safe Travels</span><strong>{advState.travels}/{advState.max_travels}</strong></div>
 
               <div className={`adventure-portal-new-day${newDayReady ? " ready" : ""}`} aria-live="polite">
                 <span>Next New Day</span>
@@ -171,6 +170,8 @@ export default function AdventurePortalBar() {
               <div className="adventure-portal-equipment">
                 <span>{advState.weapon?.name || "No weapon"}</span>
                 <span>{advState.armor?.name || "No armor"}</span>
+                {advState.mount && <span>{advState.mount_info?.name}</span>}
+                {advState.jewelry && <span>{advState.jewelry_info?.name}</span>}
               </div>
             </section>
           ) : (
@@ -180,18 +181,33 @@ export default function AdventurePortalBar() {
             </section>
           )}
 
-          <nav className="adventure-portal-adventure-nav" aria-label="Academy destinations">
-            <span className="adventure-portal-label">Academy</span>
-            {ACADEMY_LINKS.map((link) => (
-              <Link
-                key={link.screen}
-                to={link.to}
-                className={`adventure-portal-link${activeAdventureScreen === link.screen ? " active" : ""}`}
-              >
-                {link.label}
+          {advState && (
+            <nav className="adventure-portal-adventure-nav" aria-label="Current town destinations">
+              <span className="adventure-portal-label">{advState.town_info?.name || "Current Area"}</span>
+              <Link to="/adventure" className={`adventure-portal-link${activeScreen === "town" ? " active" : ""}`}>
+                {advState.town_info?.name || "Town Square"}
               </Link>
-            ))}
-          </nav>
+              <Link to="/adventure?screen=forest" className={`adventure-portal-link${activeScreen === "forest" ? " active" : ""}`}>
+                The Forest
+              </Link>
+              <Link to="/adventure?screen=travel" className={`adventure-portal-link${activeScreen === "travel" ? " active" : ""}`}>
+                Travel
+              </Link>
+              {(advState.local_places || []).map((place) => {
+                const academyScreen = advState.town === "academy" && ACADEMY_PLACE_SCREENS.has(place.id) ? place.id : null;
+                const isActive = academyScreen ? activeScreen === academyScreen : activeScreen === "place" && activePlace === place.id;
+                return (
+                  <Link
+                    key={place.id}
+                    to={placeLink(advState.town, place)}
+                    className={`adventure-portal-link${isActive ? " active" : ""}`}
+                  >
+                    {place.name}
+                  </Link>
+                );
+              })}
+            </nav>
+          )}
         </div>
       )}
 

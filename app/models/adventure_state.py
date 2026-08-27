@@ -26,6 +26,9 @@ class AdventureState(db.Model):
 
     # `turns` is the number of forest fights remaining in the current game day.
     turns = db.Column(db.Integer, nullable=False, default=10)
+    # LoGD-style safe travel allowance. Travel remains possible after this reaches zero,
+    # but the road can produce an ambush.
+    travels = db.Column(db.Integer, nullable=False, default=4)
     # Legacy specialty counter retained for backwards compatibility while mana powers skills.
     specialty_uses = db.Column(db.Integer, nullable=False, default=5)
     game_day = db.Column(db.Integer, nullable=False, default=0)
@@ -41,7 +44,13 @@ class AdventureState(db.Model):
     dragon_hp = db.Column(db.Integer, nullable=False, default=0)
     dragon_fights = db.Column(db.Integer, nullable=False, default=0)
 
+    # `town` is the settlement the character is currently visiting; `location` is the
+    # immediate activity such as town, forest, training, graveyard, or dragon hunt.
+    town = db.Column(db.String(50), nullable=False, default="academy")
     location = db.Column(db.String(50), nullable=False, default="town")
+    mount = db.Column(db.String(50), nullable=False, default="")
+    jewelry = db.Column(db.String(50), nullable=False, default="")
+    mana_runes = db.Column(db.Integer, nullable=False, default=0)
 
     user = db.relationship("User", back_populates="adventure_state")
 
@@ -61,6 +70,7 @@ class AdventureState(db.Model):
             "xp": self.xp,
             "level": self.level,
             "turns": self.turns,
+            "travels": self.travels,
             "specialty_uses": self.specialty_uses,
             "game_day": self.game_day,
             "alive": self.alive,
@@ -72,5 +82,9 @@ class AdventureState(db.Model):
             "dragon_defense": self.dragon_defense,
             "dragon_hp": self.dragon_hp,
             "dragon_fights": self.dragon_fights,
+            "town": self.town,
             "location": self.location,
+            "mount": self.mount,
+            "jewelry": self.jewelry,
+            "mana_runes": self.mana_runes,
         }
