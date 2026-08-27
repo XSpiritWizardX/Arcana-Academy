@@ -12,11 +12,14 @@
 }
 
 .adventure-portal-stats {
+  position: sticky;
+  top: -16px;
+  z-index: 3;
   margin: -16px -16px 16px;
   padding: 16px;
   border-bottom: 1px solid #596d45;
-  background: linear-gradient(180deg, rgba(20, 35, 21, 0.99), rgba(11, 21, 13, 0.99));
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+  background: linear-gradient(180deg, rgba(20, 35, 21, 0.995), rgba(11, 21, 13, 0.995));
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
 }
 
 .adventure-portal-stats-heading {
@@ -252,6 +255,7 @@
   }
 
   .adventure-portal-stats {
+    position: static;
     margin: -16px -16px 16px;
   }
 
