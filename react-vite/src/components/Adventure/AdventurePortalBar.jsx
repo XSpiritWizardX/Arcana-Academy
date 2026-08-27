@@ -10,16 +10,14 @@ import "./AdventurePortalBar.css";
 
 const GAME_DAY_MS = 6 * 60 * 60 * 1000;
 
-const COMMUNITY_LINKS = [
-  { to: "/", label: "Town" },
-  { to: "/adventure", label: "Adventure" },
+const COLLECTION_LINKS = [
   { to: "/spells/all", label: "Spells" },
   { to: "/swords/all", label: "Swords" },
   { to: "/potions/all", label: "Potions" },
   { to: "/coming-soon", label: "Bestiary" },
 ];
 
-const ADVENTURE_LINKS = [
+const ACADEMY_LINKS = [
   { screen: "town", to: "/adventure", label: "Academy Square" },
   { screen: "forest", to: "/adventure?screen=forest", label: "The Forest" },
   { screen: "healer", to: "/adventure?screen=healer", label: "Healer" },
@@ -98,6 +96,9 @@ export default function AdventurePortalBar() {
   const hpPercent = advState
     ? Math.max(0, Math.min(100, (advState.hp / Math.max(1, advState.max_hp)) * 100))
     : 0;
+  const manaPercent = advState
+    ? Math.max(0, Math.min(100, (advState.mana / Math.max(1, advState.max_mana)) * 100))
+    : 0;
   const xpPercent = advState
     ? Math.min(100, (advState.xp / Math.max(1, advState.xp_required)) * 100)
     : 0;
@@ -110,12 +111,28 @@ export default function AdventurePortalBar() {
   const requestedAdventureScreen = location.pathname === "/adventure"
     ? new URLSearchParams(location.search).get("screen") || "town"
     : null;
-  const activeAdventureScreen = ADVENTURE_LINKS.some((link) => link.screen === requestedAdventureScreen)
+  const activeAdventureScreen = ACADEMY_LINKS.some((link) => link.screen === requestedAdventureScreen)
     ? requestedAdventureScreen
     : location.pathname === "/adventure" ? "town" : null;
 
   return (
     <aside className="adventure-portal-bar" aria-label="Arcana Academy navigation">
+      <div className="adventure-portal-account adventure-portal-account-top">
+        <div className="adventure-portal-avatar" aria-hidden="true">{initial}</div>
+        <div className="adventure-portal-usercopy">
+          <strong>{user ? user.username : "Guest"}</strong>
+          <span>{user ? user.email : "Sign in to enter the Academy"}</span>
+        </div>
+      </div>
+
+      <div className="adventure-portal-brand">
+        <div className="adventure-portal-mark">AA</div>
+        <div>
+          <strong>Arcana Academy</strong>
+          <span>A legend you write yourself</span>
+        </div>
+      </div>
+
       {user && (
         <div className="adventure-portal-sticky">
           {advState ? (
@@ -127,7 +144,9 @@ export default function AdventurePortalBar() {
 
               <div className="adventure-portal-stat"><span>Level</span><strong>{advState.level}</strong></div>
               <div className="adventure-portal-stat"><span>HP</span><strong>{advState.hp}/{advState.max_hp}</strong></div>
-              <div className="adventure-portal-meter"><div style={{ width: `${hpPercent}%` }} /></div>
+              <div className="adventure-portal-meter hp"><div style={{ width: `${hpPercent}%` }} /></div>
+              <div className="adventure-portal-stat"><span>Mana</span><strong>{advState.mana}/{advState.max_mana}</strong></div>
+              <div className="adventure-portal-meter mana"><div style={{ width: `${manaPercent}%` }} /></div>
               <div className="adventure-portal-stat"><span>Forest Fights</span><strong>{advState.turns}/{advState.max_forest_fights}</strong></div>
 
               <div className={`adventure-portal-new-day${newDayReady ? " ready" : ""}`} aria-live="polite">
@@ -157,13 +176,13 @@ export default function AdventurePortalBar() {
           ) : (
             <section className="adventure-portal-stats adventure-portal-stats-loading">
               <span className="adventure-portal-label">Character</span>
-              <strong>Loading adventure stats…</strong>
+              <strong>Loading character stats…</strong>
             </section>
           )}
 
-          <nav className="adventure-portal-adventure-nav" aria-label="Adventure destinations">
-            <span className="adventure-portal-label">Adventure</span>
-            {ADVENTURE_LINKS.map((link) => (
+          <nav className="adventure-portal-adventure-nav" aria-label="Academy destinations">
+            <span className="adventure-portal-label">Academy</span>
+            {ACADEMY_LINKS.map((link) => (
               <Link
                 key={link.screen}
                 to={link.to}
@@ -176,29 +195,12 @@ export default function AdventurePortalBar() {
         </div>
       )}
 
-      <div className="adventure-portal-brand">
-        <div className="adventure-portal-mark">AA</div>
-        <div>
-          <strong>Arcana Academy</strong>
-          <span>A legend you write yourself</span>
-        </div>
-      </div>
-
-      <div className="adventure-portal-account">
-        <div className="adventure-portal-avatar" aria-hidden="true">{initial}</div>
-        <div className="adventure-portal-usercopy">
-          <strong>{user ? user.username : "Guest"}</strong>
-          <span>{user ? user.email : "Sign in to enter the Academy"}</span>
-        </div>
-      </div>
-
-      <nav className="adventure-portal-group" aria-label="Community navigation">
-        <span className="adventure-portal-label">Community</span>
-        {COMMUNITY_LINKS.map((link) => (
+      <nav className="adventure-portal-group" aria-label="Collections navigation">
+        <span className="adventure-portal-label">Collections</span>
+        {COLLECTION_LINKS.map((link) => (
           <NavLink
             key={link.to}
             to={link.to}
-            end={link.to === "/" || link.to === "/adventure"}
             className={({ isActive }) => `adventure-portal-link${isActive ? " active" : ""}`}
           >
             {link.label}
