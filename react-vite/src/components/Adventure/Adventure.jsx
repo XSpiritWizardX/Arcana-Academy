@@ -37,15 +37,20 @@ export default function Adventure() {
     try {
       const response = await csrfFetch(`/api/adventure${path}`, options);
       const data = await response.json();
-      if (data.error) {
-        setError(data.error);
-        return null;
-      }
       applyPayload(data, appendLog);
       return data;
     } catch (err) {
       console.error(err);
-      setError("Arcana could not complete that action.");
+      if (err instanceof Response) {
+        try {
+          const data = await err.json();
+          setError(data.error || "Arcana could not complete that action.");
+        } catch {
+          setError("Arcana could not complete that action.");
+        }
+      } else {
+        setError("Arcana could not complete that action.");
+      }
       return null;
     } finally {
       setLoading(false);
@@ -60,7 +65,10 @@ export default function Adventure() {
       try {
         const response = await csrfFetch("/api/adventure/state");
         const data = await response.json();
-        applyPayload(data, false);
+        if (data.state) setState(data.state);
+        if (Object.prototype.hasOwnProperty.call(data, "battle")) setBattle(data.battle);
+        if (data.shops) setShops(data.shops);
+        if (data.log?.length) setLog(data.log);
       } catch (err) {
         console.error(err);
         setError("Could not load your Arcana adventure.");
