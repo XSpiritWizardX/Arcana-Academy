@@ -1,6 +1,9 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkLogout } from "../../redux/session";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import LoginFormModal from "../LoginFormModal";
+import SignupFormModal from "../SignupFormModal";
 import "./AdventurePortalBar.css";
 
 const COMMUNITY_LINKS = [
@@ -40,15 +43,13 @@ export default function AdventurePortalBar() {
         </div>
       </div>
 
-      {user && (
-        <div className="adventure-portal-account">
-          <div className="adventure-portal-avatar" aria-hidden="true">{initial}</div>
-          <div className="adventure-portal-usercopy">
-            <strong>{user.username}</strong>
-            <span>{user.email}</span>
-          </div>
+      <div className="adventure-portal-account">
+        <div className="adventure-portal-avatar" aria-hidden="true">{initial}</div>
+        <div className="adventure-portal-usercopy">
+          <strong>{user ? user.username : "Guest"}</strong>
+          <span>{user ? user.email : "Sign in to enter the Academy"}</span>
         </div>
-      )}
+      </div>
 
       <nav className="adventure-portal-group" aria-label="Community navigation">
         <span className="adventure-portal-label">Community</span>
@@ -79,8 +80,25 @@ export default function AdventurePortalBar() {
         </nav>
       )}
 
-      {user && (
-        <button className="adventure-portal-logout" type="button" onClick={logout}>Logout</button>
+      {user ? (
+        <div className="adventure-portal-group adventure-portal-account-actions">
+          <span className="adventure-portal-label">Account</span>
+          <button className="adventure-portal-logout" type="button" onClick={logout}>Logout</button>
+        </div>
+      ) : (
+        <div className="adventure-portal-auth" aria-label="Account actions">
+          <span className="adventure-portal-label">Account</span>
+          <OpenModalButton
+            className="adventure-portal-auth-button"
+            buttonText="Log In"
+            modalComponent={<LoginFormModal />}
+          />
+          <OpenModalButton
+            className="adventure-portal-auth-button"
+            buttonText="Sign Up"
+            modalComponent={<SignupFormModal />}
+          />
+        </div>
       )}
     </aside>
   );
