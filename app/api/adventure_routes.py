@@ -36,7 +36,6 @@ from app.game.world_rules import (
     ACADEMY_TOWN,
     MYSTERY_TOWN,
     STANDARD_TOWNS,
-    TOWNS,
     build_travel_enemy,
     direct_destinations,
     jewelry_info,
