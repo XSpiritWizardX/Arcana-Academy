@@ -186,6 +186,8 @@ export default function Adventure() {
 
   useEffect(() => {
     if (user) fetchState();
+    // Keep state restoration tied to authentication changes only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   if (!user) return <div className="adventure-card">Log in to play.</div>;
